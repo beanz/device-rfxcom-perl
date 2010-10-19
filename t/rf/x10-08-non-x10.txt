@@ -1,0 +1,19 @@
+2064fb9867
+
+$expected = {
+              'bytes' => [
+                           100,
+                           251,
+                           152,
+                           103
+                         ],
+              'master' => 1,
+              'data' => '64fb9867',
+              'type' => 'unknown',
+              'header_byte' => 32
+            };
+
+
+
+
+

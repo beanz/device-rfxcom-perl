@@ -1,0 +1,22 @@
+2853454e0010
+
+$expected = {
+              'bytes' => [
+                           83,
+                           69,
+                           78,
+                           0,
+                           16
+                         ],
+              'messages' => [],
+              'master' => 1,
+              'data' => '53454e0010',
+              'type' => 'rfxsensor',
+              'header_byte' => 40
+            };
+
+RFXSensor SEN0, type 10 (unknown)
+
+
+
+

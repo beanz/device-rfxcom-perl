@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use lib 'blib/lib';
+use lib 'lib';
+use Device::RFXCOM::RX;
+use Data::Dumper;
+
+my $rx = Device::RFXCOM::RX->new;
+foreach my $test (sort @ARGV) {
+  my $ofh;
+  if (-f $test) {
+    my $file = $test;
+    open my $fh, '<', $file or die "Failed to read $file: $!";
+    do {
+      $test = <$fh>;
+    } while ($test =~ /^\s*$/);
+    close $fh;
+    open $ofh, '>', $file or die "Failed to write $file: $!";
+    chomp $test;
+  } else {
+    $ofh = \*STDOUT;
+  }
+  print $ofh $test, "\n\n";
+  my $buf = pack 'H*', $test.'deadbeef';
+  my $warn;
+  local $SIG{__WARN__} = sub { $warn .= $_[0]; };
+  my $res = $rx->read_one(\$buf);
+  $res->{data} = unpack 'H*', $res->{data} if ($res && defined $res->{data});
+  print $ofh Data::Dumper->Dump([$res],[qw/expected/]),"\n";
+  print $ofh $warn||'', "\n\n";
+  substr $buf, -4, 4, '';
+  my $rem = unpack 'H*', $buf;
+  print $ofh $rem, "\n\n";
+  close $ofh;
+}

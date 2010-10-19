@@ -1,0 +1,40 @@
+29fef1807fb700
+
+$expected = {
+              'bytes' => [
+                           127,
+                           143,
+                           1,
+                           254,
+                           237,
+                           0
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'zone' => 'x10sec7f',
+                                            'delay' => 'max',
+                                            'event' => 'alert',
+                                            'state' => 'false'
+                                          },
+                                'schema' => 'security.zone'
+                              },
+                              {
+                                'body' => {
+                                            'delay' => 'max',
+                                            'device' => 127,
+                                            'command' => 'normal'
+                                          },
+                                'schema' => 'x10.security'
+                              }
+                            ],
+              'master' => 1,
+              'data' => 'fef1807fb700',
+              'type' => 'x10security',
+              'header_byte' => 41
+            };
+
+
+
+
+

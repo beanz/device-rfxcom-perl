@@ -1,0 +1,30 @@
+2002f23ea1
+
+$expected = {
+              'bytes' => [
+                           2,
+                           242,
+                           62,
+                           161
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'base_device' => '00f0',
+                                            'current' => '5.01',
+                                            'type' => 'voltage',
+                                            'device' => 'rfxsensor02f2'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '02f23ea1',
+              'type' => 'rfxsensor',
+              'header_byte' => 32
+            };
+
+
+
+
+

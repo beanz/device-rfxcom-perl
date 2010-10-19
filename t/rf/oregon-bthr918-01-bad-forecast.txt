@@ -1,0 +1,64 @@
+585a5d00c230216044ce0154
+
+$expected = {
+              'bytes' => [
+                           90,
+                           93,
+                           0,
+                           194,
+                           48,
+                           33,
+                           96,
+                           68,
+                           206,
+                           1,
+                           84
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => '21.3',
+                                            'type' => 'temp',
+                                            'device' => 'bthr918.c2'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 46,
+                                            'string' => 'comfortable',
+                                            'type' => 'humidity',
+                                            'device' => 'bthr918.c2'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'forecast' => 'unknown',
+                                            'current' => 1001,
+                                            'type' => 'pressure',
+                                            'device' => 'bthr918.c2',
+                                            'units' => 'hPa'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 90,
+                                            'type' => 'battery',
+                                            'device' => 'bthr918.c2',
+                                            'units' => '%'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '5a5d00c230216044ce0154',
+              'type' => 'oregon',
+              'header_byte' => 88
+            };
+
+
+
+
+

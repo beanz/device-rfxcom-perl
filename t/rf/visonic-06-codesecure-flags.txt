@@ -1,0 +1,36 @@
+c23ff39b5c01ba68040d
+
+$expected = {
+              'bytes' => [
+                           63,
+                           243,
+                           155,
+                           92,
+                           1,
+                           186,
+                           104,
+                           4,
+                           13
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'low-battery' => 'true',
+                                            'repeat' => 'true',
+                                            'type' => 'codesecure',
+                                            'device' => '01ba680',
+                                            'command' => 'disarm'
+                                          },
+                                'schema' => 'x10.security'
+                              }
+                            ],
+              'master' => '',
+              'data' => '3ff39b5c01ba68040d',
+              'type' => 'visonic',
+              'header_byte' => 194
+            };
+
+
+
+
+

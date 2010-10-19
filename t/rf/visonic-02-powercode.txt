@@ -1,0 +1,39 @@
+a4c5ec581430
+
+$expected = {
+              'bytes' => [
+                           197,
+                           236,
+                           88,
+                           20,
+                           48
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'zone' => 'powercode.c5ec58',
+                                            'event' => 'alert',
+                                            'state' => 'false'
+                                          },
+                                'schema' => 'security.zone'
+                              },
+                              {
+                                'body' => {
+                                            'type' => 'powercode',
+                                            'event' => 'event',
+                                            'device' => 'c5ec58',
+                                            'command' => 'normal'
+                                          },
+                                'schema' => 'x10.security'
+                              }
+                            ],
+              'master' => '',
+              'data' => 'c5ec581430',
+              'type' => 'visonic',
+              'header_byte' => 164
+            };
+
+
+
+
+

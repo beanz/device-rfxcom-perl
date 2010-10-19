@@ -1,0 +1,56 @@
+583a0d002d10243420033233
+
+$expected = {
+              'bytes' => [
+                           58,
+                           13,
+                           0,
+                           45,
+                           16,
+                           36,
+                           52,
+                           32,
+                           3,
+                           50,
+                           51
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'average' => '3.2',
+                                            'current' => '3.4',
+                                            'type' => 'speed',
+                                            'device' => 'wgr918.2d',
+                                            'units' => 'mps'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 241,
+                                            'type' => 'direction',
+                                            'device' => 'wgr918.2d',
+                                            'units' => 'degrees'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 100,
+                                            'type' => 'battery',
+                                            'device' => 'wgr918.2d',
+                                            'units' => '%'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '3a0d002d10243420033233',
+              'type' => 'oregon',
+              'header_byte' => 88
+            };
+
+
+
+
+

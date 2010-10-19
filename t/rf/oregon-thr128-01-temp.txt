@@ -1,0 +1,44 @@
+500a4d100a902300002a00
+
+$expected = {
+              'bytes' => [
+                           10,
+                           77,
+                           16,
+                           10,
+                           144,
+                           35,
+                           0,
+                           0,
+                           42,
+                           0
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => '23.9',
+                                            'type' => 'temp',
+                                            'device' => 'thr128.0a'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 90,
+                                            'type' => 'battery',
+                                            'device' => 'thr128.0a',
+                                            'units' => '%'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '0a4d100a902300002a00',
+              'type' => 'oregon',
+              'header_byte' => 80
+            };
+
+
+
+
+

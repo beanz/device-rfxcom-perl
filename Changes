@@ -1,0 +1,5 @@
+Revision history for Perl extension Device::RFXCOM.
+
+{{$NEXT}}
+	- Initial CPAN release extracted from my code at
+          http://www.xpl-perl.org.uk/

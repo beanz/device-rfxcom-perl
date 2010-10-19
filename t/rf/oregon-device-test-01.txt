@@ -1,0 +1,26 @@
+50fefe0000000000000000
+
+$expected = {
+              'bytes' => [
+                           254,
+                           254,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0,
+                           0
+                         ],
+              'master' => 1,
+              'data' => 'fefe0000000000000000',
+              'type' => 'unknown',
+              'header_byte' => 80
+            };
+
+Possible message from Oregon part "TEST"
+
+
+
+

@@ -1,0 +1,53 @@
+50dacc134d710128645732
+
+$expected = {
+              'bytes' => [
+                           218,
+                           204,
+                           19,
+                           77,
+                           113,
+                           1,
+                           40,
+                           100,
+                           87,
+                           50
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => '-1.7',
+                                            'type' => 'temp',
+                                            'device' => 'rtgr328n.4d'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 42,
+                                            'string' => 'comfortable',
+                                            'type' => 'humidity',
+                                            'device' => 'rtgr328n.4d'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 90,
+                                            'type' => 'battery',
+                                            'device' => 'rtgr328n.4d',
+                                            'units' => '%'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => 'dacc134d710128645732',
+              'type' => 'oregon',
+              'header_byte' => 80
+            };
+
+
+
+
+

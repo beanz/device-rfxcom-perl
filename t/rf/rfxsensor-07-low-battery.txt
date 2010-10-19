@@ -1,0 +1,20 @@
+2003f30217
+
+$expected = {
+              'bytes' => [
+                           3,
+                           243,
+                           2,
+                           23
+                         ],
+              'master' => 1,
+              'data' => '03f30217',
+              'type' => 'unknown',
+              'header_byte' => 32
+            };
+
+RFXSensor info rfxsensor03f3: battery low detected
+
+
+
+

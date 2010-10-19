@@ -1,0 +1,45 @@
+a4c5ec58e800
+
+$expected = {
+              'bytes' => [
+                           197,
+                           236,
+                           88,
+                           232,
+                           0
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'tamper' => 'true',
+                                            'low-battery' => 'true',
+                                            'zone' => 'powercode.c5ec58s',
+                                            'restore' => 'true',
+                                            'event' => 'alert',
+                                            'state' => 'true'
+                                          },
+                                'schema' => 'security.zone'
+                              },
+                              {
+                                'body' => {
+                                            'low-battery' => 'true',
+                                            'tamper' => 'true',
+                                            'restore' => 'true',
+                                            'type' => 'powercode',
+                                            'event' => 'alive',
+                                            'device' => 'c5ec58s',
+                                            'command' => 'alert'
+                                          },
+                                'schema' => 'x10.security'
+                              }
+                            ],
+              'master' => '',
+              'data' => 'c5ec58e800',
+              'type' => 'visonic',
+              'header_byte' => 164
+            };
+
+
+
+
+

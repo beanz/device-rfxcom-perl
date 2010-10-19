@@ -1,0 +1,30 @@
+78ea7c10ffff70ade4fbffafce070188
+
+$expected = {
+              'bytes' => [
+                           234,
+                           124,
+                           16,
+                           255,
+                           255,
+                           112,
+                           173,
+                           228,
+                           251,
+                           255,
+                           175,
+                           206,
+                           7,
+                           1,
+                           136
+                         ],
+              'master' => 1,
+              'data' => 'ea7c10ffff70ade4fbffafce070188',
+              'type' => 'unknown',
+              'header_byte' => 120
+            };
+
+
+
+
+

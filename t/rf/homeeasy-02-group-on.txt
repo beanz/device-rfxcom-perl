@@ -1,0 +1,30 @@
+22020aa1b080
+
+$expected = {
+              'bytes' => [
+                           2,
+                           10,
+                           161,
+                           176,
+                           128
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'unit' => 'group',
+                                            'address' => '0x82a86',
+                                            'command' => 'on'
+                                          },
+                                'schema' => 'homeeasy.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '020aa1b080',
+              'type' => 'homeeasy',
+              'header_byte' => 34
+            };
+
+
+
+
+

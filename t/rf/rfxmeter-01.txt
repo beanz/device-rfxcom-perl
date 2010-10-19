@@ -1,0 +1,31 @@
+3000f00006000a
+
+$expected = {
+              'bytes' => [
+                           0,
+                           240,
+                           0,
+                           6,
+                           0,
+                           10
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => 6,
+                                            'type' => 'count',
+                                            'device' => 'rfxmeter.00f0'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '00f00006000a',
+              'type' => 'rfxmeter',
+              'header_byte' => 48
+            };
+
+
+
+
+

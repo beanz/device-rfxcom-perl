@@ -1,0 +1,53 @@
+50fa2814e6802450444d09
+
+$expected = {
+              'bytes' => [
+                           250,
+                           40,
+                           20,
+                           230,
+                           128,
+                           36,
+                           80,
+                           68,
+                           77,
+                           9
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => '24.8',
+                                            'type' => 'temp',
+                                            'device' => 'thgr810.e6'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 45,
+                                            'string' => 'comfortable',
+                                            'type' => 'humidity',
+                                            'device' => 'thgr810.e6'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 90,
+                                            'type' => 'battery',
+                                            'device' => 'thgr810.e6',
+                                            'units' => '%'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => 'fa2814e6802450444d09',
+              'type' => 'oregon',
+              'header_byte' => 80
+            };
+
+
+
+
+

@@ -1,0 +1,22 @@
+3000f00006000b
+
+$expected = {
+              'bytes' => [
+                           0,
+                           240,
+                           0,
+                           6,
+                           0,
+                           11
+                         ],
+              'master' => 1,
+              'data' => '00f00006000b',
+              'type' => 'unknown',
+              'header_byte' => 48
+            };
+
+RFXMeter parity error 10 != 11
+
+
+
+

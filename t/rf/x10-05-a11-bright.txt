@@ -1,0 +1,29 @@
+20649b8877
+
+$expected = {
+              'bytes' => [
+                           100,
+                           155,
+                           136,
+                           119
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'level' => undef,
+                                            'device' => 'a11',
+                                            'command' => 'bright'
+                                          },
+                                'schema' => 'x10.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '649b8877',
+              'type' => 'x10',
+              'header_byte' => 32
+            };
+
+
+
+
+

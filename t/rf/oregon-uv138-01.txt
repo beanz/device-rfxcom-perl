@@ -1,0 +1,50 @@
+78ea7c10804870ade4fbffafce070188
+
+$expected = {
+              'bytes' => [
+                           234,
+                           124,
+                           16,
+                           128,
+                           72,
+                           112,
+                           173,
+                           228,
+                           251,
+                           255,
+                           175,
+                           206,
+                           7,
+                           1,
+                           136
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => 4,
+                                            'type' => 'uv',
+                                            'device' => 'uv138.80',
+                                            'risk' => 'medium'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 90,
+                                            'type' => 'battery',
+                                            'device' => 'uv138.80',
+                                            'units' => '%'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => 'ea7c10804870ade4fbffafce070188',
+              'type' => 'oregon',
+              'header_byte' => 120
+            };
+
+
+
+
+

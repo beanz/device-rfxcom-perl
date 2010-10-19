@@ -1,0 +1,64 @@
+78ea00a642000000169bff5f1dc05408
+
+$expected = {
+              'bytes' => [
+                           234,
+                           0,
+                           166,
+                           66,
+                           0,
+                           0,
+                           0,
+                           22,
+                           155,
+                           255,
+                           95,
+                           29,
+                           192,
+                           84,
+                           8
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => '6.6',
+                                            'type' => 'current',
+                                            'device' => 'electrisave.a6'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => '6.6',
+                                            'type' => 'current',
+                                            'device' => 'electrisave.a6.1'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 0,
+                                            'type' => 'current',
+                                            'device' => 'electrisave.a6.2'
+                                          },
+                                'schema' => 'sensor.basic'
+                              },
+                              {
+                                'body' => {
+                                            'current' => 0,
+                                            'type' => 'current',
+                                            'device' => 'electrisave.a6.3'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => 'ea00a642000000169bff5f1dc05408',
+              'type' => 'electrisave',
+              'header_byte' => 120
+            };
+
+
+
+
+

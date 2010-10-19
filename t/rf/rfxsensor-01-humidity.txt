@@ -1,0 +1,31 @@
+2001f11ae5
+
+$expected = {
+              'bytes' => [
+                           1,
+                           241,
+                           26,
+                           229
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'base_device' => '00f0',
+                                            'current' => '2.15',
+                                            'type' => 'voltage',
+                                            'device' => 'rfxsensor01f1'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => '01f11ae5',
+              'type' => 'rfxsensor',
+              'header_byte' => 32
+            };
+
+Don't have supply voltage for rfxsensor01f1/00f0 yet
+
+
+
+

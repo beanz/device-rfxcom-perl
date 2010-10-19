@@ -1,0 +1,21 @@
+205246330a
+
+$expected = {
+              'bytes' => [
+                           82,
+                           70,
+                           51,
+                           10
+                         ],
+              'messages' => [],
+              'master' => 1,
+              'data' => '5246330a',
+              'type' => 'rfxsensor',
+              'header_byte' => 32
+            };
+
+RFXSensor Type-3, version 0a, transmit mode fast, initialized
+
+
+
+

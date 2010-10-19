@@ -1,0 +1,33 @@
+40d36c421406388406
+
+$expected = {
+              'bytes' => [
+                           211,
+                           108,
+                           66,
+                           20,
+                           6,
+                           56,
+                           132,
+                           6
+                         ],
+              'messages' => [
+                              {
+                                'body' => {
+                                            'current' => '62.1',
+                                            'type' => 'weight',
+                                            'device' => 'gr101.6c'
+                                          },
+                                'schema' => 'sensor.basic'
+                              }
+                            ],
+              'master' => 1,
+              'data' => 'd36c421406388406',
+              'type' => 'oregonscale',
+              'header_byte' => 64
+            };
+
+
+
+
+
