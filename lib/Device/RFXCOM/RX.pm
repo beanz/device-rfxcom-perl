@@ -21,6 +21,8 @@ package Device::RFXCOM::RX;
 
 Module for reading data from an RFXCOM RF receiver.
 
+B<IMPORTANT:> This API is still subject to change.
+
 =cut
 
 use 5.006;
@@ -169,6 +171,8 @@ This method blocks until a new message has been received by the
 device.  When a message is received a data structure is returned
 that represents the data received.
 
+B<IMPORTANT:> This API is still subject to change.
+
 =cut
 
 sub read {
@@ -201,6 +205,8 @@ passed in via the scalar reference.  When a message is removed a data
 structure is returned that represents the data received.  If insufficient
 data is available then undef is returned.  If a duplicate message is
 received then 0 is returned.
+
+B<IMPORTANT:> This API is still subject to change.
 
 =cut
 
