@@ -76,7 +76,7 @@ sub level { shift->{level} }
 
 =head2 C<summary()>
 
-This method returns a string summary of the x10 message.
+This method returns a string summary of the X10 message.
 
 =cut
 
