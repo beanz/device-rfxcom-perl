@@ -15,7 +15,7 @@ BEGIN {
          require AnyEvent::Handle; import AnyEvent::Handle;
          require AnyEvent::Socket; import AnyEvent::Socket };
   if ($@) {
-    import Test::More skip_all => 'No AnyEvent::Socket module installed: $@';
+    import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
   import Test::More tests => 42;
 }
