@@ -29,11 +29,55 @@ sub new {
   bless { %p }, $pkg;
 }
 
+=head2 C<type()>
+
+This method returns 'security'.
+
+=cut
+
 sub type { 'security' }
+
+=head2 C<device()>
+
+This method returns a string representing the device that sent the
+security RF message.
+
+=cut
+
 sub device { shift->{device} }
+
+=head2 C<event()>
+
+This method returns a string representing the type of event described
+by the security RF message.
+
+=cut
+
 sub event { shift->{event} }
+
+=head2 C<tamper()>
+
+This method returns true of the C<tamper> flag was set in the security
+RF message.
+
+=cut
+
 sub tamper { shift->{tamper} }
+
+=head2 C<min_delay()>
+
+This method returns true of the C<min_delay> flag was set in the
+security RF message.
+
+=cut
+
 sub min_delay { shift->{min_delay} }
+
+=head2 C<summary()>
+
+This method returns a string summary of the security message.
+
+=cut
 
 sub summary {
   my $self = shift;

@@ -29,11 +29,54 @@ sub new {
   bless { %p }, $pkg;
 }
 
+=head2 C<type()>
+
+This method returns 'homeeasy'.
+
+=cut
+
 sub type { 'homeeasy' }
+
+=head2 C<address()>
+
+This method returns the address of the home easy device that sent the
+message.
+
+=cut
+
 sub address { shift->{address} }
+
+=head2 C<unit()>
+
+This method returns the unit of the home easy device that sent the
+message.  It will be a number or the string 'group'.
+
+=cut
+
 sub unit { shift->{unit} }
+
+=head2 C<command()>
+
+This method returns the command from the home easy message.
+
+=cut
+
 sub command { shift->{command} }
+
+=head2 C<level()>
+
+This method returns the level from the home easy message.  This
+is only defined for some types of preset/bright/dim messages.
+
+=cut
+
 sub level { shift->{level} }
+
+=head2 C<summary()>
+
+This method returns a string summary of the home easy message.
+
+=cut
 
 sub summary {
   my $self = shift;

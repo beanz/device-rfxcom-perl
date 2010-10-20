@@ -29,11 +29,55 @@ sub new {
   bless { %p }, $pkg;
 }
 
+=head2 C<type()>
+
+This method returns 'sensor'.
+
+=cut
+
 sub type { 'sensor' }
+
+=head2 C<measurement()>
+
+This method returns a string describing the type of measurement.  For
+example, C<temp>, C<humidity>, C<voltage>, C<battery>, C<uv>, etc.
+
+=cut
+
 sub measurement { shift->{measurement} }
+
+=head2 C<device()>
+
+This method returns a string representing the device that sent the
+sensor RF message.
+
+=cut
+
 sub device { shift->{device} }
+
+=head2 C<value()>
+
+This method returns the value of the measurement in the sensor RF
+message.
+
+=cut
+
 sub value { shift->{value} }
+
+=head2 C<units()>
+
+This method returns the units of the L<value> in the sensor RF
+message.
+
+=cut
+
 sub units { shift->{units} }
+
+=head2 C<summary()>
+
+This method returns a string summary of the sensor message.
+
+=cut
 
 sub summary {
   my $self = shift;

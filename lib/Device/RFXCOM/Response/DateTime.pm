@@ -29,11 +29,56 @@ sub new {
   bless { %p }, $pkg;
 }
 
+=head2 C<type()>
+
+This method returns 'datetime'.
+
+=cut
+
 sub type { 'datetime' }
+
+=head2 C<device()>
+
+This method returns a string representing the name of the device that
+sent the date and time data.
+
+=cut
+
 sub device { shift->{device} }
+
+=head2 C<date()>
+
+This method returns a string of the form 'YYYYMMDD' representing the
+date from the date and time RF message.
+
+=cut
+
 sub date { shift->{date} }
+
+=head2 C<time()>
+
+This method returns a string of the form 'HHMMSS' representing the
+time from the date and time RF message.
+
+=cut
+
 sub time { shift->{time} }
+
+=head2 C<day()>
+
+This method returns the day (in English) from the date and time RF
+message.  It is probably best to avoid using this and calculate the
+correct value for the locale from the other data.
+
+=cut
+
 sub day { shift->{day} }
+
+=head2 C<summary()>
+
+This method returns a string summary of the date and time information.
+
+=cut
 
 sub summary {
   my $self = shift;
