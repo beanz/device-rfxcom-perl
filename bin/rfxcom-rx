@@ -1,0 +1,38 @@
+#!/usr/bin/perl
+
+# ABSTRACT: rfxcom-rx simple example script to read from an RFXCOM receiver
+
+=head1 SYNOPSIS
+
+  # read from USB tty device
+  rfxcom-rx /dev/ttyUSB0
+
+  # read from USB device with nicer name see Device::RFXCOM::RX(3)
+  rfxcom-rx /dev/rfxcom-rx
+
+  # read from network/wireless device
+  rfxcom-rx 10.0.0.1:10001
+
+=head1 DESCRIPTION
+
+This script is just an example of a simple use for the decoding
+modules.  It simply initializes the receiver to variable length
+mode and reads all the messages returned forever.
+
+=cut
+
+use warnings;
+use strict;
+package main;
+use Device::RFXCOM::RX;
+
+my $device = shift or die "Usage: $0 [device] [key value] ...\n";
+
+my $rx = Device::RFXCOM::RX->new(device => $device, @ARGV);
+
+$|=1; # don't buffer output
+
+while (1) {
+  my $data = $rx->read() or next;
+  print $data->summary,"\n";
+}
