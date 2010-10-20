@@ -1,53 +1,9 @@
 581a99042f10c01200013980
 
-$expected = {
-              'bytes' => [
-                           26,
-                           153,
-                           4,
-                           47,
-                           16,
-                           192,
-                           18,
-                           0,
-                           1,
-                           57,
-                           128
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'average' => 1,
-                                            'current' => '1.2',
-                                            'type' => 'speed',
-                                            'device' => 'wtgr800.2f',
-                                            'units' => 'mps'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => '22.5',
-                                            'type' => 'direction',
-                                            'device' => 'wtgr800.2f'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 100,
-                                            'type' => 'battery',
-                                            'device' => 'wtgr800.2f',
-                                            'units' => '%'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '1a99042f10c01200013980',
-              'type' => 'oregon',
-              'header_byte' => 88
-            };
+master oregon 58.1a99042f10c01200013980:
+  sensor/wtgr800.2f[speed]=1.2mps
+  sensor/wtgr800.2f[direction]=22.5
+  sensor/wtgr800.2f[battery]=100%
 
 
 

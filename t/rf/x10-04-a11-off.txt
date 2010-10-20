@@ -1,26 +1,6 @@
 20649b28d7
 
-$expected = {
-              'bytes' => [
-                           100,
-                           155,
-                           40,
-                           215
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'device' => 'a11',
-                                            'command' => 'off'
-                                          },
-                                'schema' => 'x10.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '649b28d7',
-              'type' => 'x10',
-              'header_byte' => 32
-            };
+master x10 20.649b28d7: x10/a11/off
 
 
 

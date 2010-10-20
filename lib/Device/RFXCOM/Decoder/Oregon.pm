@@ -19,6 +19,8 @@ use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_OREGON_DEBUG};
 use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble nibble_sum/;
 our @ISA = qw(Device::RFXCOM::Decoder);
+use Device::RFXCOM::Response::Sensor;
+use Device::RFXCOM::Response::DateTime;
 
 my %types =
   (
@@ -40,7 +42,7 @@ my %types =
    },
    type_length_key(0xda78, 72) =>
    {
-    part => 'UVN800', checksun => \&checksum7, method => 'uvn800',
+    part => 'UVN800', checksum => \&checksum7, method => 'uvn800',
    },
    type_length_key(0xea7c, 120) =>
    {
@@ -220,25 +222,17 @@ sub wgr918_anemometer {
   #print "WGR918: $device $dir $speed\n";
   my @res = ();
   push @res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev_str,
-              type => 'speed',
-              current => $speed,
-              units => 'mps',
-              average => $avspeed,
-             },
-    },
-      {
-       schema => 'sensor.basic',
-       body => {
-                device => $dev_str,
-                type => 'direction',
-                current => $dir,
-                units => 'degrees',
-               },
-      };
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'speed',
+                                          value => $speed,
+                                          units => 'mps',
+                                          average => $avspeed,
+                                         ),
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'direction',
+                                          value => $dir,
+                                          units => 'degrees',
+                                         );
   percentage_battery($parent, $bytes, $nib, $dev_str, \@res);
   return \@res;
 }
@@ -261,24 +255,16 @@ sub wtgr800_anemometer {
   #print "WTGR800: $device $dir $speed\n";
   my @res = ();
   push @res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev_str,
-              type => 'speed',
-              current => $speed,
-              units => 'mps',
-              average => $avspeed,
-             },
-    },
-      {
-       schema => 'sensor.basic',
-       body => {
-                device => $dev_str,
-                type => 'direction',
-                current => $dir,
-               },
-      };
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'speed',
+                                          value => $speed,
+                                          units => 'mps',
+                                          average => $avspeed,
+                                         ),
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'direction',
+                                          value => $dir,
+                                         );
   percentage_battery($parent, $bytes, $nib, $dev_str, \@res);
   return \@res;
 }
@@ -344,16 +330,12 @@ sub rtgr328n_datetime {
 
   #print STDERR "datetime: $date $time $day\n";
   my @res = ();
-  return [ {
-            schema => 'datetime.basic',
-            body => {
-                     datetime => $date.$time,
-                     'date' => $date,
-                     'time' => $time,
-                     day => $day.'day',
-                     device => $dev_str,
-                    },
-           }];
+  return
+    [Device::RFXCOM::Response::DateTime->new(date => $date,
+                                             time => $time,
+                                             day => $day.'day',
+                                             device => $dev_str,
+                                            )];
 }
 
 =head2 C<common_temp( $type, $parent, $message, $bytes, $bits, $nibbles )>
@@ -430,33 +412,21 @@ sub common_rain {
   my $flip = $nib->[13];
   #print STDERR "$dev_str rain = $rain, total = $train, flip = $flip\n";
   push @res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev_str,
-              type => 'speed',
-              current => $rain,
-              units => 'mm/h',
-             },
-    },
-      {
-       schema => 'sensor.basic',
-       body => {
-                device => $dev_str,
-                type => 'distance',
-                current => $train,
-                units => 'mm',
-               },
-      },
-        {
-         schema => 'sensor.basic',
-         body => {
-                  device => $dev_str,
-                  type => 'count',
-                  current => $flip,
-                  units => 'flips',
-                 },
-        };
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'speed',
+                                          value => $rain,
+                                          units => 'mm/h',
+                                          ),
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'distance',
+                                          value => $train,
+                                          units => 'mm',
+                                         ),
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'count',
+                                          value => $flip,
+                                          units => 'flips',
+                                         );
   simple_battery($parent, $bytes, $dev_str, \@res);
   return \@res;
 }
@@ -481,24 +451,16 @@ sub pcr800_rain {
   $train *= 25.4; # convert from inch/hr to mm/hr
   #print STDERR "$dev_str rain = $rain, total = $train\n";
   push @res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev_str,
-              type => 'speed',
-              current => (sprintf "%.2f", $rain),
-              units => 'mm/h',
-             },
-    },
-      {
-       schema => 'sensor.basic',
-       body => {
-                device => $dev_str,
-                type => 'distance',
-                current => (sprintf "%.2f", $train),
-                units => 'mm',
-               },
-      };
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'speed',
+                                          value => (sprintf "%.2f", $rain),
+                                          units => 'mm/h',
+                                         ),
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'distance',
+                                          value => (sprintf "%.2f", $train),
+                                          units => 'mm',
+                                         );
   simple_battery($parent, $bytes, $dev_str, \@res);
   return \@res;
 }
@@ -608,42 +570,35 @@ that is required.
 =cut
 
 sub checksum_tester {
+  my @bytes = ( @{$_[0]}, 0, 0, 0, 0, 0, 0, 0 );
+  my @nibbles = ( @{$_[1]}, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
   my $found;
-  my @fn = (\&hecksum1, \&checksum2, \&checksum3, \&checksum4,
+  my @fn = (\&checksum1, \&checksum2, \&checksum3, \&checksum4,
             \&checksum5, \&checksum6, \&checksum7, \&checksum8);
   foreach my $i (0..$#fn) {
     my $sum = $fn[$i];
-    if ($sum->(@_)) {
-      print "Possible use of checksum, checksum", $i+1, "\n";
-      $found++;
+    if ($sum->(\@bytes, \@nibbles)) {
+      $found .= "Possible use of checksum, checksum".($i+1)."\n";
     }
   }
-  exit if ($found);
-  for my $i (4..(scalar @{$_[0]})-2) {
-    my $c = hi_nibble($_[0]->[$i]) + (lo_nibble($_[0]->[$i+1])<<4);
-    my $s = ( ( old_nibble_sum($i, $_[0]) - 0xa) & 0xff);
-    print $i, " c=",$c, " s=", $s, "\n";
+
+  for my $i (4..(scalar @bytes)-2) {
+    my $c = $nibbles[$i*2] + ($nibbles[$i*2+3]<<4);
+    my $s = ( ( nibble_sum($i*2, \@nibbles) - 0xa) & 0xff);
     if ($s == $c) {
-      print q{
-    my $c = hi_nibble($_[0]->[}.$i.q{]) + (lo_nibble($_[0]->[}.($i+1).q{])<<4);
-    my $s = ( ( old_nibble_sum(}.$i.q{, $_[0]) - 0xa) & 0xff);
-    $s == $c;
-};
-      $found++;
+      $found .= q{($_[1]->[}.($i*2).q{] + ($_[1]->[}.($i*2+3).
+        q{])<<4)) == ( ( nibble_sum(}.($i*2).q{, $_[1]) - 0xa) & 0xff);}."\n";
     }
-    $c = $_[0]->[$i+1];
-    $s = ( ( old_nibble_sum($i+.5, $_[0]) - 0xa) & 0xff);
-    if ($s == $c) {
-      print q{
-    my $c = $_[0]->[}.($i+1).q{];
-    my $s = ( ( old_nibble_sum(}.($i+.5).q{, $_[0]) - 0xa) & 0xff);
-    $s == $c;
-};
-      $found++;
+    if ($bytes[$i+1] == ( ( nibble_sum(1+$i*2, \@nibbles) - 0xa) & 0xff)) {
+      $found .= q{$_[0]->[}.($i+1).q{] == ( ( nibble_sum(}.(1+$i*2).
+        q{, $_[0]) - 0xa) & 0xff)}."\n";
+    }
+    if ($bytes[$i+1] == ( ( nibble_sum(($i+1)*2, \@nibbles) - 0xa) & 0xff)) {
+      $found .= q{$_[0]->[}.($i+1).q{] == ( ( nibble_sum(}.(($i+1)*2).
+        q{, $_[0]) - 0xa) & 0xff);}."\n";
     }
   }
-  exit if ($found);
-  die "Could not determine checksum\n";
+  die $found || "Could not determine checksum\n";
 }
 
 my @uv_str =
@@ -681,15 +636,11 @@ sub uv {
   my $risk = uv_string($uv);
   #printf STDERR "%s uv=%d risk=%s\n", $dev, $uv, $risk;
   push @$res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev,
-              type => 'uv',
-              current => $uv,
-              risk => $risk,
-             },
-    };
+    Device::RFXCOM::Response::Sensor->new(device => $dev,
+                                          measurement => 'uv',
+                                          value => $uv,
+                                          risk => $risk,
+                                        );
   1;
 }
 
@@ -706,15 +657,11 @@ sub uv2 {
   my $risk = uv_string($uv);
   #printf STDERR "%s uv=%d risk=%s\n", $dev, $uv, $risk;
   push @$res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev,
-              type => 'uv',
-              current => $uv,
-              risk => $risk,
-             },
-    };
+    Device::RFXCOM::Response::Sensor->new(device => $dev,
+                                          measurement => 'uv',
+                                          value => $uv,
+                                          risk => $risk,
+                                        );
   1;
 }
 
@@ -731,14 +678,10 @@ sub temperature {
   $temp *= -1 if ($bytes->[6]&0x8);
   #printf STDERR "%s temp=%.1f\n", $dev, $temp;
   push @$res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev,
-              type => 'temp',
-              current => $temp,
-             },
-    };
+    Device::RFXCOM::Response::Sensor->new(device => $dev,
+                                          measurement => 'temp',
+                                          value => $temp,
+                                        );
   1;
 }
 
@@ -755,15 +698,11 @@ sub humidity {
   my $hum_str = ['normal', 'comfortable', 'dry', 'wet']->[$bytes->[7]>>6];
   #printf STDERR "%s hum=%d%% %s\n", $dev, $hum, $hum_str;
   push @$res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev,
-              type => 'humidity',
-              current => $hum,
-              string => $hum_str,
-             },
-    };
+    Device::RFXCOM::Response::Sensor->new(device => $dev,
+                                          measurement => 'humidity',
+                                          value => $hum,
+                                          string => $hum_str,
+                                         );
   1;
 }
 
@@ -786,16 +725,12 @@ sub pressure {
                  }->{$forecast_nibble} || 'unknown';
   #printf STDERR "%s baro: %d %s\n", $dev, $hpa, $forecast;
   push @$res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev,
-              type => 'pressure',
-              current => $hpa,
-              units => 'hPa',
-              forecast => $forecast,
-             },
-    };
+    Device::RFXCOM::Response::Sensor->new(device => $dev,
+                                          measurement => 'pressure',
+                                          value => $hpa,
+                                          units => 'hPa',
+                                          forecast => $forecast
+                                         );
   1;
 }
 
@@ -811,15 +746,10 @@ sub simple_battery {
   my $battery_low = $bytes->[4]&0x4;
   my $bat = $battery_low ? 10 : 90;
   push @$res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev,
-              type => 'battery',
-              current => $bat,
-              units => '%',
-             },
-    };
+    Device::RFXCOM::Response::Sensor->new(device => $dev,
+                                          measurement => 'battery',
+                                          value => $bat,
+                                          units => '%');
   $battery_low;
 }
 
@@ -834,15 +764,11 @@ sub percentage_battery {
   my ($parent, $bytes, $nib, $dev, $res) = @_;
   my $bat = 100-10*$nib->[9];
   push @$res,
-    {
-     schema => 'sensor.basic',
-     body => {
-              device => $dev,
-              type => 'battery',
-              current => $bat,
-              units => '%',
-             },
-    };
+    Device::RFXCOM::Response::Sensor->new(device => $dev,
+                                          measurement => 'battery',
+                                          value => $bat,
+                                          units => '%',
+                                         );
   $bat < 20;
 }
 

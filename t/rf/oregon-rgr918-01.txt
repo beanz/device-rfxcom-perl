@@ -1,62 +1,10 @@
 542a1d00863000815540031b
 
-$expected = {
-              'bytes' => [
-                           42,
-                           29,
-                           0,
-                           134,
-                           48,
-                           0,
-                           129,
-                           85,
-                           64,
-                           3,
-                           27
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'current' => 3,
-                                            'type' => 'speed',
-                                            'device' => 'rgr918.86',
-                                            'units' => 'mm/h'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 558,
-                                            'type' => 'distance',
-                                            'device' => 'rgr918.86',
-                                            'units' => 'mm'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 1,
-                                            'type' => 'count',
-                                            'device' => 'rgr918.86',
-                                            'units' => 'flips'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 90,
-                                            'type' => 'battery',
-                                            'device' => 'rgr918.86',
-                                            'units' => '%'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '2a1d00863000815540031b',
-              'type' => 'oregon',
-              'header_byte' => 84
-            };
+master oregon 54.2a1d00863000815540031b:
+  sensor/rgr918.86[speed]=3mm/h
+  sensor/rgr918.86[distance]=558mm
+  sensor/rgr918.86[count]=1flips
+  sensor/rgr918.86[battery]=90%
 
 
 

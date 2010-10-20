@@ -6,7 +6,7 @@ package Device::RFXCOM::Decoder;
 
 =head1 SYNOPSIS
 
-  # see Device::RFXCOM::Decorder
+  # see Device::RFXCOM::RX
 
 =head1 DESCRIPTION
 
@@ -15,7 +15,7 @@ Base class for RFXCOM decoder modules.
 =cut
 
 use 5.006;
-use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_ELECTRISAVE_DEBUG};
+use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_DEBUG};
 use Carp qw/croak/;
 
 use Exporter;
@@ -32,8 +32,8 @@ This constructor returns a new decoder object.
 =cut
 
 sub new {
-  my ($pkg, $parent) = @_;
-  bless {}, $pkg;
+  my $pkg = shift;
+  bless { @_ }, $pkg;
 }
 
 =head2 C<lo_nibble($byte)>

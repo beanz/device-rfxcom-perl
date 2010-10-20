@@ -1,28 +1,6 @@
 22c7e05dca00
 
-$expected = {
-              'bytes' => [
-                           199,
-                           224,
-                           93,
-                           202,
-                           0
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'unit' => 10,
-                                            'address' => '0x31f8177',
-                                            'command' => 'off'
-                                          },
-                                'schema' => 'homeeasy.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => 'c7e05dca00',
-              'type' => 'homeeasy',
-              'header_byte' => 34
-            };
+master homeeasy 22.c7e05dca00: homeeasy/0x31f8177.10/off
 
 
 

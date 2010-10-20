@@ -1,38 +1,8 @@
 20010e44bb
 
-$expected = {
-              'bytes' => [
-                           128,
-                           112,
-                           34,
-                           221
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'tamper' => 'true',
-                                            'zone' => 'x10sec80',
-                                            'delay' => 'min',
-                                            'event' => 'alert',
-                                            'state' => 'true'
-                                          },
-                                'schema' => 'security.zone'
-                              },
-                              {
-                                'body' => {
-                                            'tamper' => 'true',
-                                            'delay' => 'min',
-                                            'device' => 128,
-                                            'command' => 'alert'
-                                          },
-                                'schema' => 'x10.security'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '010e44bb',
-              'type' => 'x10security',
-              'header_byte' => 32
-            };
+master x10security 20.010e44bb:
+  security/x10sec80/alert/tamper/min
+  sensor/x10sec80[battery]=90%
 
 
 

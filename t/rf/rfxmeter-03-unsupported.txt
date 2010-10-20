@@ -1,20 +1,6 @@
 3000f0000600fb
 
-$expected = {
-              'bytes' => [
-                           0,
-                           240,
-                           0,
-                           6,
-                           0,
-                           251
-                         ],
-              'messages' => [],
-              'master' => 1,
-              'data' => '00f0000600fb',
-              'type' => 'rfxmeter',
-              'header_byte' => 48
-            };
+master rfxmeter 30.00f0000600fb
 
 Unsupported rfxmeter message identification packet
 Hex: 00f0000600fb

@@ -1,51 +1,9 @@
 50fab8142f792060d865db
 
-$expected = {
-              'bytes' => [
-                           250,
-                           184,
-                           20,
-                           47,
-                           121,
-                           32,
-                           96,
-                           216,
-                           101,
-                           219
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'current' => '20.7',
-                                            'type' => 'temp',
-                                            'device' => 'wtgr800.2f'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 86,
-                                            'string' => 'wet',
-                                            'type' => 'humidity',
-                                            'device' => 'wtgr800.2f'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 10,
-                                            'type' => 'battery',
-                                            'device' => 'wtgr800.2f',
-                                            'units' => '%'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => 'fab8142f792060d865db',
-              'type' => 'oregon',
-              'header_byte' => 80
-            };
+master oregon 50.fab8142f792060d865db:
+  sensor/wtgr800.2f[temp]=20.7
+  sensor/wtgr800.2f[humidity]=86
+  sensor/wtgr800.2f[battery]=10%
 
 
 

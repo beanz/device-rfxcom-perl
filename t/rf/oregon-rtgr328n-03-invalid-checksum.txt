@@ -1,23 +1,6 @@
 50dacc1ffff12220644e32
 
-$expected = {
-              'bytes' => [
-                           218,
-                           204,
-                           31,
-                           255,
-                           241,
-                           34,
-                           32,
-                           100,
-                           78,
-                           50
-                         ],
-              'master' => 1,
-              'data' => 'dacc1ffff12220644e32',
-              'type' => 'unknown',
-              'header_byte' => 80
-            };
+master unknown 50.dacc1ffff12220644e32
 
 
 

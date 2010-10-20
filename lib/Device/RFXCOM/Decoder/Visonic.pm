@@ -19,6 +19,8 @@ use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_VISONIC_DEBUG};
 use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble/;
 our @ISA = qw(Device::RFXCOM::Decoder);
+use Device::RFXCOM::Response::Security;
+use Device::RFXCOM::Response::Sensor;
 
 my %bits = ( 36 => 'powercode', 66 => 'codesecure' );
 
@@ -48,11 +50,11 @@ sub codesecure {
   # parity check?
 
   my $code =
-    sprintf "%02x%02x%02x%02x",
+    sprintf '%02x%02x%02x%02x',
       $bytes->[0], $bytes->[1], $bytes->[2], $bytes->[3];
 
   my $device =
-    sprintf "%02x%02x%02x%x",
+    sprintf 'codesecure.%02x%02x%02x%x',
       $bytes->[4], $bytes->[5], $bytes->[6], hi_nibble($bytes->[7]);
   my $event =
     { 0x1 => "light",
@@ -69,16 +71,18 @@ sub codesecure {
   my $low_bat = $bytes->[8]&0x8;
   my %args =
     (
-     schema => 'x10.security',
-     body => {
-              command => $event,
-              device  => $device,
-              type => 'codesecure',
-             }
+     event => $event,
+     device  => $device,
     );
-  $args{body}->{'low-battery'} = 'true' if ($low_bat);
-  $args{body}->{repeat} = 'true' if ($repeat);
-  return [ \%args ];
+  $args{repeat} = 1 if ($repeat);
+  return
+    [
+     Device::RFXCOM::Response::Security->new(%args),
+     Device::RFXCOM::Response::Sensor->new(device => $device,
+                                           measurement => 'battery',
+                                           value => $low_bat ? 10 : 90,
+                                           units => '%'),
+    ];
 }
 
 =head2 C<powercode( $parent, $message, $bytes, $bits )>
@@ -101,7 +105,7 @@ sub powercode {
     return;
   }
 
-  my $device = sprintf("%02x%02x%02x",
+  my $device = sprintf('powercode.%02x%02x%02x',
                        $bytes->[0], $bytes->[1], $bytes->[2]);
   $device .= 's' unless ($bytes->[3] & 0x4); # suffix s for secondary contact
   my $restore = $bytes->[3] & 0x8;
@@ -111,48 +115,21 @@ sub powercode {
   my $tamper  = $bytes->[3] & 0x80;
 
   # I assume $event is to distinguish whether it's a new event or just a
-  # heartbeat message - perhaps we should send xpl-stat if it is just a
-  # heartbeat
-
-  my @res;
-  my $args =
-    {
-     schema => 'security.zone',
-     body => {
-              event => 'alert',
-              zone  => 'powercode.'.$device,
-              state => $alert ? 'true' : 'false',
-             }
-    };
-  $args->{body}->{'low-battery'} = 'true' if ($low_bat);
-  $args->{body}->{restore} = 'true' if ($restore);
-  $args->{body}->{tamper} = 'true' if ($tamper);
-  push @res, $args;
-#x10.security
-#{
-#command=alert|normal|motion|light|dark|arm-home|arm-away|disarm|panic|lights-on
-#|lights-off
-#device=<device id>
-#[type=sh624|kr10|ds10|ds90|ms10|ms20|ms90|dm10|sd90|...]
-#[tamper=true|false]
-#[low-battery=true|false]
-#[delay=min|max]
-#}
-  $args =
-    {
-     schema => 'x10.security',
-     body => {
-              command => $alert ? 'alert' : 'normal',
-              device  => $device,
-              type => 'powercode',
-             }
-    };
-  $args->{body}->{tamper} = 'true' if ($tamper);
-  $args->{body}->{'low-battery'} = 'true' if ($low_bat);
-  $args->{body}->{event} = ($event ? 'event' : 'alive');
-  $args->{body}->{restore} = 'true' if ($restore);
-  push @res, $args;
-  return \@res;
+  # heartbeat message?
+  my %args =
+    (
+     event => $alert ? 'alert' : 'normal',
+     device  => $device,
+    );
+  $args{restore} = 1 if ($restore);
+  $args{tamper} = 1 if ($tamper);
+  return [
+          Device::RFXCOM::Response::Security->new(%args),
+          Device::RFXCOM::Response::Sensor->new(device => $device,
+                                                measurement => 'battery',
+                                                value => $low_bat ? 10 : 90,
+                                                units => '%'),
+         ];
 }
 
 1;

@@ -1,22 +1,6 @@
 c29b9fa8ad3d27a68340
 
-$expected = {
-              'bytes' => [
-                           155,
-                           159,
-                           168,
-                           173,
-                           61,
-                           39,
-                           166,
-                           131,
-                           64
-                         ],
-              'master' => '',
-              'data' => '9b9fa8ad3d27a68340',
-              'type' => 'unknown',
-              'header_byte' => 194
-            };
+slave unknown c2.9b9fa8ad3d27a68340
 
 
 

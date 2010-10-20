@@ -1,28 +1,6 @@
 2000f0ffc6
 
-$expected = {
-              'bytes' => [
-                           0,
-                           240,
-                           255,
-                           198
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'base_device' => '00f0',
-                                            'current' => '-0.25',
-                                            'type' => 'temp',
-                                            'device' => 'rfxsensor00f0'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '00f0ffc6',
-              'type' => 'rfxsensor',
-              'header_byte' => 32
-            };
+master rfxsensor 20.00f0ffc6: sensor/rfxsensor00f0[temp]=-0.25
 
 
 

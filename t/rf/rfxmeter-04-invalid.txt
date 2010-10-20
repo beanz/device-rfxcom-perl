@@ -1,19 +1,6 @@
 30000000000000
 
-$expected = {
-              'bytes' => [
-                           0,
-                           0,
-                           0,
-                           0,
-                           0,
-                           0
-                         ],
-              'master' => 1,
-              'data' => '000000000000',
-              'type' => 'unknown',
-              'header_byte' => 48
-            };
+master unknown 30.000000000000
 
 
 

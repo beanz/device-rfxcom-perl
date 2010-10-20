@@ -43,15 +43,12 @@ sub decode {
   $weight /= 10;
   my $dev_str = sprintf 'bwr102.%02x', hi_nibble($bytes->[1]);
   my $unknown = sprintf "%x%x", lo_nibble($bytes->[3]), hi_nibble($bytes->[2]);
-  return [{
-           schema => 'sensor.basic',
-           body => {
-                    device => $dev_str,
-                    type => 'weight',
-                    current => $weight,
-                    unknown => $unknown,
-                   },
-          }];
+  return
+    [Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                           measurement => 'weight',
+                                           value => $weight,
+                                           unknown => $unknown,
+                                          )];
 }
 
 =head2 C<parse_gr101( $parent, $message, $bytes, $bits )>
@@ -73,14 +70,10 @@ sub parse_gr101 {
     (lo_nibble($bytes->[4])<<12) + ($bytes->[3]<<4) + ($bytes->[2]>>4);
   $weight = sprintf "%.1f", $weight/400.8;
   my $dev_str = sprintf 'gr101.%02x', $bytes->[1];
-  return [{
-           schema => 'sensor.basic',
-           body => {
-                    device => $dev_str,
-                    type => 'weight',
-                    current => $weight,
-                   },
-          }];
+  return
+    [Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                           measurement => 'weight',
+                                           value => $weight)];
 }
 
 1;

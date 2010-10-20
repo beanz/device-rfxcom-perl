@@ -19,6 +19,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_ELECTRISAVE_DEBUG};
 use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
+use Device::RFXCOM::Response::Sensor;
 
 =head2 C<decode( $parent, $message, $bytes, $bits )>
 
@@ -46,14 +47,9 @@ sub decode {
     my $dev = $device.($index ? '.'.$index : '');
     printf "electrisave d=%s current=%.2f\n", $dev, $ct[$index] if DEBUG;
     push @msgs,
-      {
-       schema => 'sensor.basic',
-       body => {
-                device => 'electrisave.'.$dev,
-                type => 'current',
-                current => $ct[$index],
-               }
-      };
+      Device::RFXCOM::Response::Sensor->new(device => 'electrisave.'.$dev,
+                                            measurement => 'current',
+                                            value => $ct[$index]);
   }
   return \@msgs;
 }

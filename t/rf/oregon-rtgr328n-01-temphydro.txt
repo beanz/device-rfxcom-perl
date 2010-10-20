@@ -1,51 +1,9 @@
 50dacc134d312220644e32
 
-$expected = {
-              'bytes' => [
-                           218,
-                           204,
-                           19,
-                           77,
-                           49,
-                           34,
-                           32,
-                           100,
-                           78,
-                           50
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'current' => '22.3',
-                                            'type' => 'temp',
-                                            'device' => 'rtgr328n.4d'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 42,
-                                            'string' => 'comfortable',
-                                            'type' => 'humidity',
-                                            'device' => 'rtgr328n.4d'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 90,
-                                            'type' => 'battery',
-                                            'device' => 'rtgr328n.4d',
-                                            'units' => '%'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => 'dacc134d312220644e32',
-              'type' => 'oregon',
-              'header_byte' => 80
-            };
+master oregon 50.dacc134d312220644e32:
+  sensor/rtgr328n.4d[temp]=22.3
+  sensor/rtgr328n.4d[humidity]=42
+  sensor/rtgr328n.4d[battery]=90%
 
 
 

@@ -1,54 +1,9 @@
 5c2a19043f300080220120230a
 
-$expected = {
-              'bytes' => [
-                           42,
-                           25,
-                           4,
-                           63,
-                           48,
-                           0,
-                           128,
-                           34,
-                           1,
-                           32,
-                           35,
-                           10
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'current' => '0.76',
-                                            'type' => 'speed',
-                                            'device' => 'pcr800.3f',
-                                            'units' => 'mm/h'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => '31.19',
-                                            'type' => 'distance',
-                                            'device' => 'pcr800.3f',
-                                            'units' => 'mm'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 90,
-                                            'type' => 'battery',
-                                            'device' => 'pcr800.3f',
-                                            'units' => '%'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '2a19043f300080220120230a',
-              'type' => 'oregon',
-              'header_byte' => 92
-            };
+master oregon 5c.2a19043f300080220120230a:
+  sensor/pcr800.3f[speed]=0.76mm/h
+  sensor/pcr800.3f[distance]=31.19mm
+  sensor/pcr800.3f[battery]=90%
 
 
 

@@ -1,28 +1,6 @@
 2000f007cd
 
-$expected = {
-              'bytes' => [
-                           0,
-                           240,
-                           7,
-                           205
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'base_device' => '00f0',
-                                            'current' => '7.75',
-                                            'type' => 'temp',
-                                            'device' => 'rfxsensor00f0'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '00f007cd',
-              'type' => 'rfxsensor',
-              'header_byte' => 32
-            };
+master rfxsensor 20.00f007cd: sensor/rfxsensor00f0[temp]=7.75
 
 
 

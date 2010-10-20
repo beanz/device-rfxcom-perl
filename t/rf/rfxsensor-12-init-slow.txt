@@ -1,18 +1,6 @@
 2052463289
 
-$expected = {
-              'bytes' => [
-                           82,
-                           70,
-                           50,
-                           137
-                         ],
-              'messages' => [],
-              'master' => 1,
-              'data' => '52463289',
-              'type' => 'rfxsensor',
-              'header_byte' => 32
-            };
+master rfxsensor 20.52463289
 
 RFXSensor Type-2, version 09, transmit mode slow, initialized
 

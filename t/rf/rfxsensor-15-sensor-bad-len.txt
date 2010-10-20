@@ -1,16 +1,6 @@
 1852465800
 
-$expected = {
-              'bytes' => [
-                           82,
-                           70,
-                           88
-                         ],
-              'master' => 1,
-              'data' => '524658',
-              'type' => 'unknown',
-              'header_byte' => 24
-            };
+master unknown 18.524658
 
 
 

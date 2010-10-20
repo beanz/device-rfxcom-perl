@@ -1,26 +1,6 @@
 689aec134d03ff11526072605f43
 
-$expected = {
-              'bytes' => [
-                           154,
-                           236,
-                           19,
-                           77,
-                           3,
-                           255,
-                           17,
-                           82,
-                           96,
-                           114,
-                           96,
-                           95,
-                           67
-                         ],
-              'master' => 1,
-              'data' => '9aec134d03ff11526072605f43',
-              'type' => 'unknown',
-              'header_byte' => 104
-            };
+master unknown 68.9aec134d03ff11526072605f43
 
 
 

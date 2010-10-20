@@ -9,9 +9,11 @@ package Device::RFXCOM::RX;
   # for a USB-based device
   my $rx = Device::RFXCOM::RX->new(device => '/dev/ttyUSB0');
 
+  $|=1; # don't buffer output
+
   # simple interface to read received data
   while (my $data = $rx->read($timeout)) {
-    print Data::Dumper->Dump([$data],[qw/data/]);
+    print $data->summary,"\n";
   }
 
   # for a networked device
@@ -32,6 +34,7 @@ use Fcntl;
 use IO::Handle;
 use IO::Select;
 use Time::HiRes;
+use Device::RFXCOM::Response;
 use Module::Pluggable
   search_path => 'Device::RFXCOM::Decoder',
   instantiate => 'new';
@@ -70,7 +73,8 @@ sub new {
      _last_read => 0,
      %p,
     }, $pkg;
-  $self->{plugins} = [$self->plugins($self)] unless ($self->{plugins});
+  $self->{plugins} = [$self->plugins(parent => $self)]
+    unless ($self->{plugins});
   $self;
 }
 
@@ -180,6 +184,7 @@ sub read {
   my $res = $self->read_one(\$self->{_buf});
   return $res if (defined $res);
   $self->_discard_buffer_check() if ($self->{_buf} ne '');
+  $self->_discard_dup_cache_check();
   my $handle = $self->handle;
   my $sel = IO::Select->new($handle);
  REDO:
@@ -273,7 +278,7 @@ sub read_one {
   }
 
   @result{qw/data bytes/} = ($msg, \@bytes);
-  return \%result;
+  return Device::RFXCOM::Response->new(%result);
 }
 
 sub _is_duplicate {
@@ -290,6 +295,13 @@ sub _discard_buffer_check {
   if ($self->{_buf} ne '' &&
       $self->{_last_read} < (Time::HiRes::time - $self->{discard_timeout})) {
     $self->{_buf} = '';
+  }
+}
+
+sub _discard_dup_cache_check {
+  my $self = shift;
+  if ($self->{_last_read} < (Time::HiRes::time - $self->{dup_timeout})) {
+    $self->{_cache} = {};
   }
 }
 

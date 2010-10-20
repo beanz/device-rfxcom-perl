@@ -20,6 +20,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_HOMEEASY_DEBUG};
 use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
+use Device::RFXCOM::Response::HomeEasy;
 
 =head2 C<decode( $parent, $message, $bytes, $bits )>
 
@@ -33,7 +34,7 @@ returned.
 sub decode {
   my ($self, $parent, $message, $bytes, $bits) = @_;
 
-  $bits == 34 or $bits == 36 or return;
+  $bits == 34 or return;
 
   # HomeEasy devices seem to send duplicates with different byte[4] high nibble
   my @b = @{$bytes};
@@ -48,15 +49,15 @@ sub decode {
 
   printf "homeeasy c=%s u=%d a=%x\n",
     $res->{command}, $res->{unit}, $res->{address} if DEBUG;
-  my $body = {
+  my %body = (
               address => (sprintf "0x%x",$res->{address}),
               unit => $res->{unit},
               command => $res->{command},
-             };
+             );
 
-  $body->{level} = $res->{level} if ($res->{command} eq 'preset');
+  $body{level} = $res->{level} if ($res->{command} eq 'preset');
 
-  return [{ schema => 'homeeasy.basic', body => $body }];
+  return [Device::RFXCOM::Response::HomeEasy->new(%body)];
 }
 
 =head2 C<from_rf( $bits, $bytes )>

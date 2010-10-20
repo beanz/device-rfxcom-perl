@@ -83,14 +83,9 @@ sub decode {
   }
   my $count = ($bytes->[4]<<16) + ($bytes->[2]<<8) + ($bytes->[3]);
   #print "rfxmeter: ", $count, "count\n";
-  return [{
-           schema => 'sensor.basic',
-           body => {
-                    device => 'rfxmeter.'.$device,
-                    type => 'count',
-                    current => $count,
-                   },
-          }];
+  return [Device::RFXCOM::Response::Sensor->new(device => 'rfxmeter.'.$device,
+                                            measurement => 'count',
+                                            value => $count)];
 }
 
 1;

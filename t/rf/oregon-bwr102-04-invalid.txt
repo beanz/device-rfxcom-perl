@@ -1,20 +1,6 @@
 38dc63d293d2d013
 
-$expected = {
-              'bytes' => [
-                           220,
-                           99,
-                           210,
-                           147,
-                           210,
-                           208,
-                           19
-                         ],
-              'master' => 1,
-              'data' => 'dc63d293d2d013',
-              'type' => 'unknown',
-              'header_byte' => 56
-            };
+master unknown 38.dc63d293d2d013
 
 
 

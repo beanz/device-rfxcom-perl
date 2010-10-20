@@ -1,38 +1,6 @@
 689aec134d033311526072605f43
 
-$expected = {
-              'bytes' => [
-                           154,
-                           236,
-                           19,
-                           77,
-                           3,
-                           51,
-                           17,
-                           82,
-                           96,
-                           114,
-                           96,
-                           95,
-                           67
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'time' => '211330',
-                                            'date' => '20070605',
-                                            'day' => 'Tuesday',
-                                            'device' => 'rtgr328n.4d',
-                                            'datetime' => '20070605211330'
-                                          },
-                                'schema' => 'datetime.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '9aec134d033311526072605f43',
-              'type' => 'oregon',
-              'header_byte' => 104
-            };
+master oregon 68.9aec134d033311526072605f43: datetime/rtgr328n.4d=20070605 211330 Tuesday
 
 
 

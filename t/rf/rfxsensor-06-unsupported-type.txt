@@ -1,17 +1,6 @@
 2003f31ae1
 
-$expected = {
-              'bytes' => [
-                           3,
-                           243,
-                           26,
-                           225
-                         ],
-              'master' => 1,
-              'data' => '03f31ae1',
-              'type' => 'unknown',
-              'header_byte' => 32
-            };
+master unknown 20.03f31ae1
 
 Unsupported RFXSensor: type=3
 

@@ -18,6 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_X10_DEBUG};
 use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
+use Device::RFXCOM::Response::X10;
 
 =head2 C<new($parent)>
 
@@ -26,7 +27,7 @@ This constructor returns a new X10 decoder object.
 =cut
 
 sub new {
-  my ($pkg, $parent) = @_;
+  my $pkg = shift;
   $pkg->SUPER::new(unit_cache => {}, default_x10_level => 10, @_);
 }
 
@@ -47,23 +48,19 @@ sub decode {
   $self->{unit_cache}->{$h} = $res->{unit} if (exists $res->{unit});
   my %r =
     (
-     schema => 'x10.basic',
-     body =>
-     {
-      command => $f,
-     }
+     command => $f,
     );
   my $u = $self->{unit_cache}->{$h};
   if (defined $u) {
-    $r{body}->{device} = $h.$u;
+    $r{device} = $h.$u;
   } else {
     warn "Don't have unit code for: $h $f\n";
-    $r{body}->{house} = $h;
+    $r{house} = $h;
   }
   if ($f eq 'bright' or $f eq 'dim') {
-    $r{body}->{level} = $self->{default_x10_level};
+    $r{level} = $self->{default_x10_level};
   }
-  return [\%r];
+  return [Device::RFXCOM::Response::X10->new(%r)];
 }
 
 my %byte_to_house =

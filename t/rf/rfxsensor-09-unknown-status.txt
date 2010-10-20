@@ -1,17 +1,6 @@
 2003f39917
 
-$expected = {
-              'bytes' => [
-                           3,
-                           243,
-                           153,
-                           23
-                         ],
-              'master' => 1,
-              'data' => '03f39917',
-              'type' => 'unknown',
-              'header_byte' => 32
-            };
+master unknown 20.03f39917
 
 RFXSensor unknown status messages: 99
 

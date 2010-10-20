@@ -1,40 +1,8 @@
 20010e45ba
 
-$expected = {
-              'bytes' => [
-                           128,
-                           112,
-                           162,
-                           93
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'tamper' => 'true',
-                                            'low-battery' => 'true',
-                                            'zone' => 'x10sec80',
-                                            'delay' => 'min',
-                                            'event' => 'alert',
-                                            'state' => 'true'
-                                          },
-                                'schema' => 'security.zone'
-                              },
-                              {
-                                'body' => {
-                                            'low-battery' => 'true',
-                                            'tamper' => 'true',
-                                            'delay' => 'min',
-                                            'device' => 128,
-                                            'command' => 'alert'
-                                          },
-                                'schema' => 'x10.security'
-                              }
-                            ],
-              'master' => 1,
-              'data' => '010e45ba',
-              'type' => 'x10security',
-              'header_byte' => 32
-            };
+master x10security 20.010e45ba:
+  security/x10sec80/alert/tamper/min
+  sensor/x10sec80[battery]=10%
 
 
 

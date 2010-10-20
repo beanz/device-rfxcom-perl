@@ -1,19 +1,6 @@
 2853454e0026
 
-$expected = {
-              'bytes' => [
-                           83,
-                           69,
-                           78,
-                           0,
-                           38
-                         ],
-              'messages' => [],
-              'master' => 1,
-              'data' => '53454e0026',
-              'type' => 'rfxsensor',
-              'header_byte' => 40
-            };
+master rfxsensor 28.53454e0026
 
 RFXSensor SEN0, type 26 (DS2438)
 

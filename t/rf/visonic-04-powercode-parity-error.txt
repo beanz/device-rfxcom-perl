@@ -1,29 +1,6 @@
 a4c5ec581440
 
-$expected = {
-              'bytes' => [
-                           197,
-                           236,
-                           88,
-                           20,
-                           64
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'level' => 4,
-                                            'unit' => 4,
-                                            'address' => '0x317b160',
-                                            'command' => 'preset'
-                                          },
-                                'schema' => 'homeeasy.basic'
-                              }
-                            ],
-              'master' => '',
-              'data' => 'c5ec581440',
-              'type' => 'homeeasy',
-              'header_byte' => 164
-            };
+slave unknown a4.c5ec581440
 
 Possible Visonic powercode with parity error 3 != 4
 

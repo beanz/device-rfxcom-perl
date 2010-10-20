@@ -18,6 +18,8 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_X10_SECURITY_DEBUG};
 use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
+use Device::RFXCOM::Response::Security;
+use Device::RFXCOM::Response::Sensor;
 
 =head2 C<decode( $parent, $message, $bytes, $bits )>
 
@@ -68,26 +70,13 @@ sub decode {
   my $min_delay;
   my $low_battery;
 
-  my @res;
-  my $args;
   if (exists $x10_security{$data}) {
     my $rec = $x10_security{$data};
-    my $min_delay;
     if (ref $rec) {
       ($command, $min_delay) = @$rec;
     } else {
       $command = $rec;
     }
-
-    $args = {
-             schema => 'security.basic',
-             body => {
-                      command => $command,
-                      user => $device,
-                     }
-            };
-    $args->{body}->{delay} = $min_delay if (defined $min_delay);
-    push @res, $args;
   } elsif (exists $not_supported_yet{$data}) {
     warn sprintf "Not supported: %02x %s\n", $data, $not_supported_yet{$data};
     return [];
@@ -96,37 +85,25 @@ sub decode {
     my $alert = !($data&0x1);
     $command = $alert ? 'alert' : 'normal',
     $tamper = $data&0x2;
-    $min_delay = $data&0x20 ? 'min' : 'max';
+    $min_delay = $data&0x20;
     $low_battery = $data&0x80;
-
-    $args =
-      {
-       schema => 'security.zone',
-       body => {
-                event => 'alert',
-                zone  => $device,
-                state => $alert ? 'true' : 'false',
-                delay => $min_delay,
-               }
-      };
-    $args->{body}->{'low-battery'} = 'true' if ($low_battery);
-    $args->{body}->{'tamper'} = 'true' if ($tamper);
-    push @res, $args;
   }
 
-  $args =
-    {
-     schema => 'x10.security',
-     body => {
-              command => $command,
-              device  => $short_device,
-             }
-    };
-  $args->{body}->{tamper} = 'true' if ($tamper);
-  $args->{body}->{'low-battery'} = 'true' if ($low_battery);
-  $args->{body}->{'delay'} = $min_delay if (defined $min_delay);
-  push @res, $args;
-  return \@res;
+  my %args =
+    (
+     event => $command,
+     device  => $device,
+    );
+  $args{tamper} = 1 if ($tamper);
+  $args{min_delay} = 1 if ($min_delay);
+  return
+    [
+     Device::RFXCOM::Response::Security->new(%args),
+     Device::RFXCOM::Response::Sensor->new(device => $device,
+                                           measurement => 'battery',
+                                           value => $low_battery ? 10 : 90,
+                                           units => '%'),
+    ];
 }
 
 =head2 C<reverse_bits( \@bytes )>

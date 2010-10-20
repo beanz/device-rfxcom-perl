@@ -1,36 +1,8 @@
 29c6c906f9ef80
 
-$expected = {
-              'bytes' => [
-                           99,
-                           147,
-                           96,
-                           159,
-                           247,
-                           1
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'delay' => 'min',
-                                            'user' => 'x10sec63',
-                                            'command' => 'arm-away'
-                                          },
-                                'schema' => 'security.basic'
-                              },
-                              {
-                                'body' => {
-                                            'device' => 99,
-                                            'command' => 'arm-away'
-                                          },
-                                'schema' => 'x10.security'
-                              }
-                            ],
-              'master' => 1,
-              'data' => 'c6c906f9ef80',
-              'type' => 'x10security',
-              'header_byte' => 41
-            };
+master x10security 29.c6c906f9ef80:
+  security/x10sec63/arm-away/min
+  sensor/x10sec63[battery]=90%
 
 
 

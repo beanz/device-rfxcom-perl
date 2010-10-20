@@ -1,42 +1,8 @@
 48da7814560010073480
 
-$expected = {
-              'bytes' => [
-                           218,
-                           120,
-                           20,
-                           86,
-                           0,
-                           16,
-                           7,
-                           52,
-                           128
-                         ],
-              'messages' => [
-                              {
-                                'body' => {
-                                            'current' => 0,
-                                            'type' => 'uv',
-                                            'device' => 'uvn800.56',
-                                            'risk' => 'low'
-                                          },
-                                'schema' => 'sensor.basic'
-                              },
-                              {
-                                'body' => {
-                                            'current' => 100,
-                                            'type' => 'battery',
-                                            'device' => 'uvn800.56',
-                                            'units' => '%'
-                                          },
-                                'schema' => 'sensor.basic'
-                              }
-                            ],
-              'master' => 1,
-              'data' => 'da7814560010073480',
-              'type' => 'oregon',
-              'header_byte' => 72
-            };
+master oregon 48.da7814560010073480:
+  sensor/uvn800.56[uv]=0
+  sensor/uvn800.56[battery]=100%
 
 
 

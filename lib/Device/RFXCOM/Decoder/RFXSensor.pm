@@ -52,7 +52,7 @@ This constructor returns a new RFXSensor decoder object.
 =cut
 
 sub new {
-  my ($pkg, $parent) = @_;
+  my $pkg = shift;
   $pkg->SUPER::new(rfxsensor_cache => {}, @_);
 }
 
@@ -99,28 +99,19 @@ sub decode {
         $temp = -1*(256-$temp);
       }
       $cache->{$base}->{temp} = $temp;
-      return [{
-               schema => 'sensor.basic',
-               body => {
-                        device => $device,
-                        type => 'temp',
-                        current => $temp,
-                        base_device => $base,
-                       },
-              }];
+      return
+        [Device::RFXCOM::Response::Sensor->new(device => $device,
+                                               measurement => 'temp',
+                                               value => $temp,
+                                               base_device => $base)];
     } elsif ($type == 1) {
       my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
       my @res = ();
       push @res,
-        {
-         schema => 'sensor.basic',
-         body => {
-                  device => $device,
-                  type => 'voltage',
-                  current => $v,
-                  base_device => $base,
-                 },
-        };
+        Device::RFXCOM::Response::Sensor->new(device => $device,
+                                              measurement => 'voltage',
+                                              value => $v,
+                                              base_device => $base);
       unless (defined $supply_voltage) {
         warn "Don't have supply voltage for $device/$base yet\n";
         return \@res;
@@ -136,28 +127,18 @@ sub decode {
         warn "Don't have temperature for $device/$base yet - assuming 25'C\n";
       }
       push @res,
-        {
-         schema => 'sensor.basic',
-         body => {
-                  device => $device,
-                  type => 'humidity',
-                  current => $hum,
-                  base_device => $base,
-                 },
-        };
+        Device::RFXCOM::Response::Sensor->new(device => $device,
+                                              measurement => 'humidity',
+                                              value => $hum,
+                                              base_device => $base);
       return \@res;
     } elsif ($type == 2) {
       my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
       $cache->{$base}->{supply} = $v;
-      return [{
-               schema => 'sensor.basic',
-               body => {
-                        device => $device,
-                        type => 'voltage',
-                        current => $v,
-                        base_device => $base,
-                       },
-              }];
+      return [Device::RFXCOM::Response::Sensor->new(device => $device,
+                                                    measurement => 'voltage',
+                                                    value => $v,
+                                                    base_device => $base)]
     } else {
       warn "Unsupported RFXSensor: type=$type\n";
       # not implemented yet

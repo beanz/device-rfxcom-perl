@@ -1,20 +1,6 @@
 29c6c902fdef80
 
-$expected = {
-              'bytes' => [
-                           99,
-                           147,
-                           64,
-                           191,
-                           247,
-                           1
-                         ],
-              'messages' => [],
-              'master' => 1,
-              'data' => 'c6c902fdef80',
-              'type' => 'x10security',
-              'header_byte' => 41
-            };
+master x10security 29.c6c902fdef80
 
 Not supported: 40 SH624 arm away (max)
 

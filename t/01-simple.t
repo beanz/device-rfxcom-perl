@@ -17,7 +17,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'No AnyEvent::Socket module installed: $@';
   }
-  import Test::More tests => 12;
+  import Test::More tests => 42;
 }
 
 my @connections =
@@ -25,8 +25,8 @@ my @connections =
    [
     'F020' => '4d26',
     'F041' => '41',
-    'F02A' => '41',
-    '' => '20649b08f7',
+    'F02A' => '2c', # mode is still 0x41 really but differs here for coverage
+    '' => '20609f08f7',
     '' => '80',
    ],
 
@@ -112,46 +112,64 @@ my $res;
 my $w = AnyEvent->io(fh => $rx->handle, poll => 'r',
                      cb => sub { $cv->send($rx->read()) });
 $res = $cv->recv;
-is_deeply($res, { type => 'version', header_byte => 0x4d, bytes => [0x26],
-                  master => 1, data => chr(38), },
-         'version check reply');
+is($res->type, 'version', 'got version check response');
+is($res->header_byte, 0x4d, '... correct header_byte');
+ok($res->master, '... from master receiver');
+is($res->length, 1, '... correct data length');
+is_deeply($res->bytes, [0x26], '... correct data bytes');
+is($res->summary, 'master version 4d.26', '... correct summary string');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
-is_deeply($res, { type => 'mode', header_byte => 0x41, bytes => [],
-                  master => 1, data => '', },
-         'mode set reply');
+is($res->type, 'mode', 'got 1st mode acknowledgement');
+is($res->header_byte, 0x41, '... correct header_byte');
+ok($res->master, '... from master receiver');
+is($res->length, 0, '... correct data length');
+is(@{$res->bytes}, 0, '... no data bytes');
+is($res->summary, 'master mode 41.', '... correct summary string');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
-is_deeply($res, { type => 'mode', header_byte => 0x41, bytes => [],
-                  master => 1, data => '', },
-         'receiving option reply');
+is($res->type, 'mode', 'got 2nd mode acknowledgement');
+is($res->header_byte, 0x2c, '... correct header_byte');
+ok($res->master, '... from master receiver');
+is($res->length, 0, '... correct data length');
+is(@{$res->bytes}, 0, '... no data bytes');
+is($res->summary, 'master mode 2c.', '... correct summary string');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
-my $data = pack 'H*', '649b08f7';
-is_deeply($res, { type => 'x10', header_byte => 0x20,
-                  bytes => [unpack 'C*', $data],
-                  master => 1, data => $data,
-                  'messages' =>
-                  [
-                   {
-                    'schema' => 'x10.basic',
-                    'body' => {'command' => 'on', 'device' => 'a11', },
-                   }
-                  ],
-                },
-          'simple data message');
+is($res->type, 'x10', 'got x10 message');
+is($res->header_byte, 0x20, '... correct header_byte');
+ok($res->master, '... from master receiver');
+is($res->length, 4, '... correct data length');
+is($res->hex_data, '609f08f7', '... correct data');
+is($res->summary,
+   'master x10 20.609f08f7: x10/a3/on',
+   '... correct summary string');
+
+is(scalar @{$res->messages}, 1, '... correct number of messages');
+my $message = $res->messages->[0];
+is($message->type, 'x10', '... correct message type');
+is($message->command, 'on', '... correct message command');
+is($message->device, 'a3', '... correct message device');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
-is_deeply($res, { type => 'empty', header_byte => 0x80,
-                  bytes => [],
-                  master => '', data => '', },
-          'empty slave message');
+is($res->type, 'empty', 'got empty message');
+is($res->header_byte, 0x80, '... correct header_byte');
+ok(!$res->master, '... from slave receiver');
+is($res->length, 0, '... correct data length');
+is($res->hex_data, '', '... no data');
+is($res->summary, 'slave empty 80.', '... correct summary string');
 
 undef $server;
+
+$cv = AnyEvent->condvar;
+eval { $res = $cv->recv; };
+like($@, qr!^closed at t/01-simple\.t line \d+$!, 'check close');
+
+undef $rx, $w;
 
 $rx = Device::RFXCOM::RX->new(device => $addr);
 ok($rx, 'instantiate Device::RFXCOM::RX object');
