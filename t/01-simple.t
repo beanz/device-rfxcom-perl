@@ -169,7 +169,8 @@ $cv = AnyEvent->condvar;
 eval { $res = $cv->recv; };
 like($@, qr!^closed at t/01-simple\.t line \d+$!, 'check close');
 
-undef $rx, $w;
+undef $rx;
+undef $w;
 
 $rx = Device::RFXCOM::RX->new(device => $addr);
 ok($rx, 'instantiate Device::RFXCOM::RX object');
