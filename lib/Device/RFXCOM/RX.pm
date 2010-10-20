@@ -48,11 +48,22 @@ The only supported parameter is:
 
 =item device
 
-The name of the device to connect to.  The default is
-C</dev/rfxcom-rx> in anticipation of a typical scenario where a udev
-rule has been used to identify the USB tty device for the device.
-Other values can be tty device names, unix domain sockets (in the form
-of paths) or C<hostname:port> for TCP-based RFXCOM receivers.
+The name of the device to connect to.  The value can be a tty device
+name, unix domain socket (in the form of a path) or a C<hostname:port>
+for TCP-based RFXCOM receivers.
+
+The default is C</dev/rfxcom-rx> in anticipation of a scenario where a
+udev rule has been used to identify the USB tty device for the device.
+For example, a file might be created in C</etc/udev/rules.d/91-rfxcom>
+with a line like:
+
+  SUBSYSTEM=="tty", SYSFS{idProduct}=="6001", SYSFS{idVendor}=="0403", SYSFS{serial}=="AnnnnABC", NAME="rfxcom-rx"
+
+where the C<serial> number attribute is obtained from the output
+from:
+
+  udevinfo -a -p `udevinfo -q path -n /dev/ttyUSB0` | \
+    sed -e'/ATTRS{serial}/!d;q'
 
 =back
 
