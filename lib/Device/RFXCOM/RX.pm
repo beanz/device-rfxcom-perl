@@ -49,8 +49,7 @@ The only supported parameter is:
 =item device
 
 The name of the device to connect to.  The value can be a tty device
-name, unix domain socket (in the form of a path) or a C<hostname:port>
-for TCP-based RFXCOM receivers.
+name or a C<hostname:port> for TCP-based RFXCOM receivers.
 
 The default is C</dev/rfxcom-rx> in anticipation of a scenario where a
 udev rule has been used to identify the USB tty device for the device.
