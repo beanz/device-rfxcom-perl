@@ -112,7 +112,7 @@ sub _write_now {
   print STDERR "Sending: $msg $desc\n" if DEBUG;
   my $out = pack 'H*', $msg;
   syswrite $self->handle, $out, length $out;
-  $self->{_waiting} = [ Time::HiRes::time, @$record ];
+  $self->{_waiting} = [ $self->_time_now, @$record ];
 }
 
 =head2 C<handle()>
@@ -134,41 +134,40 @@ sub handle {
 
 sub _open {
   my $self = shift;
+  $self->{device} =~ m!/! ?
+    $self->_open_serial_port(@_) : $self->_open_tcp_port(@_)
+}
 
+sub _open_tcp_port {
+  my $self = shift;
   my $dev = $self->{device};
-  print STDERR "Opening $dev as " if DEBUG;
-  my $fh;
-  if ($dev =~ m!/!) {
-    if (-S $dev) {
-      print STDERR "unix domain socket\n" if DEBUG;
-      require IO::Socket::UNIX; import IO::Socket::UNIX;
-      $fh = IO::Socket::Unix->new($dev) or
-        croak "Unix domain socket open of '$dev' failed: $!";
-    } else {
-      print STDERR "serial port\n" if DEBUG;
-      require Device::SerialPort; import Device::SerialPort;
-      my $ser = $self->{serialport} =
-        Device::SerialPort->new($dev) or
-            croak "Failed to tie '$dev' with Device::SerialPort: $!";
-      $ser->baudrate($self->{port});
-      $ser->databits(8);
-      $ser->parity('none');
-      $ser->stopbits(1);
-      $ser->write_settings;
-      $ser->close;
-      undef $ser;
-      sysopen $fh, $dev, O_RDWR|O_NOCTTY|O_NDELAY
-        or croak "sysopen of '$dev' failed: $!";
-      $fh->autoflush(1);
-      binmode($fh);
-    }
-  } else {
-    print STDERR "tcp port\n" if DEBUG;
-    require IO::Socket::INET; import IO::Socket::INET;
-    $dev .= ':'.$self->{port} unless ($dev =~ /:/);
-    $fh = IO::Socket::INET->new($dev) or
-      croak "TCP connect to '$dev' failed: $!";
-  }
+  print STDERR "Opening $dev as tcp socket\n" if DEBUG;
+  require IO::Socket::INET; import IO::Socket::INET;
+  $dev .= ':'.$self->{port} unless ($dev =~ /:/);
+  my $fh = IO::Socket::INET->new($dev) or
+    croak "TCP connect to '$dev' failed: $!";
+  return $fh;
+}
+
+sub _open_serial_port {
+  my $self = shift;
+  my $dev = $self->{device};
+  print STDERR "Opening $dev as serial port\n" if DEBUG;
+  require Device::SerialPort; import Device::SerialPort;
+  my $ser = $self->{serialport} =
+    Device::SerialPort->new($dev) or
+        croak "Failed to open '$dev' with Device::SerialPort: $!";
+  $ser->baudrate($self->{port});
+  $ser->databits(8);
+  $ser->parity('none');
+  $ser->stopbits(1);
+  $ser->write_settings;
+  $ser->close;
+  undef $ser;
+  sysopen my $fh, $dev, O_RDWR|O_NOCTTY|O_NDELAY
+    or croak "sysopen of '$dev' failed: $!";
+  $fh->autoflush(1);
+  binmode($fh);
   return $fh;
 }
 
@@ -199,10 +198,10 @@ sub read {
   my $handle = $self->handle;
   my $sel = IO::Select->new($handle);
  REDO:
-  my $start = Time::HiRes::time;
+  my $start = $self->_time_now;
   $sel->can_read($timeout) or return;
   my $bytes = sysread $handle, $self->{_buf}, 2048, length $self->{_buf};
-  $self->{_last_read} = Time::HiRes::time;
+  $self->{_last_read} = $self->_time_now;
   $timeout -= $self->{_last_read} - $start if (defined $timeout);
   unless ($bytes) {
     croak defined $bytes ? 'closed' : 'error: '.$!;
@@ -295,7 +294,7 @@ sub read_one {
 sub _is_duplicate {
   my ($self, $bits, $message) = @_;
   my $key = $bits.'!'.$message;
-  my $t = Time::HiRes::time;
+  my $t = $self->_time_now;
   my $l = $self->{_cache}->{$key};
   $self->{_cache}->{$key} = $t;
   return defined $l && $t-$l < $self->{dup_timeout};
@@ -304,16 +303,20 @@ sub _is_duplicate {
 sub _discard_buffer_check {
   my $self = shift;
   if ($self->{_buf} ne '' &&
-      $self->{_last_read} < (Time::HiRes::time - $self->{discard_timeout})) {
+      $self->{_last_read} < ($self->_time_now - $self->{discard_timeout})) {
     $self->{_buf} = '';
   }
 }
 
 sub _discard_dup_cache_check {
   my $self = shift;
-  if ($self->{_last_read} < (Time::HiRes::time - $self->{dup_timeout})) {
+  if ($self->{_last_read} < ($self->_time_now - $self->{dup_timeout})) {
     $self->{_cache} = {};
   }
+}
+
+sub _time_now {
+  Time::HiRes::time
 }
 
 1;
