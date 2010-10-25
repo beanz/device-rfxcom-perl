@@ -50,7 +50,7 @@ sub decode {
   printf "homeeasy c=%s u=%d a=%x\n",
     $res->{command}, $res->{unit}, $res->{address} if DEBUG;
   my %body = (
-              address => (sprintf "0x%x",$res->{address}),
+              address => (sprintf "%#x",$res->{address}),
               unit => $res->{unit},
               command => $res->{command},
              );
