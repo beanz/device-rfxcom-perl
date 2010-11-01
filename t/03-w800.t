@@ -3,6 +3,7 @@
 # Copyright (C) 2010 by Mark Hindess
 
 use strict;
+use warnings;
 use constant {
   DEBUG => $ENV{DEVICE_W800_TEST_DEBUG}
 };
@@ -17,17 +18,20 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 16;
+  import Test::More tests => 17;
 }
 
 my @connections =
   (
    [
+    '609f08',
+    '',
+    'f7',
     '609f08f7',
-    '609f08f7',
+    '',
    ],
-
   );
+
 my $cv = AnyEvent->condvar;
 my $server = tcp_server undef, undef, sub {
   my ($fh, $host, $port) = @_;
@@ -73,7 +77,7 @@ sub handle_connection {
                                 });
     return;
   }
-  print STDERR "Sending: ", $send if DEBUG;
+  print STDERR "Sending: ", $send, "\n" if DEBUG;
   $send = pack "H*", $send;
   print STDERR "Sending ", length $send, " bytes\n" if DEBUG;
   $handle->push_write($send);
@@ -86,14 +90,18 @@ $addr = $addr->[0].':'.$addr->[1];
 
 use_ok('Device::W800');
 
-my $w800 = Device::W800->new(device => $addr);
+my $w800 = Device::W800->new(device => $addr,
+                             discard_timeout => 0.4);
 
 ok($w800, 'instantiate Device::W800 object');
 
-my $cv;
 my $res;
 my $w = AnyEvent->io(fh => $w800->handle, poll => 'r',
                      cb => sub { $cv->send($w800->read(0.1)) });
+$cv = AnyEvent->condvar;
+$res = $cv->recv;
+is($res, undef, 'timeout');
+
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
 is($res->type, 'x10', 'got x10 message');
