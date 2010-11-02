@@ -51,16 +51,18 @@ sub decode {
      command => $f,
     );
   my $u = $self->{unit_cache}->{$h};
+  my $dont_cache;
   if (defined $u) {
     $r{device} = $h.$u;
   } else {
     warn "Don't have unit code for: $h $f\n";
+    $dont_cache = 1;
     $r{house} = $h;
   }
   if ($f eq 'bright' or $f eq 'dim') {
     $r{level} = $self->{default_x10_level};
   }
-  return [Device::RFXCOM::Response::X10->new(%r)];
+  return ([Device::RFXCOM::Response::X10->new(%r)], undef, undef, $dont_cache);
 }
 
 my %byte_to_house =

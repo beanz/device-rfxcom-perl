@@ -40,14 +40,20 @@ sub decode {
   my @b = @{$bytes};
   my $b4 = $b[4];
   $b[4] &= 0xf;
+  my $normalized_message;
   if ($b[4] != $b4) {
-    $parent->_is_duplicate($bits, pack "C*", @b) and return [];
+    $normalized_message = pack "C*", @b;
+    my $entry = $parent->_cache_get($bits, $normalized_message);
+    if ($entry) {
+      return ($entry->{result}->{messages},
+              $parent->_cache_is_duplicate($entry));
+    }
     $b[4] = $b4;
   }
 
   my $res = from_rf($bits, $bytes);
 
-  printf "homeeasy c=%s u=%d a=%x\n",
+  printf "homeeasy c=%s u=%s a=%x\n",
     $res->{command}, $res->{unit}, $res->{address} if DEBUG;
   my %body = (
               address => (sprintf "%#x",$res->{address}),
@@ -57,7 +63,7 @@ sub decode {
 
   $body{level} = $res->{level} if ($res->{command} eq 'preset');
 
-  return [Device::RFXCOM::Response::HomeEasy->new(%body)];
+  return ([Device::RFXCOM::Response::HomeEasy->new(%body)], undef, $normalized_message);
 }
 
 =head2 C<from_rf( $bits, $bytes )>

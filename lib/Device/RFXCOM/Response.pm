@@ -122,6 +122,15 @@ from the payload.
 
 sub messages { shift->{messages} || [] }
 
+=head2 C<duplicate()>
+
+This method returns a true value if the message was identical to another
+sent recently.
+
+=cut
+
+sub duplicate { shift->{duplicate} }
+
 =head2 C<summary()>
 
 This method returns a string summary of the contents of the RF message.
@@ -133,11 +142,12 @@ this may be a multiline string.)
 sub summary {
   my $self = shift;
   my $str = join "\n  ", map { $_->summary } @{$self->messages};
-  sprintf('%s %s %02x.%s%s',
+  sprintf('%s %s %02x.%s%s%s',
           $self->master ? 'master' : 'slave',
           $self->type,
           $self->header_byte,
           $self->hex_data,
+          $self->duplicate ? '(dup)' : '',
           $str =~ /\n/ ? ":\n  ".$str : $str ne '' ? ': '.$str : '');
 }
 

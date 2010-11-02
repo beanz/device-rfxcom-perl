@@ -90,60 +90,61 @@ sub decode {
       warn sprintf "RFXSensor unknown status messages: %02x\n", $bytes->[2];
     }
     return;
-  } else {
-    my $type = ($bytes->[0]&0x3);
-    if ($type == 0) {
-      # temp
-      my $temp = $bytes->[2] + (($bytes->[3]&0xe0)/0x100);
-      if ($temp > 150) {
-        $temp = -1*(256-$temp);
-      }
-      $cache->{$base}->{temp} = $temp;
-      return
-        [Device::RFXCOM::Response::Sensor->new(device => $device,
-                                               measurement => 'temp',
-                                               value => $temp,
-                                               base_device => $base)];
-    } elsif ($type == 1) {
-      my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
-      my @res = ();
-      push @res,
-        Device::RFXCOM::Response::Sensor->new(device => $device,
-                                              measurement => 'voltage',
-                                              value => $v,
-                                              base_device => $base);
-      unless (defined $supply_voltage) {
-        warn "Don't have supply voltage for $device/$base yet\n";
-        return \@res;
-      }
-      # See http://archives.sensorsmag.com/articles/0800/62/main.shtml
-      my $hum = sprintf "%.2f", (($v/$supply_voltage) - 0.16)/0.0062;
-      #print STDERR "Sensor Hum: $hum\n";
-      if (defined $last_temp) {
-        #print STDERR "Last temp: $last_temp\n";
-        $hum = sprintf "%.2f", $hum / (1.0546 - 0.00216*$last_temp);
-        #print STDERR "True Hum: $hum\n";
-      } else {
-        warn "Don't have temperature for $device/$base yet - assuming 25'C\n";
-      }
-      push @res,
-        Device::RFXCOM::Response::Sensor->new(device => $device,
-                                              measurement => 'humidity',
-                                              value => $hum,
-                                              base_device => $base);
-      return \@res;
-    } elsif ($type == 2) {
-      my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
-      $cache->{$base}->{supply} = $v;
-      return [Device::RFXCOM::Response::Sensor->new(device => $device,
-                                                    measurement => 'voltage',
-                                                    value => $v,
-                                                    base_device => $base)]
-    } else {
-      warn "Unsupported RFXSensor: type=$type\n";
-      # not implemented yet
-    }
   }
+
+  my $type = ($bytes->[0]&0x3);
+  if ($type == 0) {
+    # temp
+    my $temp = $bytes->[2] + (($bytes->[3]&0xe0)/0x100);
+    if ($temp > 150) {
+      $temp = -1*(256-$temp);
+    }
+    $cache->{$base}->{temp} = $temp;
+    return
+      [Device::RFXCOM::Response::Sensor->new(device => $device,
+                                             measurement => 'temp',
+                                             value => $temp,
+                                             base_device => $base)];
+  } elsif ($type == 1) {
+    my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
+    my @res = ();
+    push @res,
+      Device::RFXCOM::Response::Sensor->new(device => $device,
+                                            measurement => 'voltage',
+                                            value => $v,
+                                            base_device => $base);
+    unless (defined $supply_voltage) {
+      warn "Don't have supply voltage for $device/$base yet\n";
+      return (\@res, undef, undef, 1);
+    }
+    # See http://archives.sensorsmag.com/articles/0800/62/main.shtml
+    my $hum = sprintf "%.2f", (($v/$supply_voltage) - 0.16)/0.0062;
+    #print STDERR "Sensor Hum: $hum\n";
+    my $dont_cache;
+    if (defined $last_temp) {
+      #print STDERR "Last temp: $last_temp\n";
+      $hum = sprintf "%.2f", $hum / (1.0546 - 0.00216*$last_temp);
+      #print STDERR "True Hum: $hum\n";
+    } else {
+      $dont_cache = 1;
+      warn "Don't have temperature for $device/$base yet - assuming 25'C\n";
+    }
+    push @res,
+      Device::RFXCOM::Response::Sensor->new(device => $device,
+                                            measurement => 'humidity',
+                                            value => $hum,
+                                            base_device => $base);
+    return (\@res, undef, undef, 1);
+  } elsif ($type == 2) {
+    my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
+    $cache->{$base}->{supply} = $v;
+    return [Device::RFXCOM::Response::Sensor->new(device => $device,
+                                                  measurement => 'voltage',
+                                                  value => $v,
+                                                  base_device => $base)]
+  }
+
+  warn "Unsupported RFXSensor: type=$type\n";
   return;
 }
 

@@ -274,15 +274,29 @@ sub read_one {
 
     $msg = substr $$rbuf, 0, 1 + $length, ''; # message from buffer
     substr $msg, 0, 1, '';
-    return 0 if ($self->_is_duplicate($bits, $msg));
-
     @bytes = unpack 'C*', $msg;
-    foreach my $decoder (@{$self->{plugins}}) {
-      my $messages = $decoder->decode($self, $msg, \@bytes, $bits);
-      next unless (defined $messages);
-      $result{messages} = $messages;
-      ($result{type} = lc ref $decoder) =~ s/.*:://;
-      last;
+    my $entry = $self->_cache_get($bits, $msg);
+    if ($entry) {
+      print STDERR "using cache entry\n" if DEBUG;
+      @result{qw/messages type/} = @{$entry->{result}}{qw/messages type/};
+      $result{duplicate} = 1 if ($self->_cache_is_duplicate($entry));
+      $self->_cache_set($bits, $msg);
+    } else {
+      my ($normalized_message, $dont_cache);
+      foreach my $decoder (@{$self->{plugins}}) {
+        my ($messages, $duplicate);
+        ($messages, $duplicate, $normalized_message, $dont_cache) =
+          $decoder->decode($self, $msg, \@bytes, $bits);
+        next unless (defined $messages);
+        $result{messages} = $messages;
+        $result{duplicate} = 1 if ($duplicate);
+        ($result{type} = lc ref $decoder) =~ s/.*:://;
+        last;
+      }
+      $self->_cache_set($bits,
+                        defined $normalized_message ?
+                        $normalized_message :
+                        $msg, \%result) unless ($dont_cache);
     }
   }
 
@@ -290,13 +304,23 @@ sub read_one {
   return Device::RFXCOM::Response->new(%result);
 }
 
-sub _is_duplicate {
+sub _cache_get {
   my ($self, $bits, $message) = @_;
   my $key = $bits.'!'.$message;
-  my $t = $self->_time_now;
-  my $l = $self->{_cache}->{$key};
-  $self->{_cache}->{$key} = $t;
-  return defined $l && $t-$l < $self->{dup_timeout};
+  $self->{_cache}->{$key};
+}
+
+sub _cache_set {
+  my ($self, $bits, $message, $result) = @_;
+  my $key = $bits.'!'.$message;
+  $self->{_cache}->{$key}->{t} = $self->_time_now;
+  $self->{_cache}->{$key}->{result} = $result if ($result);
+  $self->{_cache}->{$key};
+}
+
+sub _cache_is_duplicate {
+  my ($self, $entry) = @_;
+  ($self->_time_now - $entry->{t}) < $self->{dup_timeout};
 }
 
 sub _discard_buffer_check {
