@@ -20,7 +20,7 @@ use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble/;
 our @ISA = qw(Device::RFXCOM::Decoder);
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from Oregon
 Scientific weighing scales.  If messages are identified, a reference
@@ -30,9 +30,9 @@ recognized, undef is returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   if ($bits == 64 && lo_nibble($bytes->[0]) == 3) {
-    return parse_gr101($self, $parent, $message, $bytes, $bits);
+    return parse_gr101($self, $parent, $message, $bytes, $bits, $result);
   }
   return unless (scalar @$bytes == 7);
   return unless (($bytes->[0]&0xf0) == ($bytes->[5]&0xf0) &&
@@ -43,37 +43,35 @@ sub decode {
   $weight /= 10;
   my $dev_str = sprintf 'bwr102.%02x', hi_nibble($bytes->[1]);
   my $unknown = sprintf "%x%x", lo_nibble($bytes->[3]), hi_nibble($bytes->[2]);
-  return
-    [Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
                                            measurement => 'weight',
                                            value => $weight,
                                            unknown => $unknown,
-                                          )];
+                                          );
+  return 1;
 }
 
-=head2 C<parse_gr101( $parent, $message, $bytes, $bits )>
+=head2 C<parse_gr101( $parent, $message, $bytes, $bits, \%result )>
 
-This method is a helper for the main L<parse> method that handles the
+This method is a helper for the main L<decode> method that handles the
 GR101 scales only.  Parameters and return values are the same as the
-L<parse> method.
+L<decode> method.
 
 =cut
 
 sub parse_gr101 {
-  my $self = shift;
-  my $parent = shift;
-  my $message = shift;
-  my $bytes = shift;
-  my $bits = shift;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
 
   my $weight =
     (lo_nibble($bytes->[4])<<12) + ($bytes->[3]<<4) + ($bytes->[2]>>4);
   $weight = sprintf "%.1f", $weight/400.8;
   my $dev_str = sprintf 'gr101.%02x', $bytes->[1];
-  return
-    [Device::RFXCOM::Response::Sensor->new(device => $dev_str,
-                                           measurement => 'weight',
-                                           value => $weight)];
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Sensor->new(device => $dev_str,
+                                          measurement => 'weight',
+                                          value => $weight);
+  return 1;
 }
 
 1;

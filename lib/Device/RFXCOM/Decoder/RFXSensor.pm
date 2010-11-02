@@ -56,7 +56,7 @@ sub new {
   $pkg->SUPER::new(rfxsensor_cache => {}, @_);
 }
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from
 RFXSensor devices.  If messages are identified, a reference to a list
@@ -66,10 +66,11 @@ is returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   my $str = substr $message, 0, 3;
   if (exists $types{$str} && $bits == $types{$str}->{len}) {
-    return $types{$str}->{fun}->($self, $parent, $message, $bytes, $bits, $str);
+    return $types{$str}->{fun}->($self, $parent,
+                                 $message, $bytes, $bits, $result, $str);
   }
   $bits == 32 or return;
   (($bytes->[0]^0xf0) == $bytes->[1]) or return;
@@ -100,81 +101,83 @@ sub decode {
       $temp = -1*(256-$temp);
     }
     $cache->{$base}->{temp} = $temp;
-    return
-      [Device::RFXCOM::Response::Sensor->new(device => $device,
-                                             measurement => 'temp',
-                                             value => $temp,
-                                             base_device => $base)];
+    push @{$result->{messages}},
+      Device::RFXCOM::Response::Sensor->new(device => $device,
+                                            measurement => 'temp',
+                                            value => $temp,
+                                            base_device => $base);
+    return 1;
   } elsif ($type == 1) {
     my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
-    my @res = ();
-    push @res,
+    push @{$result->{messages}},
       Device::RFXCOM::Response::Sensor->new(device => $device,
                                             measurement => 'voltage',
                                             value => $v,
                                             base_device => $base);
     unless (defined $supply_voltage) {
       warn "Don't have supply voltage for $device/$base yet\n";
-      return (\@res, undef, undef, 1);
+      $result->{dont_cache} = 1;
+      return 1;
     }
     # See http://archives.sensorsmag.com/articles/0800/62/main.shtml
     my $hum = sprintf "%.2f", (($v/$supply_voltage) - 0.16)/0.0062;
     #print STDERR "Sensor Hum: $hum\n";
-    my $dont_cache;
     if (defined $last_temp) {
       #print STDERR "Last temp: $last_temp\n";
       $hum = sprintf "%.2f", $hum / (1.0546 - 0.00216*$last_temp);
       #print STDERR "True Hum: $hum\n";
     } else {
-      $dont_cache = 1;
+      $result->{dont_cache} = 1;
       warn "Don't have temperature for $device/$base yet - assuming 25'C\n";
     }
-    push @res,
+    push @{$result->{messages}},
       Device::RFXCOM::Response::Sensor->new(device => $device,
                                             measurement => 'humidity',
                                             value => $hum,
                                             base_device => $base);
-    return (\@res, undef, undef, 1);
+    return 1;
   } elsif ($type == 2) {
     my $v = ( ($bytes->[2]<<3) + ($bytes->[3]>>5) ) / 100;
     $cache->{$base}->{supply} = $v;
-    return [Device::RFXCOM::Response::Sensor->new(device => $device,
-                                                  measurement => 'voltage',
-                                                  value => $v,
-                                                  base_device => $base)]
+    push @{$result->{messages}},
+      Device::RFXCOM::Response::Sensor->new(device => $device,
+                                            measurement => 'voltage',
+                                            value => $v,
+                                            base_device => $base);
+    return 1;
   }
 
   warn "Unsupported RFXSensor: type=$type\n";
   return;
 }
 
-=head2 C<decode_init( $parent, $message, $bytes, $bits, $type )>
+=head2 C<decode_init( $parent, $message, $bytes, $bits, \%result, $type )>
 
 Parse RFX Sensor initialization messages and output information to STDERR.
 
 =cut
 
 sub decode_init {
-  my ($self, $parent, $message, $bytes, $bits, $type) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result, $type) = @_;
 
   warn sprintf "RFXSensor %s, version %02x, transmit mode %s, initialized\n",
     { 0x58 => 'Type-1', 0x32 => 'Type-2', 0x33 => 'Type-3' }->{$bytes->[2]},
       $bytes->[3]&0x7f, $bytes->[3]&0x80 ? 'slow' : 'fast';
-  return [];
+  return 1;
 }
 
-=head2 C<decode_sen( $parent, $message, $bytes, $bits, $str )>
+=head2 C<decode_sen( $parent, $message, $bytes, $bits, \%result, $str )>
 
 Parse RFX Sensor version messages and output information to STDERR.
 
 =cut
 
 sub decode_sen {
-  my ($self, $parent, $message, $bytes, $bits, $str) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result, $str) = @_;
 
   warn sprintf "RFXSensor SEN%d, type %02x (%s)\n", $bytes->[3], $bytes->[4],
     { 0x26 => 'DS2438', 0x28 => 'DS18B20' }->{$bytes->[4]} || 'unknown';
-  return [];
+  return 1;
 }
 
 1;

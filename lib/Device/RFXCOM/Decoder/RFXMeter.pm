@@ -20,7 +20,7 @@ use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/nibble_sum/;
 our @ISA = qw(Device::RFXCOM::Decoder);
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from RFXMeter
 and RFXPower devices.  If messages are identified, a reference to a
@@ -30,7 +30,7 @@ undef is returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
 
   $bits == 48 or return;
 
@@ -83,9 +83,11 @@ sub decode {
   }
   my $count = ($bytes->[4]<<16) + ($bytes->[2]<<8) + ($bytes->[3]);
   #print "rfxmeter: ", $count, "count\n";
-  return [Device::RFXCOM::Response::Sensor->new(device => 'rfxmeter.'.$device,
-                                            measurement => 'count',
-                                            value => $count)];
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Sensor->new(device => 'rfxmeter.'.$device,
+                                          measurement => 'count',
+                                          value => $count);
+  return 1;
 }
 
 1;

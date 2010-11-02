@@ -21,7 +21,7 @@ use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Thermostat;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble nibble_sum/;
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from Digimax
 devices.  If messages are identified, a reference to a list of message
@@ -31,7 +31,7 @@ returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   return unless ($bits == 44);
   my $p =
     hi_nibble($bytes->[0]) + lo_nibble($bytes->[0]) +
@@ -57,12 +57,13 @@ sub decode {
   my $mode = $bytes->[4]&0x40 ? 'heat' : 'cool';
   my $device = sprintf 'digimax.%02x%02x', $bytes->[0], $bytes->[1];
   printf STDERR "Thermostat: $device $state $temp $set $mode\n" if DEBUG;
-  return [Device::RFXCOM::Response::Thermostat->new(device => $device,
-                                                    temp => $temp,
-                                                    set => $set,
-                                                    mode => $mode,
-                                                    state => $state,
-                                                   )];
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Thermostat->new(device => $device,
+                                              temp => $temp,
+                                              set => $set,
+                                              mode => $mode,
+                                              state => $state);
+  return 1;
 }
 
 1;

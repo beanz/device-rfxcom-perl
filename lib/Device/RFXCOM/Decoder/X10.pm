@@ -31,7 +31,7 @@ sub new {
   $pkg->SUPER::new(unit_cache => {}, default_x10_level => 10, @_);
 }
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from X10
 devices.  If messages are identified, a reference to a list of message
@@ -41,7 +41,7 @@ returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   my $res = from_rf($bytes) or return;
   my $h = $res->{house};
   my $f = $res->{command};
@@ -56,13 +56,14 @@ sub decode {
     $r{device} = $h.$u;
   } else {
     warn "Don't have unit code for: $h $f\n";
-    $dont_cache = 1;
+    $result->{dont_cache} = 1;
     $r{house} = $h;
   }
   if ($f eq 'bright' or $f eq 'dim') {
     $r{level} = $self->{default_x10_level};
   }
-  return ([Device::RFXCOM::Response::X10->new(%r)], undef, undef, $dont_cache);
+  push @{$result->{messages}}, Device::RFXCOM::Response::X10->new(%r);
+  return 1;
 }
 
 my %byte_to_house =

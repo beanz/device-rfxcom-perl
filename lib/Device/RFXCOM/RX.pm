@@ -275,28 +275,22 @@ sub read_one {
     $msg = substr $$rbuf, 0, 1 + $length, ''; # message from buffer
     substr $msg, 0, 1, '';
     @bytes = unpack 'C*', $msg;
-    my $entry = $self->_cache_get($bits, $msg);
+
+    $result{key} = $bits.'!'.$msg;
+    my $entry = $self->_cache_get(\%result);
     if ($entry) {
       print STDERR "using cache entry\n" if DEBUG;
       @result{qw/messages type/} = @{$entry->{result}}{qw/messages type/};
       $result{duplicate} = 1 if ($self->_cache_is_duplicate($entry));
-      $self->_cache_set($bits, $msg);
+      $self->_cache_set(\%result);
     } else {
-      my ($normalized_message, $dont_cache);
       foreach my $decoder (@{$self->{plugins}}) {
-        my ($messages, $duplicate);
-        ($messages, $duplicate, $normalized_message, $dont_cache) =
-          $decoder->decode($self, $msg, \@bytes, $bits);
-        next unless (defined $messages);
-        $result{messages} = $messages;
-        $result{duplicate} = 1 if ($duplicate);
+        my $matched = $decoder->decode($self, $msg, \@bytes, $bits, \%result)
+          or next;
         ($result{type} = lc ref $decoder) =~ s/.*:://;
         last;
       }
-      $self->_cache_set($bits,
-                        defined $normalized_message ?
-                        $normalized_message :
-                        $msg, \%result) unless ($dont_cache);
+      $self->_cache_set(\%result);
     }
   }
 
@@ -305,17 +299,18 @@ sub read_one {
 }
 
 sub _cache_get {
-  my ($self, $bits, $message) = @_;
-  my $key = $bits.'!'.$message;
-  $self->{_cache}->{$key};
+  my ($self, $result) = @_;
+  $self->{_cache}->{$result->{key}};
 }
 
 sub _cache_set {
-  my ($self, $bits, $message, $result) = @_;
-  my $key = $bits.'!'.$message;
-  $self->{_cache}->{$key}->{t} = $self->_time_now;
-  $self->{_cache}->{$key}->{result} = $result if ($result);
-  $self->{_cache}->{$key};
+  my ($self, $result) = @_;
+  return if ($result->{dont_cache});
+  $self->{_cache}->{$result->{key}} =
+    {
+     result => $result,
+     t => $self->_time_now,
+    };
 }
 
 sub _cache_is_duplicate {

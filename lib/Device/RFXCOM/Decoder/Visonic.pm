@@ -24,7 +24,7 @@ use Device::RFXCOM::Response::Sensor;
 
 my %bits = ( 36 => 'powercode', 66 => 'codesecure' );
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from Visonic
 PowerCode and CodeSecure devices.  If messages are identified, a
@@ -34,19 +34,19 @@ not recognized, undef is returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   my $method = $bits{$bits} or return;
-  return $self->$method($parent, $message, $bytes, $bits);
+  return $self->$method($parent, $message, $bytes, $bits, $result);
 }
 
-=head2 C<codesecure( $parent, $message, $bytes, $bits )>
+=head2 C<codesecure( $parent, $message, $bytes, $bits, \%result )>
 
 This method decodes a message from a Visonic code secure keyfob.
 
 =cut
 
 sub codesecure {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   # parity check?
 
   my $code =
@@ -75,24 +75,23 @@ sub codesecure {
      device  => $device,
     );
   $args{repeat} = 1 if ($repeat);
-  return
-    [
-     Device::RFXCOM::Response::Security->new(%args),
-     Device::RFXCOM::Response::Sensor->new(device => $device,
-                                           measurement => 'battery',
-                                           value => $low_bat ? 10 : 90,
-                                           units => '%'),
-    ];
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Security->new(%args),
+    Device::RFXCOM::Response::Sensor->new(device => $device,
+                                          measurement => 'battery',
+                                          value => $low_bat ? 10 : 90,
+                                          units => '%');
+  return 1;
 }
 
-=head2 C<powercode( $parent, $message, $bytes, $bits )>
+=head2 C<powercode( $parent, $message, $bytes, $bits, \%result )>
 
 This method decodes a message from a Visonic powercode sensor.
 
 =cut
 
 sub powercode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   my $parity;
   foreach (0 .. 3) {
     $parity ^= hi_nibble($bytes->[$_]);
@@ -123,13 +122,13 @@ sub powercode {
     );
   $args{restore} = 1 if ($restore);
   $args{tamper} = 1 if ($tamper);
-  return [
-          Device::RFXCOM::Response::Security->new(%args),
-          Device::RFXCOM::Response::Sensor->new(device => $device,
-                                                measurement => 'battery',
-                                                value => $low_bat ? 10 : 90,
-                                                units => '%'),
-         ];
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Security->new(%args),
+    Device::RFXCOM::Response::Sensor->new(device => $device,
+                                          measurement => 'battery',
+                                          value => $low_bat ? 10 : 90,
+                                          units => '%');
+  return 1;
 }
 
 1;

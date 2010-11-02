@@ -22,7 +22,7 @@ use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::HomeEasy;
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from HomeEasy
 devices.  If messages are identified, a reference to a list of message
@@ -32,7 +32,7 @@ returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
 
   $bits == 34 or $bits == 38 or return;
 
@@ -40,13 +40,13 @@ sub decode {
   my @b = @{$bytes};
   my $b4 = $b[4];
   $b[4] &= 0xf;
-  my $normalized_message;
   if ($b[4] != $b4) {
-    $normalized_message = pack "C*", @b;
-    my $entry = $parent->_cache_get($bits, $normalized_message);
+    $result->{key} = $bits.'!'.(pack "C*", @b);
+    my $entry = $parent->_cache_get($result);
     if ($entry) {
-      return ($entry->{result}->{messages},
-              $parent->_cache_is_duplicate($entry));
+      $result->{messages} = $entry->{result}->{messages};
+      $result->{duplicate} = $parent->_cache_is_duplicate($entry);
+      return 1;
     }
     $b[4] = $b4;
   }
@@ -63,7 +63,8 @@ sub decode {
 
   $body{level} = $res->{level} if ($res->{command} eq 'preset');
 
-  return ([Device::RFXCOM::Response::HomeEasy->new(%body)], undef, $normalized_message);
+  push @{$result->{messages}}, Device::RFXCOM::Response::HomeEasy->new(%body);
+  return 1;
 }
 
 =head2 C<from_rf( $bits, $bytes )>

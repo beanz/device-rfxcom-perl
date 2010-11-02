@@ -21,7 +21,7 @@ use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Security;
 use Device::RFXCOM::Response::Sensor;
 
-=head2 C<decode( $parent, $message, $bytes, $bits )>
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from X10
 Security devices.  If messages are identified, a reference to a list of
@@ -31,7 +31,7 @@ undef is returned.
 =cut
 
 sub decode {
-  my ($self, $parent, $message, $bytes, $bits) = @_;
+  my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   ($bits == 32 || $bits == 41) or return;
 
   # bits are not reversed yet!
@@ -79,7 +79,7 @@ sub decode {
     }
   } elsif (exists $not_supported_yet{$data}) {
     warn sprintf "Not supported: %02x %s\n", $data, $not_supported_yet{$data};
-    return [];
+    return 1;
   } else {
 
     my $alert = !($data&0x1);
@@ -96,14 +96,13 @@ sub decode {
     );
   $args{tamper} = 1 if ($tamper);
   $args{min_delay} = 1 if ($min_delay);
-  return
-    [
-     Device::RFXCOM::Response::Security->new(%args),
-     Device::RFXCOM::Response::Sensor->new(device => $device,
-                                           measurement => 'battery',
-                                           value => $low_battery ? 10 : 90,
-                                           units => '%'),
-    ];
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Security->new(%args),
+    Device::RFXCOM::Response::Sensor->new(device => $device,
+                                          measurement => 'battery',
+                                          value => $low_battery ? 10 : 90,
+                                          units => '%');
+  return 1;
 }
 
 =head2 C<reverse_bits( \@bytes )>
