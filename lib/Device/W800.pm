@@ -108,7 +108,6 @@ sub read_one {
   if ($entry) {
     print STDERR "using cache entry\n" if DEBUG;
     @result{qw/messages type/} = @{$entry->{result}}{qw/messages type/};
-    $result{duplicate} = 1 if ($self->_cache_is_duplicate($entry));
     $self->_cache_set(\%result);
   } else {
     foreach my $decoder (@{$self->{plugins}}) {

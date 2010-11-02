@@ -281,7 +281,6 @@ sub read_one {
     if ($entry) {
       print STDERR "using cache entry\n" if DEBUG;
       @result{qw/messages type/} = @{$entry->{result}}{qw/messages type/};
-      $result{duplicate} = 1 if ($self->_cache_is_duplicate($entry));
       $self->_cache_set(\%result);
     } else {
       foreach my $decoder (@{$self->{plugins}}) {
@@ -306,6 +305,12 @@ sub _cache_get {
 sub _cache_set {
   my ($self, $result) = @_;
   return if ($result->{dont_cache});
+  my $entry = $self->{_cache}->{$result->{key}};
+  if ($entry) {
+    $result->{duplicate} = 1 if ($self->_cache_is_duplicate($entry));
+    $entry->{t} = $self->_time_now;
+    return $entry;
+  }
   $self->{_cache}->{$result->{key}} =
     {
      result => $result,
