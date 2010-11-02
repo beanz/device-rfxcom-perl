@@ -46,7 +46,7 @@ foreach my $m (sort keys %msg) {
   my $rec = $msg{$m};
   my $res;
   if ($rec->{flags} && $rec->{flags} =~ s/^pause//) {
-    select undef, undef, undef, 1.1;
+    select undef, undef, undef, 0.5;
   }
   if ($rec->{flags} && $rec->{flags} =~ s/^clear//) {
     # clear unit code cache and try again - trash non-X10 decoders, nevermind
