@@ -34,7 +34,7 @@ returned.
 sub decode {
   my ($self, $parent, $message, $bytes, $bits) = @_;
 
-  $bits == 34 or return;
+  $bits == 34 or $bits == 38 or return;
 
   # HomeEasy devices seem to send duplicates with different byte[4] high nibble
   my @b = @{$bytes};
@@ -75,7 +75,7 @@ sub from_rf {
     ($bytes->[2] << 2) + ($bytes->[3] >> 6);
   my $command = ($bytes->[3] >> 4) & 0x3;
   $p{unit} = ($command & 0x2) ? 'group' : ($bytes->[3] & 0xf);
-  if ($length == 36) {
+  if ($length == 38) {
     $p{command} =  'preset';
     $p{level} = $bytes->[4] >> 4;
   } else {
