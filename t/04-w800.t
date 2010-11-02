@@ -18,7 +18,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 18;
+  import Test::More tests => 28;
 }
 
 my @connections =
@@ -121,13 +121,27 @@ is($message->device, 'a3', '... correct message device');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
-is($res, 0, '... received a duplicate');
+ok($res->duplicate, '... received a duplicate');
+is($res->type, 'x10', 'got x10 message');
+is($res->header_byte, 0x20, '... correct header_byte');
+ok($res->master, '... from master receiver');
+is($res->length, 4, '... correct data length');
+is($res->hex_data, '609f08f7', '... correct data');
+is($res->summary,
+   'master x10 20.609f08f7(dup): x10/a3/on',
+   '... correct summary string');
+
+is(scalar @{$res->messages}, 1, '... correct number of messages');
+$message = $res->messages->[0];
+is($message->type, 'x10', '... correct message type');
+is($message->command, 'on', '... correct message command');
+is($message->device, 'a3', '... correct message device');
 
 undef $server;
 
 $cv = AnyEvent->condvar;
 eval { $res = $cv->recv; };
-like($@, qr!^closed at t/03-w800\.t line \d+$!, 'close');
+like($@, qr!^closed at \Q$0\E line \d+$!, 'close');
 
 eval { $w800->_write('BEEF'); };
 like($@, qr!^Writes not supported for W800!, 'write unsupported');
