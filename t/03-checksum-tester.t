@@ -3,7 +3,7 @@
 # Copyright (C) 2010 by Mark Hindess
 
 use strict;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use_ok('Device::RFXCOM::Decoder::Oregon');
 
@@ -23,3 +23,9 @@ is($@, q{Possible use of checksum, checksum2
 $_[0]->[8] == ( ( nibble_sum(15, $_[0]) - 0xa) & 0xff)
 $_[0]->[8] == ( ( nibble_sum(16, $_[0]) - 0xa) & 0xff);
 }, 'checksum2');
+
+$rf = '0a4d100a9023dc0002a0';
+@n = map { hex $_ } split //, $rf;
+@b = unpack 'C*', pack 'H*', $rf;
+eval { Device::RFXCOM::Decoder::Oregon::checksum_tester(\@b,\@n); };
+is($@, qq{Could not determine checksum\n}, 'no checksum');
