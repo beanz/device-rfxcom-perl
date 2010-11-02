@@ -18,7 +18,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 17;
+  import Test::More tests => 18;
 }
 
 my @connections =
@@ -127,7 +127,10 @@ undef $server;
 
 $cv = AnyEvent->condvar;
 eval { $res = $cv->recv; };
-like($@, qr!^closed at t/03-w800\.t line \d+$!, 'check close');
+like($@, qr!^closed at t/03-w800\.t line \d+$!, 'close');
+
+eval { $w800->_write('BEEF'); };
+like($@, qr!^Writes not supported for W800!, 'write unsupported');
 
 undef $w800;
 undef $w;
