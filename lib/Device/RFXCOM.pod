@@ -1,0 +1,40 @@
+use strict;
+use warnings;
+package Device::RFXCOM;
+
+# ABSTRACT: Perl modules for RFXCOM RF receivers and transmitters
+
+=head1 SYNOPSIS
+
+  # for a USB-based device
+  my $rx = Device::RFXCOM::RX->new(device => '/dev/ttyUSB0');
+
+  $|=1; # don't buffer output
+
+  # simple interface to read received data
+  while (my $data = $rx->read($timeout)) {
+    print $data->summary,"\n" unless ($data->duplicate);
+  }
+
+  # for a networked device
+  my $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
+
+=head1 DESCRIPTION
+
+Modules for reading data from RFXCOM RF receivers and transmitters.
+This release has code for receivers only but the transmitter code
+will be added soon.  This code is derived from code written for
+the xPL-Perl project at L<http://www.xpl-perl.org.uk/>.
+
+=head1 THANKS
+
+Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
+excellent documentation and for giving me permission to use it to help
+me write this code.  I own a number of their products and highly
+recommend them.
+
+=head1 SEE ALSO
+
+L<Device::RFXCOM::RX> and shortly I'll add L<Device::RFXCOM::TX>.
+
+RFXCOM website: http://www.rfxcom.com/
