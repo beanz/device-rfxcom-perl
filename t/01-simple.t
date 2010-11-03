@@ -17,7 +17,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 42;
+  import Test::More tests => 44;
 }
 
 my @connections =
@@ -96,8 +96,8 @@ sub handle_connection {
                      });
 }
 
-my $addr = $cv->recv;
-$addr = $addr->[0].':'.$addr->[1];
+my ($host,$port) = @{$cv->recv};
+my $addr = join ':', $host, $port;
 
 use_ok('Device::RFXCOM::RX');
 
@@ -153,6 +153,7 @@ my $message = $res->messages->[0];
 is($message->type, 'x10', '... correct message type');
 is($message->command, 'on', '... correct message command');
 is($message->device, 'a3', '... correct message device');
+undef $message;
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
@@ -162,7 +163,7 @@ ok(!$res->master, '... from slave receiver');
 is($res->length, 0, '... correct data length');
 is($res->hex_data, '', '... no data');
 is($res->summary, 'slave empty 80.', '... correct summary string');
-
+undef $res;
 undef $server;
 
 $cv = AnyEvent->condvar;
@@ -177,4 +178,12 @@ ok($rx, 'instantiate Device::RFXCOM::RX object');
 eval { $rx->handle() }; # hack to kick start init
 like($@, qr!^TCP connect to '\Q$addr\E' failed:!o, 'connection failed');
 
-#use Data::Dumper; print Data::Dumper->Dump([$res],[qw/res/]);exit;
+undef $rx;
+
+$rx = Device::RFXCOM::RX->new(device => $host, port => $port);
+ok($rx, 'instantiate Device::RFXCOM::RX object');
+eval { $rx->handle() }; # hack to kick start init
+like($@, qr!^TCP connect to '\Q$addr\E' failed:!o,
+     'connection failed (default port)');
+
+undef $rx;
