@@ -21,10 +21,15 @@ package Device::RFXCOM;
 
 =head1 DESCRIPTION
 
-Modules for reading data from RFXCOM RF receivers and transmitters.
-This release has code for receivers only but the transmitter code
-will be added soon.  This code is derived from code written for
-the xPL-Perl project at L<http://www.xpl-perl.org.uk/>.
+Modules for reading data from RF receivers and transmitters produced
+by RFXCOM, L<http://www.rfxcom.com/>.  This release has code for
+receivers only but the transmitter code will be added soon.  This code
+is derived from code written for the xPL-Perl project at
+L<http://www.xpl-perl.org.uk/>.
+
+This distribution also contains a thin-wrapper module that provides an
+interface for W800 RF receivers from L<http://www.wgldesigns.com/>.
+However, this receiver supports fewer remote devices.
 
 =head1 THANKS
 
