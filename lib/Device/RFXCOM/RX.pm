@@ -86,8 +86,7 @@ sub new {
      _last_read => 0,
      %p,
     }, $pkg;
-  $self->{plugins} = [$self->plugins(parent => $self)]
-    unless ($self->{plugins});
+  $self->{plugins} = [$self->plugins()] unless ($self->{plugins});
   $self;
 }
 
