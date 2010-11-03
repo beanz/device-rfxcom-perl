@@ -76,7 +76,7 @@ is_deeply([$rx->{serialport}->calls],
           ],
           '... object calls');
 
-my $rx = MY::RX->new(device => 't/fail-serialport.dev');
+$rx = MY::RX->new(device => 't/fail-serialport.dev');
 eval { $rx->handle };
 like($@, qr!^Failed to open 't/fail-serialport\.dev' with Device::SerialPort:!,
      'Device::SerialPort error');
