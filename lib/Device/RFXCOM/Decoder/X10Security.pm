@@ -38,7 +38,7 @@ sub decode {
   (($bytes->[0]^0x0f) == $bytes->[1] && ($bytes->[2]^0xff) == $bytes->[3])
     or return;
 
-  $self->reverse_bits($bytes);
+  $self->reverse_bits($bytes); # TOFIX: corrupts the input data?
 
   my $device = sprintf 'x10sec%02x', $bytes->[0];
   my $short_device = $bytes->[0];
