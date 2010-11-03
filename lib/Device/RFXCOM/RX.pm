@@ -13,7 +13,7 @@ package Device::RFXCOM::RX;
 
   # simple interface to read received data
   while (my $data = $rx->read($timeout)) {
-    print $data->summary,"\n";
+    print $data->summary,"\n" unless ($data->duplicate);
   }
 
   # for a networked device
