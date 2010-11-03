@@ -54,7 +54,16 @@ udev rule has been used to identify the USB tty device for the device.
 
 sub new {
   my ($pkg, %p) = @_;
-  $pkg->SUPER::new(device => '/dev/w800', %p);
+  my @plugins;
+  # TODO: Make 32-bit support a class method on the decoder so
+  # this process (to restrict the plugins to a useful set) is
+  # encapsulated better.
+  foreach my $decoder (qw/RFXSensor X10 X10Security/) {
+    my $module = 'Device::RFXCOM::Decoder::'.$decoder;
+    require 'Device/RFXCOM/Decoder/'.$decoder.'.pm'; import $module;
+    push @plugins, $module->new();
+  }
+  $pkg->SUPER::new(device => '/dev/w800', plugins => \@plugins, %p);
 }
 
 sub _write {
