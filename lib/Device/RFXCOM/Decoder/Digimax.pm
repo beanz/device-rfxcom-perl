@@ -54,7 +54,7 @@ sub decode {
 
   my $temp = $bytes->[3];
   my $set = $bytes->[4]&0x3f;
-  my $mode = $bytes->[4]&0x40 ? 'heat' : 'cool';
+  my $mode = $bytes->[4]&0x40 ? 'cool' : 'heat';
   my $device = sprintf 'digimax.%02x%02x', $bytes->[0], $bytes->[1];
   printf STDERR "Thermostat: $device $state $temp $set $mode\n" if DEBUG;
   push @{$result->{messages}},
