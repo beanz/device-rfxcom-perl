@@ -60,7 +60,8 @@ sub new {
   # encapsulated better.
   foreach my $decoder (qw/RFXSensor X10 X10Security/) {
     my $module = 'Device::RFXCOM::Decoder::'.$decoder;
-    require 'Device/RFXCOM/Decoder/'.$decoder.'.pm'; import $module;
+    my $file = 'Device/RFXCOM/Decoder/'.$decoder.'.pm';
+    require $file; import $module;
     push @plugins, $module->new();
   }
   $pkg->SUPER::new(device => '/dev/w800', plugins => \@plugins, %p);
