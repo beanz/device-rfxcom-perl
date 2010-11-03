@@ -28,7 +28,10 @@ B<IMPORTANT:> This API is still subject to change.
 =cut
 
 use 5.006;
-use constant DEBUG => $ENV{DEVICE_RFXCOM_RX_DEBUG};
+use constant {
+  DEBUG => $ENV{DEVICE_RFXCOM_RX_DEBUG},
+  TESTING => $ENV{DEVICE_RFXCOM_RX_TESTING},
+};
 use Carp qw/croak/;
 use Fcntl;
 use IO::Handle;
@@ -90,7 +93,6 @@ sub new {
 
 sub DESTROY {
   my $self = shift;
-  untie $self->{serialport} if (exists $self->{serialport});
   delete $self->{init};
 }
 
@@ -153,15 +155,16 @@ sub _open_serial_port {
   my $dev = $self->{device};
   print STDERR "Opening $dev as serial port\n" if DEBUG;
   require Device::SerialPort; import Device::SerialPort;
-  my $ser = $self->{serialport} =
+  my $ser =
     Device::SerialPort->new($dev) or
         croak "Failed to open '$dev' with Device::SerialPort: $!";
-  $ser->baudrate($self->{port});
+  $ser->baudrate($self->{baud});
   $ser->databits(8);
   $ser->parity('none');
   $ser->stopbits(1);
   $ser->write_settings;
   $ser->close;
+  $self->{serialport} = $ser if TESTING; # keep mock object
   undef $ser;
   sysopen my $fh, $dev, O_RDWR|O_NOCTTY|O_NDELAY
     or croak "sysopen of '$dev' failed: $!";
