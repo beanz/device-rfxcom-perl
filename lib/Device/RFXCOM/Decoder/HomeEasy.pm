@@ -22,7 +22,7 @@ use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::HomeEasy;
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from HomeEasy
 devices.  If messages are identified, a reference to a list of message
@@ -67,7 +67,7 @@ sub decode {
   return 1;
 }
 
-=head2 C<from_rf( $bits, $bytes )>
+=method C<from_rf( $bits, $bytes )>
 
 Takes an array reference of bytes from an RF message and converts it
 in to an hash reference with the details.

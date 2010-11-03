@@ -18,7 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_DATETIME_DEBUG};
 use Carp qw/croak/;
 
-=head2 C<new(%params)>
+=method C<new(%params)>
 
 This constructor returns a new response object.
 
@@ -29,7 +29,7 @@ sub new {
   bless { %p }, $pkg;
 }
 
-=head2 C<type()>
+=method C<type()>
 
 This method returns 'datetime'.
 
@@ -37,7 +37,7 @@ This method returns 'datetime'.
 
 sub type { 'datetime' }
 
-=head2 C<device()>
+=method C<device()>
 
 This method returns a string representing the name of the device that
 sent the date and time data.
@@ -46,7 +46,7 @@ sent the date and time data.
 
 sub device { shift->{device} }
 
-=head2 C<date()>
+=method C<date()>
 
 This method returns a string of the form 'YYYYMMDD' representing the
 date from the date and time RF message.
@@ -55,7 +55,7 @@ date from the date and time RF message.
 
 sub date { shift->{date} }
 
-=head2 C<time()>
+=method C<time()>
 
 This method returns a string of the form 'HHMMSS' representing the
 time from the date and time RF message.
@@ -64,7 +64,7 @@ time from the date and time RF message.
 
 sub time { shift->{time} }
 
-=head2 C<day()>
+=method C<day()>
 
 This method returns the day (in English) from the date and time RF
 message.  It is probably best to avoid using this and calculate the
@@ -74,7 +74,7 @@ correct value for the locale from the other data.
 
 sub day { shift->{day} }
 
-=head2 C<summary()>
+=method C<summary()>
 
 This method returns a string summary of the date and time information.
 

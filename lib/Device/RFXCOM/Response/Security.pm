@@ -18,7 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_SECURITY_DEBUG};
 use Carp qw/croak/;
 
-=head2 C<new(%params)>
+=method C<new(%params)>
 
 This constructor returns a new response object.
 
@@ -29,7 +29,7 @@ sub new {
   bless { %p }, $pkg;
 }
 
-=head2 C<type()>
+=method C<type()>
 
 This method returns 'security'.
 
@@ -37,7 +37,7 @@ This method returns 'security'.
 
 sub type { 'security' }
 
-=head2 C<device()>
+=method C<device()>
 
 This method returns a string representing the device that sent the
 security RF message.
@@ -46,7 +46,7 @@ security RF message.
 
 sub device { shift->{device} }
 
-=head2 C<event()>
+=method C<event()>
 
 This method returns a string representing the type of event described
 by the security RF message.
@@ -55,7 +55,7 @@ by the security RF message.
 
 sub event { shift->{event} }
 
-=head2 C<tamper()>
+=method C<tamper()>
 
 This method returns true of the C<tamper> flag was set in the security
 RF message.
@@ -64,7 +64,7 @@ RF message.
 
 sub tamper { shift->{tamper} }
 
-=head2 C<min_delay()>
+=method C<min_delay()>
 
 This method returns true of the C<min_delay> flag was set in the
 security RF message.
@@ -73,7 +73,7 @@ security RF message.
 
 sub min_delay { shift->{min_delay} }
 
-=head2 C<summary()>
+=method C<summary()>
 
 This method returns a string summary of the security message.
 

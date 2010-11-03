@@ -20,7 +20,7 @@ use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/nibble_sum/;
 our @ISA = qw(Device::RFXCOM::Decoder);
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from RFXMeter
 and RFXPower devices.  If messages are identified, a reference to a

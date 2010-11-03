@@ -20,7 +20,7 @@ use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble/;
 our @ISA = qw(Device::RFXCOM::Decoder);
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from Oregon
 Scientific weighing scales.  If messages are identified, a reference
@@ -52,7 +52,7 @@ sub decode {
   return 1;
 }
 
-=head2 C<parse_gr101( $parent, $message, $bytes, $bits, \%result )>
+=method C<parse_gr101( $parent, $message, $bytes, $bits, \%result )>
 
 This method is a helper for the main L<decode> method that handles the
 GR101 scales only.  Parameters and return values are the same as the

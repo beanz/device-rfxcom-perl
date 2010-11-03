@@ -18,7 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_X10_DEBUG};
 use Carp qw/croak/;
 
-=head2 C<new(%params)>
+=method C<new(%params)>
 
 This constructor returns a new response object.
 
@@ -29,7 +29,7 @@ sub new {
   bless { %p }, $pkg;
 }
 
-=head2 C<type()>
+=method C<type()>
 
 This method returns 'x10'.
 
@@ -37,7 +37,7 @@ This method returns 'x10'.
 
 sub type { 'x10' }
 
-=head2 C<device()>
+=method C<device()>
 
 This method returns the X10 device from the RF message.  That is,
 C<a1>, C<a2>, ... C<a16>, ..., C<p1>, ..., C<p16>.  It will be
@@ -47,7 +47,7 @@ undefined if no unit code is present for the house code.
 
 sub device { shift->{device} }
 
-=head2 C<house()>
+=method C<house()>
 
 This method returns the X10 house code from the RF message.  That is,
 C<a>, C<b>, ... C<p>.  It will be undefined if L<device> is defined.
@@ -56,7 +56,7 @@ C<a>, C<b>, ... C<p>.  It will be undefined if L<device> is defined.
 
 sub house { shift->{house} }
 
-=head2 C<command()>
+=method C<command()>
 
 This method returns the X10 command from the RF message.  For example,
 C<on>, C<off>, C<bright>, C<dim>, etc.
@@ -65,7 +65,7 @@ C<on>, C<off>, C<bright>, C<dim>, etc.
 
 sub command { shift->{command} }
 
-=head2 C<level()>
+=method C<level()>
 
 This method returns the X10 level for C<bright> and C<dim> commands or
 undef if the level is not defined for the command.
@@ -74,7 +74,7 @@ undef if the level is not defined for the command.
 
 sub level { shift->{level} }
 
-=head2 C<summary()>
+=method C<summary()>
 
 This method returns a string summary of the X10 message.
 

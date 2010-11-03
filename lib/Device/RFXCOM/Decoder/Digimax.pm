@@ -21,7 +21,7 @@ use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Thermostat;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble nibble_sum/;
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from Digimax
 devices.  If messages are identified, a reference to a list of message

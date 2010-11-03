@@ -21,7 +21,7 @@ use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Sensor;
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from
 Electrisave/Cent-a-meter/OWL devices.  If a suitable message is

@@ -45,7 +45,7 @@ my %types = (
              'SEN' => { fun => \&decode_sen, len => 40 },
 );
 
-=head2 C<new($parent)>
+=method C<new($parent)>
 
 This constructor returns a new RFXSensor decoder object.
 
@@ -56,7 +56,7 @@ sub new {
   $pkg->SUPER::new(rfxsensor_cache => {}, @_);
 }
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from
 RFXSensor devices.  If messages are identified, a reference to a list
@@ -151,7 +151,7 @@ sub decode {
   return;
 }
 
-=head2 C<decode_init( $parent, $message, $bytes, $bits, \%result, $type )>
+=method C<decode_init( $parent, $message, $bytes, $bits, \%result, $type )>
 
 Parse RFX Sensor initialization messages and output information to STDERR.
 
@@ -166,7 +166,7 @@ sub decode_init {
   return 1;
 }
 
-=head2 C<decode_sen( $parent, $message, $bytes, $bits, \%result, $str )>
+=method C<decode_sen( $parent, $message, $bytes, $bits, \%result, $str )>
 
 Parse RFX Sensor version messages and output information to STDERR.
 

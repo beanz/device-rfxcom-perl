@@ -18,7 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_DEBUG};
 use Carp qw/croak/;
 
-=head2 C<new(%params)>
+=method C<new(%params)>
 
 This constructor returns a new response object.
 
@@ -29,7 +29,7 @@ sub new {
   bless { %p }, $pkg;
 }
 
-=head2 C<type()>
+=method C<type()>
 
 This method returns the type of the response.  It will be one of:
 
@@ -60,7 +60,7 @@ message originated.
 
 sub type { shift->{type} }
 
-=head2 C<header_byte()>
+=method C<header_byte()>
 
 This method returns the header byte contains the length in buts and
 master/slave flag for the message.
@@ -69,7 +69,7 @@ master/slave flag for the message.
 
 sub header_byte { shift->{header_byte} }
 
-=head2 C<master()>
+=method C<master()>
 
 This method returns true of the message originated from the master
 receiver or false of it originated from a slave receiver.
@@ -78,7 +78,7 @@ receiver or false of it originated from a slave receiver.
 
 sub master { shift->{master} }
 
-=head2 C<hex_data()>
+=method C<hex_data()>
 
 This method returns a hex string representing the payload of the RF
 message.
@@ -87,7 +87,7 @@ message.
 
 sub hex_data { unpack 'H*', shift->data }
 
-=head2 C<data()>
+=method C<data()>
 
 This method returns the binary string of the payload of the RF
 message.
@@ -96,7 +96,7 @@ message.
 
 sub data { shift->{data} }
 
-=head2 C<length()>
+=method C<length()>
 
 This method returns the length of the payload of the RF message (in bytes).
 
@@ -104,7 +104,7 @@ This method returns the length of the payload of the RF message (in bytes).
 
 sub length { length shift->data }
 
-=head2 C<bytes()>
+=method C<bytes()>
 
 This method returns an array reference of bytes representing the
 payload of the RF message.
@@ -113,7 +113,7 @@ payload of the RF message.
 
 sub bytes { shift->{bytes} }
 
-=head2 C<messages()>
+=method C<messages()>
 
 This method returns an array reference of message objects generated
 from the payload.
@@ -122,7 +122,7 @@ from the payload.
 
 sub messages { shift->{messages} || [] }
 
-=head2 C<duplicate()>
+=method C<duplicate()>
 
 This method returns a true value if the message was identical to another
 sent recently.
@@ -131,7 +131,7 @@ sent recently.
 
 sub duplicate { shift->{duplicate} }
 
-=head2 C<summary()>
+=method C<summary()>
 
 This method returns a string summary of the contents of the RF message.
 (If there are multiple message objects produced from the payload then

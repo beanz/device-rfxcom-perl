@@ -20,7 +20,7 @@ use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::X10;
 
-=head2 C<new($parent)>
+=method C<new($parent)>
 
 This constructor returns a new X10 decoder object.
 
@@ -31,7 +31,7 @@ sub new {
   $pkg->SUPER::new(unit_cache => {}, default_x10_level => 10, @_);
 }
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from X10
 devices.  If messages are identified, a reference to a list of message
@@ -91,7 +91,7 @@ my %byte_to_command =
    0x98 => 'dim',
   );
 
-=head2 C<from_rf( $bytes )>
+=method C<from_rf( $bytes )>
 
 Takes an array reference of bytes from an RF message and converts it
 in to an hash reference with the details.
@@ -114,7 +114,7 @@ sub from_rf {
   return \%r;
 }
 
-=head2 C<is_x10( $bytes )>
+=method C<is_x10( $bytes )>
 
 Takes an array reference of bytes from an RF message and returns true
 if it appears to be a valid X10 message.

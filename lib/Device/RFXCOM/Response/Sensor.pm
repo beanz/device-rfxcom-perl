@@ -18,7 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_SENSOR_DEBUG};
 use Carp qw/croak/;
 
-=head2 C<new(%params)>
+=method C<new(%params)>
 
 This constructor returns a new response object.
 
@@ -29,7 +29,7 @@ sub new {
   bless { %p }, $pkg;
 }
 
-=head2 C<type()>
+=method C<type()>
 
 This method returns 'sensor'.
 
@@ -37,7 +37,7 @@ This method returns 'sensor'.
 
 sub type { 'sensor' }
 
-=head2 C<measurement()>
+=method C<measurement()>
 
 This method returns a string describing the type of measurement.  For
 example, C<temp>, C<humidity>, C<voltage>, C<battery>, C<uv>, etc.
@@ -46,7 +46,7 @@ example, C<temp>, C<humidity>, C<voltage>, C<battery>, C<uv>, etc.
 
 sub measurement { shift->{measurement} }
 
-=head2 C<device()>
+=method C<device()>
 
 This method returns a string representing the device that sent the
 sensor RF message.
@@ -55,7 +55,7 @@ sensor RF message.
 
 sub device { shift->{device} }
 
-=head2 C<value()>
+=method C<value()>
 
 This method returns the value of the measurement in the sensor RF
 message.
@@ -64,7 +64,7 @@ message.
 
 sub value { shift->{value} }
 
-=head2 C<units()>
+=method C<units()>
 
 This method returns the units of the L<value> in the sensor RF
 message.
@@ -73,7 +73,7 @@ message.
 
 sub units { shift->{units} }
 
-=head2 C<summary()>
+=method C<summary()>
 
 This method returns a string summary of the sensor message.
 

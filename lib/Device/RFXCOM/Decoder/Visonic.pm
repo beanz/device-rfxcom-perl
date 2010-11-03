@@ -24,7 +24,7 @@ use Device::RFXCOM::Response::Sensor;
 
 my %bits = ( 36 => 'powercode', 66 => 'codesecure' );
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from Visonic
 PowerCode and CodeSecure devices.  If messages are identified, a
@@ -39,7 +39,7 @@ sub decode {
   return $self->$method($parent, $message, $bytes, $bits, $result);
 }
 
-=head2 C<codesecure( $parent, $message, $bytes, $bits, \%result )>
+=method C<codesecure( $parent, $message, $bytes, $bits, \%result )>
 
 This method decodes a message from a Visonic code secure keyfob.
 
@@ -84,7 +84,7 @@ sub codesecure {
   return 1;
 }
 
-=head2 C<powercode( $parent, $message, $bytes, $bits, \%result )>
+=method C<powercode( $parent, $message, $bytes, $bits, \%result )>
 
 This method decodes a message from a Visonic powercode sensor.
 

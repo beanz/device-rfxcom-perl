@@ -18,7 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_HOMEEASY_DEBUG};
 use Carp qw/croak/;
 
-=head2 C<new(%params)>
+=method C<new(%params)>
 
 This constructor returns a new response object.
 
@@ -29,7 +29,7 @@ sub new {
   bless { %p }, $pkg;
 }
 
-=head2 C<type()>
+=method C<type()>
 
 This method returns 'homeeasy'.
 
@@ -37,7 +37,7 @@ This method returns 'homeeasy'.
 
 sub type { 'homeeasy' }
 
-=head2 C<address()>
+=method C<address()>
 
 This method returns the address of the home easy device that sent the
 message.
@@ -46,7 +46,7 @@ message.
 
 sub address { shift->{address} }
 
-=head2 C<unit()>
+=method C<unit()>
 
 This method returns the unit of the home easy device that sent the
 message.  It will be a number or the string 'group'.
@@ -55,7 +55,7 @@ message.  It will be a number or the string 'group'.
 
 sub unit { shift->{unit} }
 
-=head2 C<command()>
+=method C<command()>
 
 This method returns the command from the home easy message.
 
@@ -63,7 +63,7 @@ This method returns the command from the home easy message.
 
 sub command { shift->{command} }
 
-=head2 C<level()>
+=method C<level()>
 
 This method returns the level from the home easy message.  This
 is only defined for some types of preset/bright/dim messages.
@@ -72,7 +72,7 @@ is only defined for some types of preset/bright/dim messages.
 
 sub level { shift->{level} }
 
-=head2 C<summary()>
+=method C<summary()>
 
 This method returns a string summary of the home easy message.
 

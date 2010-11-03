@@ -25,7 +25,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw(lo_nibble hi_nibble nibble_sum) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw();
 
-=head2 C<new($parent)>
+=method C<new($parent)>
 
 This constructor returns a new decoder object.
 
@@ -36,7 +36,7 @@ sub new {
   bless { @_ }, $pkg;
 }
 
-=head2 C<lo_nibble($byte)>
+=method C<lo_nibble($byte)>
 
 This function returns the low nibble of a byte.  So, for example, given
 0x16 it returns 6.
@@ -47,7 +47,7 @@ sub lo_nibble {
   $_[0]&0xf;
 }
 
-=head2 C<hi_nibble($byte)>
+=method C<hi_nibble($byte)>
 
 This function returns the hi nibble of a byte.  So, for example, given
 0x16 it returns 1.
@@ -58,7 +58,7 @@ sub hi_nibble {
   ($_[0]&0xf0)>>4;
 }
 
-=head2 C<nibble_sum($count, \@nibbles)>
+=method C<nibble_sum($count, \@nibbles)>
 
 This function returns the sum of the nibbles of count nibbles.
 

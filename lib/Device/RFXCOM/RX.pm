@@ -42,7 +42,7 @@ use Module::Pluggable
   search_path => 'Device::RFXCOM::Decoder',
   instantiate => 'new';
 
-=head2 C<new(%parameters)>
+=method C<new(%parameters)>
 
 This constructor returns a new RFXCOM RF receiver object.
 The only supported parameter is:
@@ -115,7 +115,7 @@ sub _write_now {
   $self->{_waiting} = [ $self->_time_now, @$record ];
 }
 
-=head2 C<handle()>
+=method C<handle()>
 
 This method returns the file handle for the device.  If the device
 is not connected it initiates the connection and initialization of
@@ -180,7 +180,7 @@ sub _init {
   $self->{init} = 1;
 }
 
-=head2 C<read($timeout)>
+=method C<read($timeout)>
 
 This method blocks until a new message has been received by the
 device.  When a message is received a data structure is returned
@@ -214,7 +214,7 @@ sub read {
 }
 
 
-=head2 C<read_one(\$buffer)>
+=method C<read_one(\$buffer)>
 
 This method attempts to remove a single RF message from the buffer
 passed in via the scalar reference.  When a message is removed a data

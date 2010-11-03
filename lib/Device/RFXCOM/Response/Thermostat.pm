@@ -18,7 +18,7 @@ use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_THERMOSTAT_DEBUG};
 use Carp qw/croak/;
 
-=head2 C<new(%params)>
+=method C<new(%params)>
 
 This constructor returns a new response object.
 
@@ -29,7 +29,7 @@ sub new {
   bless { %p }, $pkg;
 }
 
-=head2 C<type()>
+=method C<type()>
 
 This method returns 'thermostat'.
 
@@ -37,7 +37,7 @@ This method returns 'thermostat'.
 
 sub type { 'thermostat' }
 
-=head2 C<device()>
+=method C<device()>
 
 This method returns an identifier for the device.
 
@@ -45,7 +45,7 @@ This method returns an identifier for the device.
 
 sub device { shift->{device} }
 
-=head2 C<state()>
+=method C<state()>
 
 This method returns the state of the thermostat.  Typical values include:
 
@@ -73,7 +73,7 @@ If the thermostat is being initialized.
 
 sub state { shift->{state} }
 
-=head2 C<temp()>
+=method C<temp()>
 
 This method returns the current temperature.
 
@@ -81,7 +81,7 @@ This method returns the current temperature.
 
 sub temp { shift->{temp} }
 
-=head2 C<set()>
+=method C<set()>
 
 This method returns the set point for the thermostat.  It will be zero
 if it has not been defined.
@@ -90,7 +90,7 @@ if it has not been defined.
 
 sub set { shift->{set} }
 
-=head2 C<mode()>
+=method C<mode()>
 
 This method returns the mode for the thermostat.  It will be 'heat'
 or 'cool'.
@@ -99,7 +99,7 @@ or 'cool'.
 
 sub mode { shift->{mode} }
 
-=head2 C<summary()>
+=method C<summary()>
 
 This method returns a string summary of the thermostat message.
 

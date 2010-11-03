@@ -33,7 +33,7 @@ use Carp qw/croak/;
 use base 'Device::RFXCOM::RX';
 use Device::RFXCOM::Response;
 
-=head2 C<new(%parameters)>
+=method C<new(%parameters)>
 
 This constructor returns a new W800 RF receiver object.
 The only supported parameter is:
@@ -80,7 +80,7 @@ sub _init {
   $self->{init} = 1;
 }
 
-=head2 C<read_one(\$buffer)>
+=method C<read_one(\$buffer)>
 
 This method attempts to remove a single RF message from the buffer
 passed in via the scalar reference.  When a message is removed a data

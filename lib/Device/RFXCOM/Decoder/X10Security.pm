@@ -21,7 +21,7 @@ use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Security;
 use Device::RFXCOM::Response::Sensor;
 
-=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+=method C<decode( $parent, $message, $bytes, $bits, \%result )>
 
 This method attempts to recognize and decode RF messages from X10
 Security devices.  If messages are identified, a reference to a list of
@@ -105,7 +105,7 @@ sub decode {
   return 1;
 }
 
-=head2 C<reverse_bits( \@bytes )>
+=method C<reverse_bits( \@bytes )>
 
 This method reverses the bits in the bytes.
 
