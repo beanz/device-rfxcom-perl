@@ -62,7 +62,7 @@ is_deeply(\@sent, ['F020'], '... sent data');
 #print STDERR Data::Dumper->Dump([$rx->read(0.1)],[qw/read/]);
 
 
-my $rx = MY::RX->new(device => 't/does-not-exist.dev');
+$rx = MY::RX->new(device => 't/does-not-exist.dev');
 eval { $rx->handle };
 like($@, qr!^sysopen of 't/does-not-exist\.dev' failed:!, 'sysopen error');
 is_deeply([$rx->{serialport}->calls],
