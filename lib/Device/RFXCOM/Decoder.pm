@@ -25,7 +25,7 @@ our %EXPORT_TAGS = ( 'all' => [ qw(lo_nibble hi_nibble nibble_sum) ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw();
 
-=method C<new($parent)>
+=method C<new()>
 
 This constructor returns a new decoder object.
 
