@@ -6,25 +6,15 @@ package Device::RFXCOM;
 
 =head1 SYNOPSIS
 
-  # for a USB-based device
-  my $rx = Device::RFXCOM::RX->new(device => '/dev/ttyUSB0');
-
-  $|=1; # don't buffer output
-
-  # simple interface to read received data
-  while (my $data = $rx->read($timeout)) {
-    print $data->summary,"\n" unless ($data->duplicate);
-  }
-
-  # for a networked device
-  my $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
+  # see Device::RFXCOM::RX (and corresponding example script
+  # rfxcom-rx) and see Device::RFXCOM::TX (and example script
+  # rfxcom-tx)
 
 =head1 DESCRIPTION
 
-Modules for reading data from RF receivers and transmitters produced
-by RFXCOM, L<http://www.rfxcom.com/>.  This release has code for
-receivers only but the transmitter code will be added soon.  This code
-is derived from code written for the xPL-Perl project at
+Modules for RF receivers and transmitters produced by RFXCOM,
+L<http://www.rfxcom.com/>.  This code is derived
+from code written for the xPL-Perl project at
 L<http://www.xpl-perl.org.uk/>.
 
 This distribution also contains a thin-wrapper module that provides an
@@ -40,6 +30,6 @@ recommend them.
 
 =head1 SEE ALSO
 
-L<Device::RFXCOM::RX> and shortly I'll add L<Device::RFXCOM::TX>.
+L<Device::RFXCOM::RX>, L<rfxcom-rx>, L<Device::RFXCOM::TX>, L<rfxcom-tx>.
 
 RFXCOM website: http://www.rfxcom.com/
