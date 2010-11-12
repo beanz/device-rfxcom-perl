@@ -36,12 +36,6 @@ my @connections =
      send => '37',
     },
     {
-     transmit => undef,
-     desc => 'disabling x10',
-     recv => 'F03FF03F',
-     send => '37',
-    },
-    {
      transmit => { type => 'x10', command => 'off', device => 'i10' },
      desc => 'x10/i10/off',
      recv => '20E41B30CF',
@@ -120,6 +114,12 @@ my @connections =
      desc => 'enable flamingo',
      recv => 'F03EF03E',
      send => '33',
+    },
+    {
+     transmit => undef,
+     desc => 'disabling x10',
+     recv => 'F03FF03F',
+     send => '37',
     },
     {
      transmit => undef,
@@ -205,7 +205,6 @@ my $addr = join ':', $host, $port;
 use_ok('Device::RFXCOM::TX');
 
 my $tx;
-my $cv;
 my $w;
 my %args = ();
 
@@ -234,13 +233,14 @@ foreach my $con (@connections) {
     $cv = AnyEvent->condvar;
   }
 
+  # invert all the defaults
   %args =
     (
      receiver_connected => 1,
      harrison => 1,
      koko => 1,
      flamingo => 1,
-     x10 => 1,
+     x10 => 0,
     );
 }
 
