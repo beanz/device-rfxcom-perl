@@ -202,7 +202,7 @@ sub init {
 
 sub _init_mode {
   my $self = shift;
-  $self->_write($self->{receiver_connected} ?
+  $self->_write($self->receiver_connected ?
                 (hex => 'F033F033',
                  desc => 'variable length mode w/receiver connected') :
                 (hex => 'F037F037',
