@@ -17,7 +17,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 44;
+  import Test::More tests => 45;
 }
 
 my @connections =
@@ -106,6 +106,8 @@ my $rx = Device::RFXCOM::RX->new(device => $addr);
 ok($rx, 'instantiate Device::RFXCOM::RX object');
 
 $rx->handle(); # hack to kick start init before there is anything to read
+
+is($rx->queue, 2, 'queued initialization');
 
 $cv = AnyEvent->condvar;
 my $res;

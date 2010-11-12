@@ -25,12 +25,10 @@ use constant {
   DEBUG => $ENV{DEVICE_RFXCOM_TX_DEBUG},
   TESTING => $ENV{DEVICE_RFXCOM_TX_TESTING},
 };
+use base 'Device::RFXCOM::Base';
 use Carp qw/croak carp/;
-use Fcntl;
 use IO::Handle;
 use IO::Select;
-use Time::HiRes;
-use Device::RFXCOM::Response;
 use Module::Pluggable
   search_path => 'Device::RFXCOM::Encoder',
   instantiate => 'new';
@@ -65,29 +63,19 @@ from:
 =cut
 
 sub new {
-  my ($pkg, %p) = @_;
-  my $self = bless
-    {
-     device => '/dev/rfxcom-tx',
-     baud => 4800,
-     port => 10001,
-     discard_timeout => 0.03,
-     ack_timeout => 6,
-     dup_timeout => 0.5,
-     receiver_connected => 0,
-     flamingo => 0,
-     harrison => 0,
-     koko => 0,
-     x10 => 0,
-     _q => [],
-     _buf => '',
-     _last_read => 0,
-     %p,
-    }, $pkg;
-  foreach my $plugin (@{$self->{plugins} || [$self->plugins()]}) {
+  my $pkg = shift;
+  my $self = $pkg->SUPER::_new(device => '/dev/rfxcom-tx',
+                               ack_timeout => 6,
+                               receiver_connected => 0,
+                               flamingo => 0,
+                               harrison => 0,
+                               koko => 0,
+                               x10 => 0,
+                               @_);
+  foreach my $plugin ($self->plugins()) {
     my $p = lc ref $plugin;
     $p =~ s/.*:://;
-    $self->{plugins}->{$p} = $plugin;
+    $self->{plugin_map}->{$p} = $plugin;
     print STDERR "Initialized plugin for $p messages\n" if DEBUG;
   }
   $self;
@@ -98,16 +86,6 @@ sub flamingo { shift->{flamingo} }
 sub harrison { shift->{harrison} }
 sub koko { shift->{koko} }
 sub x10 { shift->{x10} }
-
-sub DESTROY {
-  my $self = shift;
-  delete $self->{init};
-}
-
-sub queue {
-  my $self = shift;
-  scalar @{$self->{_q}};
-}
 
 sub _write {
   my $self = shift;
@@ -128,62 +106,6 @@ sub _write_now {
   print STDERR "Sending: ", $rec->{hex}, ' ', ($rec->{desc}||''), "\n" if DEBUG;
   syswrite $self->handle, $rec->{raw}, length $rec->{raw};
   $self->{_waiting} = [ $self->_time_now, $rec ];
-}
-
-=method C<handle()>
-
-This method returns the file handle for the device.  If the device
-is not connected it initiates the connection and initialization of
-the device.
-
-=cut
-
-sub handle {
-  my $self = shift;
-  unless (exists $self->{handle}) {
-    $self->{handle} = $self->_open();
-  }
-  $self->{handle};
-}
-
-sub _open {
-  my $self = shift;
-  $self->{device} =~ m!/! ?
-    $self->_open_serial_port(@_) : $self->_open_tcp_port(@_)
-}
-
-sub _open_tcp_port {
-  my $self = shift;
-  my $dev = $self->{device};
-  print STDERR "Opening $dev as tcp socket\n" if DEBUG;
-  require IO::Socket::INET; import IO::Socket::INET;
-  $dev .= ':'.$self->{port} unless ($dev =~ /:/);
-  my $fh = IO::Socket::INET->new($dev) or
-    croak "TCP connect to '$dev' failed: $!";
-  return $fh;
-}
-
-sub _open_serial_port {
-  my $self = shift;
-  my $dev = $self->{device};
-  print STDERR "Opening $dev as serial port\n" if DEBUG;
-  require Device::SerialPort; import Device::SerialPort;
-  my $ser =
-    Device::SerialPort->new($dev) or
-        croak "Failed to open '$dev' with Device::SerialPort: $!";
-  $ser->baudrate($self->{baud});
-  $ser->databits(8);
-  $ser->parity('none');
-  $ser->stopbits(1);
-  $ser->write_settings;
-  $ser->close;
-  $self->{serialport} = $ser if TESTING; # keep mock object
-  undef $ser;
-  sysopen my $fh, $dev, O_RDWR|O_NOCTTY|O_NDELAY
-    or croak "sysopen of '$dev' failed: $!";
-  $fh->autoflush(1);
-  binmode($fh);
-  return $fh;
 }
 
 sub init {
@@ -226,7 +148,7 @@ sub transmit {
   my ($self, %p) = @_;
   my $type = $p{type} || 'x10';
   $self->init unless ($self->{init});
-  my $plugin = $self->{plugins}->{$type} or
+  my $plugin = $self->{plugin_map}->{$type} or
     croak $self, '->transmit: ', $type, ' encoding not supported';
   my $encode = $plugin->encode($self, \%p);
   if (ref $encode eq 'ARRAY') {
@@ -262,10 +184,6 @@ sub wait_for_ack {
   }
   $self->_write_now();
   return $buf;
-}
-
-sub _time_now {
-  Time::HiRes::time
 }
 
 1;

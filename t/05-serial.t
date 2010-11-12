@@ -11,7 +11,7 @@ use Test::More tests => 8;
 use File::Temp qw/tempfile/;
 
 BEGIN {
-  $ENV{DEVICE_RFXCOM_RX_TESTING} = 1;
+  $ENV{DEVICE_RFXCOM_TESTING} = 1;
 }
 
 my ($fh, $filename) = tempfile();
