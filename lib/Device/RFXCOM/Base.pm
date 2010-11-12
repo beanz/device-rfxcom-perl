@@ -52,24 +52,26 @@ sub queue {
   scalar @{$_[0]->{_q}};
 }
 
+
 sub _write {
   my $self = shift;
-  print STDERR "Queued: @_\n" if DEBUG;
-  push @{$self->{_q}}, [ @_ ];
+  my %p = @_;
+  $p{raw} = pack 'H*', $p{hex} unless (exists $p{raw});
+  $p{hex} = unpack 'H*', $p{raw} unless (exists $p{hex});
+  print STDERR "Queued: ", $p{hex}, ' ', ($p{desc}||''), "\n" if DEBUG;
+  push @{$self->{_q}}, \%p;
   $self->_write_now unless (exists $self->{_waiting});
   1;
 }
 
 sub _write_now {
   my $self = shift;
-  my $record = shift @{$self->{_q}};
+  my $rec = shift @{$self->{_q}};
   delete $self->{_waiting};
-  return unless (defined $record);
-  my ($msg, $desc) = @$record;
-  print STDERR "Sending: $msg $desc\n" if DEBUG;
-  my $out = pack 'H*', $msg;
-  syswrite $self->handle, $out, length $out;
-  $self->{_waiting} = [ $self->_time_now, @$record ];
+  return unless (defined $rec);
+  print STDERR "Sending: ", $rec->{hex}, ' ', ($rec->{desc}||''), "\n" if DEBUG;
+  syswrite $self->handle, $rec->{raw}, length $rec->{raw};
+  $self->{_waiting} = [ $self->_time_now, $rec ];
 }
 
 =method C<handle()>

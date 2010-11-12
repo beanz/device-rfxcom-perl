@@ -87,27 +87,6 @@ sub harrison { shift->{harrison} }
 sub koko { shift->{koko} }
 sub x10 { shift->{x10} }
 
-sub _write {
-  my $self = shift;
-  my %p = @_;
-  $p{raw} = pack 'H*', $p{hex} unless (exists $p{raw});
-  $p{hex} = unpack 'H*', $p{raw} unless (exists $p{hex});
-  print STDERR "Queued: ", $p{hex}, ' ', ($p{desc}||''), "\n" if DEBUG;
-  push @{$self->{_q}}, \%p;
-  $self->_write_now unless (exists $self->{_waiting});
-  1;
-}
-
-sub _write_now {
-  my $self = shift;
-  my $rec = shift @{$self->{_q}};
-  delete $self->{_waiting};
-  return unless (defined $rec);
-  print STDERR "Sending: ", $rec->{hex}, ' ', ($rec->{desc}||''), "\n" if DEBUG;
-  syswrite $self->handle, $rec->{raw}, length $rec->{raw};
-  $self->{_waiting} = [ $self->_time_now, $rec ];
-}
-
 sub init {
   my $self = shift;
   $self->_write(hex => 'F030F030', desc => 'version check');

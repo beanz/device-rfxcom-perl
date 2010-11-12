@@ -77,9 +77,9 @@ sub new {
 
 sub _init {
   my $self = shift;
-  $self->_write('F020', 'version check');
-  $self->_write('F041', 'variable length with visonic');
-  $self->_write('F02A', 'enable all possible receiving modes');
+  $self->_write(hex => 'F020', desc => 'version check');
+  $self->_write(hex => 'F041', desc => 'variable length with visonic');
+  $self->_write(hex => 'F02A', desc => 'enable all possible receiving modes');
   $self->{init} = 1;
 }
 

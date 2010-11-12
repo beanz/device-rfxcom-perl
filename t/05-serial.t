@@ -27,12 +27,11 @@ my @sent;
   our @ISA = qw/Device::RFXCOM::RX/;
   sub _write_now {
     my $self = shift;
-    my $record = shift @{$self->{_q}};
+    my $rec = shift @{$self->{_q}};
     delete $self->{_waiting};
-    return unless (defined $record);
-    my ($msg, $desc) = @$record;
-    push @sent, $msg;
-    $self->{_waiting} = [ $self->_time_now, @$record ];
+    return unless (defined $rec);
+    push @sent, $rec->{hex};
+    $self->{_waiting} = [ $self->_time_now, $rec ];
   }
 }
 
