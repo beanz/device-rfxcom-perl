@@ -4,21 +4,27 @@
 
 =head1 SYNOPSIS
 
-  # control USB tty device
-  rfxcom-tx /dev/ttyUSB0
+  # send x10 a1/on command via USB tty device
+  echo type=x10 command=on device=a1 | rfxcom-tx /dev/ttyUSB0
 
-  # control a USB device with nicer name see Device::RFXCOM::TX(3)
-  rfxcom-tx /dev/rfxcom-tx
+  # send homeeasy message via a USB device with helpful name,
+  # see Device::RFXCOM::TX(3)
+  echo type=homeeasy command=on address=0x3333 unit=1 | \
+    rfxcom-tx /dev/rfxcom-tx
 
-  # control a network/wireless device, disable x10 (which defaults to on)
-  # and enable homeeasy (which defaults to off)
+  # read commands to send from stdin and send them via a
+  # network/wireless device, disable x10 (which defaults to on) and
+  # enable homeeasy (which defaults to off)
   rfxcom-tx 10.0.0.1:10001 x10=0 homeeasy=1
 
 =head1 DESCRIPTION
 
 This script is an example of the usage of the L<Device::RFXCOM::TX>
 api.  It simply initializes the transmitter and reads messages
-specifications from stdin.
+specifications from stdin.  The keys and values given on the command
+line become the parameter hash for the L<Device::RFXCOM::TX#new>
+constructor and are documented in that module.
+
 
 =cut
 

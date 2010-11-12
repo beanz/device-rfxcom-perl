@@ -15,9 +15,12 @@
 
 =head1 DESCRIPTION
 
-This script is just an example of a simple use for the decoding
-modules.  It simply initializes the receiver to variable length
-mode and reads all the messages returned forever.
+This script is an example of the usage of the L<Device::RFXCOM::RX>
+api.  It simply initializes the receiver and writes a summary of the
+received RF messages to stdout.  The keys and values given on the
+command line become the parameter hash for the
+L<Device::RFXCOM::RX#new> constructor and are documented in that
+module.
 
 =cut
 
