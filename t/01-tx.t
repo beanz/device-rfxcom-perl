@@ -17,20 +17,122 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 16;
+  import Test::More tests => 42;
 }
 
 my @connections =
   (
    [
-    'F030F030' => '10',
-    'F037F037' => '37',
-    'F03FF03F' => '37',
-    '20E41B30CF' => '37',
-    '2101D5EA0A00' => '37',
+    {
+     transmit => 'init',
+     desc => 'version check',
+     recv => 'F030F030',
+     send => '10',
+    },
+    {
+     transmit => undef,
+     desc => 'set mode',
+     recv => 'F037F037',
+     send => '37',
+    },
+    {
+     transmit => undef,
+     desc => 'disabling x10',
+     recv => 'F03FF03F',
+     send => '37',
+    },
+    {
+     transmit => { type => 'x10', command => 'off', device => 'i10' },
+     desc => 'x10/i10/off',
+     recv => '20E41B30CF',
+     send => '37',
+    },
+    {
+     transmit => { type => 'x10', command => 'on', device => 'i2,i3,q0' },
+     desc => 'x10/i2,i3/on - i2',
+     recv => '20E01F10EF', # i2/on
+     send => '37',
+    },
+    {
+     transmit => undef,
+     desc => 'x10/i2,i3/on - i3',
+     recv => '20E01F08F7', # i3/on
+     send => '37',
+    },
+    # no q0 as that is invalid
+    {
+     transmit => { type => 'x10', command => 'bright', house => 'j' },
+     desc => 'x10/j/bright',
+     recv => '20F00F8877',
+     send => '37',
+    },
+    {
+     transmit => { type => 'homeeasy', command => 'off',
+                   address => 'xmas', unit => 10 },
+     desc => 'homeeasy/xmas/10/off',
+     recv => '2101D5EA0A00',
+     send => '37',
+    },
+    {
+     transmit => { type => 'homeeasy', command => 'on',
+                   address => '0x3333', unit => 1 },
+     desc => 'homeeasy/0x3333/1/on',
+     recv => '21000CCCD100',
+     send => '37',
+    },
+    {
+     transmit => { type => 'homeeasy', command => 'preset',
+                   address => 'test', unit => 9, level => 5 },
+     desc => 'homeeasy/test/9/preset/5',
+     recv => '2401CD490950',
+     send => '37',
+    },
+   ],
+
+   [
+    {
+     transmit => { type => 'homeeasy', command => 'on',
+                   address => 'console', unit => 'group' },
+     desc => 'homeeasy/console/group/on',
+     recv => 'F030F030',
+     send => '10',
+    },
+    {
+     transmit => undef,
+     desc => 'set mode',
+     recv => 'F033F033',
+     send => '33',
+    },
+    {
+     transmit => undef,
+     desc => 'enable harrison',
+     recv => 'F03CF03C',
+     send => '33',
+    },
+    {
+     transmit => undef,
+     desc => 'enable koko',
+     recv => 'F03DF03D',
+     send => '33',
+    },
+    {
+     transmit => undef,
+     desc => 'enable flamingo',
+     recv => 'F03EF03E',
+     send => '33',
+    },
+    {
+     transmit => undef,
+     desc => 'homeeasy/console/group/on',
+     recv => '21AA163DB000',
+     send => '33',
+    },
    ],
 
   );
+
+my @server_connections = @connections; # copy so we don't modify client copy
+
 my $cv = AnyEvent->condvar;
 my $server = tcp_server undef, undef, sub {
   my ($fh, $host, $port) = @_;
@@ -50,11 +152,11 @@ my $server = tcp_server undef, undef, sub {
                                     die "server timeout\n";
                                   }
                                  );
-  my $actions = shift @connections;
-  unless ($actions && @$actions) {
+  my @actions = @{shift @server_connections || []};
+  unless (@actions) {
     die "Server received unexpected connection\n";
   }
-  handle_connection($handle, $actions);
+  handle_connection($handle, \@actions);
 }, sub {
   my ($fh, $host, $port) = @_;
   $cv->send([$host, $port]);
@@ -63,11 +165,12 @@ my $server = tcp_server undef, undef, sub {
 sub handle_connection {
   my ($handle, $actions) = @_;
   print STDERR "In handle connection ", scalar @$actions, "\n" if DEBUG;
-  my ($recv, $send) = splice @$actions, 0, 2, ()
-    or do {
-      print STDERR "closing connection\n" if DEBUG;
-      return $handle->push_shutdown;
-    };
+  my $rec = shift @$actions;
+  unless ($rec) {
+    print STDERR "closing connection\n" if DEBUG;
+    return $handle->push_shutdown;
+  }
+  my ($desc, $recv, $send) = @{$rec}{qw/desc recv send/};
   if ($recv eq '') {
     print STDERR "Sending: ", $send if DEBUG;
     $send = pack "H*", $send;
@@ -85,7 +188,7 @@ sub handle_connection {
                        print STDERR "In receive handler\n" if DEBUG;
                        my $got = uc unpack 'H*', $_[1];
                        is($got, $expect,
-                          '... correct message received by server');
+                          '... correct message received by server - '.$desc);
                        print STDERR "Sending: ", $send, "\n" if DEBUG;
                        $send = pack "H*", $send;
                        print STDERR "Sending ", length $send, " bytes\n"
@@ -101,41 +204,56 @@ my $addr = join ':', $host, $port;
 
 use_ok('Device::RFXCOM::TX');
 
-my $tx = Device::RFXCOM::TX->new(device => $addr);
+my $tx;
+my $cv;
+my $w;
+my %args = ();
 
-ok($tx, 'instantiate Device::RFXCOM::TX object');
+foreach my $con (@connections) {
 
-$tx->init(); # hack to kick start init before there is anything to read
+  $tx = Device::RFXCOM::TX->new(%args, device => $addr);
+  ok($tx, 'instantiate Device::RFXCOM::TX object');
 
-$cv = AnyEvent->condvar;
-my $res;
-my $w = AnyEvent->io(fh => $tx->handle, poll => 'r',
-                     cb => sub { $cv->send($tx->wait_for_ack()) });
-$res = $cv->recv;
-is($res, chr(0x10), 'got version check response');
+  $w = AnyEvent->io(fh => $tx->handle, poll => 'r',
+                    cb => sub { $cv->send($tx->wait_for_ack()) });
 
-$cv = AnyEvent->condvar;
-$res = $cv->recv;
-is($res, chr(0x37), 'got 1st mode acknowledgement');
+  $cv = AnyEvent->condvar;
+  foreach my $rec (@$con) {
+    my ($tran, $desc, $sent) = @{$rec}{qw/transmit desc send/};
+    if ($tran) {
+      print STDERR "Transmitting: $desc\n" if DEBUG;
+      if (ref $tran) {
+        $tx->transmit(%$tran);
+      } else {
+        $tx->init();
+      }
+    }
+    my $res = $cv->recv;
+    print STDERR "Received ack for $desc\n" if DEBUG;
+    is((unpack 'H*', $res), $sent, 'response - '.$desc);
+    $cv = AnyEvent->condvar;
+  }
 
-$cv = AnyEvent->condvar;
-$res = $cv->recv;
-is($res, chr(0x37), 'got 2nd mode acknowledgement');
+  %args =
+    (
+     receiver_connected => 1,
+     harrison => 1,
+     koko => 1,
+     flamingo => 1,
+     x10 => 1,
+    );
+}
 
-$cv = AnyEvent->condvar;
-$tx->transmit(type => 'x10', command => 'off', device => 'i10');
-$res = $cv->recv;
-is($res, chr(0x37), 'got x10 acknowledgement');
-
-$cv = AnyEvent->condvar;
-$tx->transmit(type => 'homeeasy', command => 'off',
-              address => 'xmas', unit => 10);
-$res = $cv->recv;
-undef $res;
 undef $server;
 
-$cv = AnyEvent->condvar;
-eval { $res = $cv->recv; };
+eval { $tx->transmit(type => 'magic', command => 'fetch cake'); };
+like($@, qr!^\Q$tx\E->transmit: magic encoding not supported at !,
+     'invalid transmit type');
+
+like(test_warn(sub { $tx->transmit(type => 'x10', command => 'on'); }),
+     qr!->encode: Invalid x10\.basic message!, 'invalid x10 message');
+
+eval { my $res = $cv->recv; };
 like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
 
 undef $tx;
@@ -155,3 +273,17 @@ like($@, qr!^TCP connect to '\Q$addr\E' failed:!o,
      'connection failed (default port)');
 
 undef $tx;
+
+sub test_warn {
+  my $sub = shift;
+  my $warn;
+  local $SIG{__WARN__} = sub { $warn .= $_[0]; };
+  eval { $sub->(); };
+  die $@ if ($@);
+  if ($warn) {
+    $warn =~ s/\s+at (\S+|\(eval \d+\)(\[[^]]+\])?) line \d+\.?\s*$//g;
+    $warn =~ s/\s+at (\S+|\(eval \d+\)(\[[^]]+\])?) line \d+\.?\s*$//g;
+    $warn =~ s/ \(\@INC contains:.*?\)$//;
+  }
+  return $warn;
+}
