@@ -80,12 +80,13 @@ sub encode_x10 {
   my @bytes = ( 0, 0, 0, 0 );
   $bytes[2] |= $command_to_byte{lc $p->{command}};
   $bytes[0] |= ($house_to_byte{lc $p->{house}})<<4;
+  my $unit = $p->{unit};
   unless ($bytes[2]&0x80) {
-    if ($p->{unit} > 8) {
-      $p->{unit} -= 8;
+    if ($unit > 8) {
+      $unit -= 8;
       $bytes[0] |= 0x4;
     }
-    $bytes[2] |= $unit_to_bytes{$p->{unit}};
+    $bytes[2] |= $unit_to_bytes{$unit};
   }
   $bytes[1] = $bytes[0]^0xff;
   $bytes[3] = $bytes[2]^0xff;
