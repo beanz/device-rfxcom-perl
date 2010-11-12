@@ -70,7 +70,7 @@ sub new {
                                flamingo => 0,
                                harrison => 0,
                                koko => 0,
-                               x10 => 0,
+                               x10 => 1,
                                @_);
   foreach my $plugin ($self->plugins()) {
     my $p = lc ref $plugin;
@@ -162,6 +162,7 @@ sub wait_for_ack {
     croak defined $bytes ? 'closed' : 'error: '.$!;
   }
   $self->_write_now();
+  print STDERR "Received: ", (unpack 'H*', $buf), "\n" if DEBUG;
   return $buf;
 }
 

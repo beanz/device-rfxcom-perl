@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+# ABSTRACT: simple example script to control an RFXCOM RF transmitter
+
+=head1 SYNOPSIS
+
+  # control USB tty device
+  rfxcom-tx /dev/ttyUSB0
+
+  # control a USB device with nicer name see Device::RFXCOM::TX(3)
+  rfxcom-tx /dev/rfxcom-tx
+
+  # control a network/wireless device, disable x10 (which defaults to on)
+  # and enable homeeasy (which defaults to off)
+  rfxcom-tx 10.0.0.1:10001 x10=0 homeeasy=1
+
+=head1 DESCRIPTION
+
+This script is an example of the usage of the L<Device::RFXCOM::TX>
+api.  It simply initializes the transmitter and reads messages
+specifications from stdin.
+
+=cut
+
+use warnings;
+use strict;
+package main;
+use Device::RFXCOM::TX;
+
+my $device = shift or die "Usage: $0 device [key=value] ...\n";
+
+my $tx = Device::RFXCOM::TX->new(device => $device, map{split/=/}@ARGV);
+
+@ARGV = ();
+
+$|=1; # don't buffer output
+
+while (<>) {
+  chomp;
+  $tx->transmit(split /[\t =]/);
+  do {
+    $tx->wait_for_ack();
+  } until (!$tx->queue);
+}

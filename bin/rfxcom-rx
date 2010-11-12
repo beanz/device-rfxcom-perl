@@ -26,9 +26,9 @@ use strict;
 package main;
 use Device::RFXCOM::RX;
 
-my $device = shift or die "Usage: $0 [device] [key value] ...\n";
+my $device = shift or die "Usage: $0 [device] [key=value] ...\n";
 
-my $rx = Device::RFXCOM::RX->new(device => $device, @ARGV);
+my $rx = Device::RFXCOM::RX->new(device => $device, map{split/=/}@ARGV);
 
 $|=1; # don't buffer output
 
