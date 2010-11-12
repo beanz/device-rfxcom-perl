@@ -13,9 +13,8 @@
     rfxcom-tx /dev/rfxcom-tx
 
   # read commands to send from stdin and send them via a
-  # network/wireless device, disable x10 (which defaults to on) and
-  # enable homeeasy (which defaults to off)
-  rfxcom-tx 10.0.0.1:10001 x10=0 homeeasy=1
+  # network/wireless device, disable x10 (which defaults to on)
+  rfxcom-tx 10.0.0.1:10001 x10=0
 
 =head1 DESCRIPTION
 

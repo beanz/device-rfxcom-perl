@@ -8,7 +8,6 @@ package Device::RFXCOM::TX;
 
   # for a USB-based device, transmitting X10 RF messages
   my $tx = Device::RFXCOM::TX->new(device => '/dev/ttyUSB0', x10 => 1);
-  $tx->init;
   $tx->transmit(type => 'homeeasy', command => 'on', ...);
   $tx->wait_for_ack() while ($tx->queue);
 
@@ -58,7 +57,37 @@ from:
   udevinfo -a -p `udevinfo -q path -n /dev/ttyUSB0` | \
     sed -e'/ATTRS{serial}/!d;q'
 
+=item receiver_connected
+
+This parameter should be set to a true value if a receiver is connected
+to the transmitter.
+
+=item flamingo
+
+This parameter should be set to a true value to enable the
+transmission for "flamingo" RF messages.
+
+=item harrison
+
+This parameter should be set to a true value to enable the
+transmission for "harrison" RF messages.
+
+=item koko
+
+This parameter should be set to a true value to enable the
+transmission for "klik-on klik-off" RF messages.
+
+=item x10
+
+This parameter should be set to a false value to disable the
+transmission for "x10" RF messages.  This protocol is enable
+by default in keeping with the hardware default.
+
 =back
+
+There is no option to enable homeeasy messages because they use either
+the klik-on klik-off protocol or homeeasy specific commands in order
+to trigger them.
 
 =cut
 
@@ -81,13 +110,52 @@ sub new {
   $self;
 }
 
+=method C<receiver_connected()>
+
+Returns true if the transmitter is operating with a receiver
+connected.
+
+=cut
+
 sub receiver_connected { shift->{receiver_connected} }
+
+=method C<flamingo()>
+
+Returns true if the transmitter is configured to transmit "flamingo"
+RF messages.
+
+=cut
+
 sub flamingo { shift->{flamingo} }
+
+=method C<harrison()>
+
+Returns true if the transmitter is configured to transmit "harrison"
+RF messages.
+
+=cut
+
 sub harrison { shift->{harrison} }
+
+=method C<koko()>
+
+Returns true if the transmitter is configured to transmit "klik-on
+klik-off" RF messages.
+
+=cut
+
 sub koko { shift->{koko} }
+
+=method C<x10()>
+
+Returns true if the transmitter is configured to transmit "x10" RF messages.
+This attribute defaults to true.
+
+=cut
+
 sub x10 { shift->{x10} }
 
-sub init {
+sub _init {
   my $self = shift;
   $self->_write(hex => 'F030F030', desc => 'version check');
   $self->_init_mode();
@@ -126,7 +194,6 @@ This method sends an RF message to the device for transmission.
 sub transmit {
   my ($self, %p) = @_;
   my $type = $p{type} || 'x10';
-  $self->init unless ($self->{init});
   my $plugin = $self->{plugin_map}->{$type} or
     croak $self, '->transmit: ', $type, ' encoding not supported';
   my $encode = $plugin->encode($self, \%p);

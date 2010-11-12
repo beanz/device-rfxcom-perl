@@ -24,7 +24,7 @@ my @connections =
   (
    [
     {
-     transmit => 'init',
+     transmit => 'handle',
      desc => 'version check',
      recv => 'F030F030',
      send => '10',
@@ -224,7 +224,7 @@ foreach my $con (@connections) {
       if (ref $tran) {
         $tx->transmit(%$tran);
       } else {
-        $tx->init();
+        $tx->handle();
       }
     }
     my $res = $cv->recv;

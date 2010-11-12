@@ -53,21 +53,19 @@ sub encode {
   my @res = ();
   if ($p->{house}) {
     foreach (split //, $p->{house}) {
-      push @res, $self->encode_x10($parent,
-                                   {
-                                    command => $p->{command},
-                                    house => $p->{house},
-                                   });
+      push @res, $self->_encode_x10({
+                                     command => $p->{command},
+                                     house => $p->{house},
+                                    });
     }
   } elsif ($p->{device}) {
     foreach (split /,/, $p->{device}) {
       my ($house, $unit) = /^([a-p])(\d+)$/i or next;
-      push @res, $self->encode_x10($parent,
-                                   {
-                                    command => $p->{command},
-                                    house => $house,
-                                    unit => $unit,
-                                   });
+      push @res, $self->_encode_x10({
+                                     command => $p->{command},
+                                     house => $house,
+                                     unit => $unit,
+                                    });
     }
   } else {
     carp $self.'->encode: Invalid x10.basic message';
@@ -75,8 +73,8 @@ sub encode {
   return \@res;
 }
 
-sub encode_x10 {
-  my ($self, $parent, $p) = @_;
+sub _encode_x10 {
+  my ($self, $p) = @_;
   my @bytes = ( 0, 0, 0, 0 );
   $bytes[2] |= $command_to_byte{lc $p->{command}};
   $bytes[0] |= ($house_to_byte{lc $p->{house}})<<4;

@@ -48,6 +48,13 @@ sub DESTROY {
   delete $self->{init};
 }
 
+=method C<queue()>
+
+Returns the number of messages in the queue to be sent to the
+device.
+
+=cut
+
 sub queue {
   scalar @{$_[0]->{_q}};
 }
@@ -56,6 +63,7 @@ sub queue {
 sub _write {
   my $self = shift;
   my %p = @_;
+  my $handle = $self->handle; # make sure this is initialized
   $p{raw} = pack 'H*', $p{hex} unless (exists $p{raw});
   $p{hex} = unpack 'H*', $p{raw} unless (exists $p{hex});
   print STDERR "Queued: ", $p{hex}, ' ', ($p{desc}||''), "\n" if DEBUG;
