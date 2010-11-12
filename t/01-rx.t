@@ -168,7 +168,7 @@ undef $server;
 
 $cv = AnyEvent->condvar;
 eval { $res = $cv->recv; };
-like($@, qr!^closed at t/01-simple\.t line \d+$!, 'check close');
+like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
 
 undef $rx;
 undef $w;
