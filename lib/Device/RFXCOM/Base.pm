@@ -37,6 +37,7 @@ sub _new {
      _q => [],
      _buf => '',
      _last_read => 0,
+     init_callback => undef,
      %p,
     }, $pkg;
   $self->{plugins} = [$self->plugins()] unless ($self->{plugins});
@@ -75,11 +76,21 @@ sub _write {
 sub _write_now {
   my $self = shift;
   my $rec = shift @{$self->{_q}};
-  delete $self->{_waiting};
+  my $wait_record = $self->{_waiting};
+  if ($wait_record) {
+    delete $self->{_waiting};
+    my $cb = $wait_record->[1]->{callback};
+    $cb->() if ($cb);
+  }
   return unless (defined $rec);
+  $self->_real_write($rec);
+  $self->{_waiting} = [ $self->_time_now, $rec ];
+}
+
+sub _real_write {
+  my ($self, $rec) = @_;
   print STDERR "Sending: ", $rec->{hex}, ' ', ($rec->{desc}||''), "\n" if DEBUG;
   syswrite $self->handle, $rec->{raw}, length $rec->{raw};
-  $self->{_waiting} = [ $self->_time_now, $rec ];
 }
 
 =method C<handle()>
@@ -137,10 +148,6 @@ sub _open_serial_port {
   $fh->autoflush(1);
   binmode($fh);
   return $fh;
-}
-
-sub _init {
-  my $self = shift;
 }
 
 sub _time_now {

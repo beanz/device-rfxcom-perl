@@ -66,6 +66,11 @@ from:
   udevinfo -a -p `udevinfo -q path -n /dev/ttyUSB0` | \
     sed -e'/ATTRS{serial}/!d;q'
 
+=item init_callback
+
+This parameter can be set to a callback to be called when the device
+initialization has been completed.
+
 =back
 
 =cut
@@ -76,10 +81,11 @@ sub new {
 }
 
 sub _init {
-  my $self = shift;
+  my ($self, $cb) = @_;
   $self->_write(hex => 'F020', desc => 'version check');
   $self->_write(hex => 'F041', desc => 'variable length with visonic');
-  $self->_write(hex => 'F02A', desc => 'enable all possible receiving modes');
+  $self->_write(hex => 'F02A', desc => 'enable all possible receiving modes',
+                callback => $cb || $self->{init_callback});
   $self->{init} = 1;
 }
 

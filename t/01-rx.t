@@ -17,7 +17,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 45;
+  import Test::More tests => 48;
 }
 
 my @connections =
@@ -101,7 +101,10 @@ my $addr = join ':', $host, $port;
 
 use_ok('Device::RFXCOM::RX');
 
-my $rx = Device::RFXCOM::RX->new(device => $addr);
+my $init = 0;
+
+my $rx = Device::RFXCOM::RX->new(device => $addr,
+                                 init_callback => sub { $init++ });
 
 ok($rx, 'instantiate Device::RFXCOM::RX object');
 
@@ -120,6 +123,7 @@ ok($res->master, '... from master receiver');
 is($res->length, 1, '... correct data length');
 is_deeply($res->bytes, [0x26], '... correct data bytes');
 is($res->summary, 'master version 4d.26', '... correct summary string');
+is($init, 0, '... initialization incomplete');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
@@ -129,6 +133,7 @@ ok($res->master, '... from master receiver');
 is($res->length, 0, '... correct data length');
 is(@{$res->bytes}, 0, '... no data bytes');
 is($res->summary, 'master mode 41.', '... correct summary string');
+is($init, 0, '... initialization incomplete');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
@@ -138,6 +143,7 @@ ok($res->master, '... from master receiver');
 is($res->length, 0, '... correct data length');
 is(@{$res->bytes}, 0, '... no data bytes');
 is($res->summary, 'master mode 2c.', '... correct summary string');
+is($init, 1, '... initialization complete');
 
 $cv = AnyEvent->condvar;
 $res = $cv->recv;

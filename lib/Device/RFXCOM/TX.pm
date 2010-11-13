@@ -57,6 +57,11 @@ from:
   udevinfo -a -p `udevinfo -q path -n /dev/ttyUSB0` | \
     sed -e'/ATTRS{serial}/!d;q'
 
+=item init_callback
+
+This parameter can be set to a callback to be called when the device
+initialization has been completed.
+
 =item receiver_connected
 
 This parameter should be set to a true value if a receiver is connected
@@ -158,7 +163,6 @@ sub x10 { shift->{x10} }
 sub _init {
   my $self = shift;
   $self->_write(hex => 'F030F030', desc => 'version check');
-  $self->_init_mode();
   $self->_write(hex => 'F03CF03C', desc => 'enabling harrison')
     if ($self->harrison);
   $self->_write(hex => 'F03DF03D', desc => 'enabling klikon-klikoff')
@@ -166,16 +170,20 @@ sub _init {
   $self->_write(hex => 'F03EF03E', desc => 'enabling flamingo')
     if ($self->flamingo);
   $self->_write(hex => 'F03FF03F', desc => 'disabling x10') unless ($self->x10);
+  $self->_init_mode($self->{init_callback});
   $self->{init} = 1;
 }
 
 sub _init_mode {
-  my $self = shift;
-  $self->_write($self->receiver_connected ?
-                (hex => 'F033F033',
-                 desc => 'variable length mode w/receiver connected') :
-                (hex => 'F037F037',
-                 desc=> 'variable length mode w/o receiver connected'));
+  my ($self, $cb) = @_;
+  my @args =
+    $self->receiver_connected ?
+      (hex => 'F033F033',
+       desc => 'variable length mode w/receiver connected') :
+         (hex => 'F037F037',
+          desc=> 'variable length mode w/o receiver connected');
+  push @args, callback => $cb if ($cb);
+  $self->_write(@args);
 }
 
 sub _reset_device {

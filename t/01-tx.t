@@ -17,7 +17,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 42;
+  import Test::More tests => 58;
 }
 
 my @connections =
@@ -28,30 +28,35 @@ my @connections =
      desc => 'version check',
      recv => 'F030F030',
      send => '10',
+     init => 0,
     },
     {
      transmit => undef,
      desc => 'set mode',
      recv => 'F037F037',
      send => '37',
+     init => 1,
     },
     {
      transmit => { type => 'x10', command => 'off', device => 'i10' },
      desc => 'x10/i10/off',
      recv => '20E41B30CF',
      send => '37',
+     init => 1,
     },
     {
      transmit => { type => 'x10', command => 'on', device => 'i2,i3,q0' },
      desc => 'x10/i2,i3/on - i2',
      recv => '20E01F10EF', # i2/on
      send => '37',
+     init => 1,
     },
     {
      transmit => undef,
      desc => 'x10/i2,i3/on - i3',
      recv => '20E01F08F7', # i3/on
      send => '37',
+     init => 1,
     },
     # no q0 as that is invalid
     {
@@ -59,6 +64,7 @@ my @connections =
      desc => 'x10/j/bright',
      recv => '20F00F8877',
      send => '37',
+     init => 1,
     },
     {
      transmit => { type => 'homeeasy', command => 'off',
@@ -66,6 +72,7 @@ my @connections =
      desc => 'homeeasy/xmas/10/off',
      recv => '2101D5EA0A00',
      send => '37',
+     init => 1,
     },
     {
      transmit => { type => 'homeeasy', command => 'on',
@@ -73,6 +80,7 @@ my @connections =
      desc => 'homeeasy/0x3333/1/on',
      recv => '21000CCCD100',
      send => '37',
+     init => 1,
     },
     {
      transmit => { type => 'homeeasy', command => 'preset',
@@ -80,6 +88,7 @@ my @connections =
      desc => 'homeeasy/test/9/preset/5',
      recv => '2401CD490950',
      send => '37',
+     init => 1,
     },
    ],
 
@@ -90,42 +99,49 @@ my @connections =
      desc => 'homeeasy/console/group/on',
      recv => 'F030F030',
      send => '10',
-    },
-    {
-     transmit => undef,
-     desc => 'set mode',
-     recv => 'F033F033',
-     send => '33',
+     init => 0,
     },
     {
      transmit => undef,
      desc => 'enable harrison',
      recv => 'F03CF03C',
      send => '33',
+     init => 0,
     },
     {
      transmit => undef,
      desc => 'enable koko',
      recv => 'F03DF03D',
      send => '33',
+     init => 0,
     },
     {
      transmit => undef,
      desc => 'enable flamingo',
      recv => 'F03EF03E',
      send => '33',
+     init => 0,
     },
     {
      transmit => undef,
      desc => 'disabling x10',
      recv => 'F03FF03F',
      send => '37',
+     init => 0,
+    },
+    {
+     transmit => undef,
+     desc => 'set mode',
+     recv => 'F033F033',
+     send => '33',
+     init => 1,
     },
     {
      transmit => undef,
      desc => 'homeeasy/console/group/on',
      recv => '21AA163DB000',
      send => '33',
+     init => 1,
     },
    ],
 
@@ -210,7 +226,11 @@ my %args = ();
 
 foreach my $con (@connections) {
 
-  $tx = Device::RFXCOM::TX->new(%args, device => $addr);
+  my $init = 0;
+  $tx = Device::RFXCOM::TX->new(%args,
+                                device => $addr,
+                                init_callback => sub { $init++ });
+
   ok($tx, 'instantiate Device::RFXCOM::TX object');
 
   $w = AnyEvent->io(fh => $tx->handle, poll => 'r',
@@ -218,7 +238,7 @@ foreach my $con (@connections) {
 
   $cv = AnyEvent->condvar;
   foreach my $rec (@$con) {
-    my ($tran, $desc, $sent) = @{$rec}{qw/transmit desc send/};
+    my ($tran, $desc, $sent, $init_exp) = @{$rec}{qw/transmit desc send init/};
     if ($tran) {
       print STDERR "Transmitting: $desc\n" if DEBUG;
       if (ref $tran) {
@@ -230,6 +250,7 @@ foreach my $con (@connections) {
     my $res = $cv->recv;
     print STDERR "Received ack for $desc\n" if DEBUG;
     is((unpack 'H*', $res), $sent, 'response - '.$desc);
+    is($init, $init_exp, 'init == '.$init_exp.' - '.$desc);
     $cv = AnyEvent->condvar;
   }
 
