@@ -202,17 +202,19 @@ This method sends an RF message to the device for transmission.
 sub transmit {
   my ($self, %p) = @_;
   my $type = $p{type} || 'x10';
+  my @args = @{$p{args}||[]};
   my $plugin = $self->{plugin_map}->{$type} or
     croak $self, '->transmit: ', $type, ' encoding not supported';
   my $encode = $plugin->encode($self, \%p);
   if (ref $encode eq 'ARRAY') {
     foreach my $e (@$encode) {
-      $self->_write(%$e);
+      $self->_write(%$e, @args);
     }
+    return scalar @$encode;
   } else {
-    $self->_write(%$encode);
+    $self->_write(%$encode, @args);
+    return 1;
   }
-  return 1;
 }
 
 =method C<wait_for_ack($timeout)>
