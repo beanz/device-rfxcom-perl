@@ -17,14 +17,14 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 58;
+  import Test::More tests => 56;
 }
 
 my @connections =
   (
    [
     {
-     transmit => 'handle',
+     transmit => undef,
      desc => 'version check',
      recv => 'F030F030',
      send => '10',
@@ -280,16 +280,12 @@ like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
 undef $tx;
 undef $w;
 
-$tx = Device::RFXCOM::TX->new(device => $addr);
-ok($tx, 'instantiate Device::RFXCOM::TX object');
-eval { $tx->handle() }; # hack to kick start init
+eval { Device::RFXCOM::TX->new(device => $addr) };
 like($@, qr!^TCP connect to '\Q$addr\E' failed:!o, 'connection failed');
 
 undef $tx;
 
-$tx = Device::RFXCOM::TX->new(device => $host, port => $port);
-ok($tx, 'instantiate Device::RFXCOM::TX object');
-eval { $tx->handle() }; # hack to kick start init
+eval { Device::RFXCOM::TX->new(device => $host, port => $port) };
 like($@, qr!^TCP connect to '\Q$addr\E' failed:!o,
      'connection failed (default port)');
 

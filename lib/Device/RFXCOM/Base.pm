@@ -41,6 +41,8 @@ sub _new {
      %p,
     }, $pkg;
   $self->{plugins} = [$self->plugins()] unless ($self->{plugins});
+  $self->{handle} = $self->_open();
+  $self->_init();
   $self;
 }
 
@@ -64,7 +66,6 @@ sub queue {
 sub _write {
   my $self = shift;
   my %p = @_;
-  my $handle = $self->handle; # make sure this is initialized
   $p{raw} = pack 'H*', $p{hex} unless (exists $p{raw});
   $p{hex} = unpack 'H*', $p{raw} unless (exists $p{hex});
   print STDERR "Queued: ", $p{hex}, ' ', ($p{desc}||''), "\n" if DEBUG;
@@ -95,19 +96,12 @@ sub _real_write {
 
 =method C<handle()>
 
-This method returns the file handle for the device.  If the device
-is not connected it initiates the connection and initialization of
-the device.
+This method returns the file handle for the device.
 
 =cut
 
 sub handle {
-  my $self = shift;
-  unless (exists $self->{handle}) {
-    $self->{handle} = $self->_open();
-    $self->_init();
-  }
-  $self->{handle};
+  shift->{handle}
 }
 
 sub _open {

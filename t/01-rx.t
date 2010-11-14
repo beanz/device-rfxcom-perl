@@ -17,7 +17,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 48;
+  import Test::More tests => 46;
 }
 
 my @connections =
@@ -181,16 +181,12 @@ like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
 undef $rx;
 undef $w;
 
-$rx = Device::RFXCOM::RX->new(device => $addr);
-ok($rx, 'instantiate Device::RFXCOM::RX object');
-eval { $rx->handle() }; # hack to kick start init
+eval { Device::RFXCOM::RX->new(device => $addr) };
 like($@, qr!^TCP connect to '\Q$addr\E' failed:!o, 'connection failed');
 
 undef $rx;
 
-$rx = Device::RFXCOM::RX->new(device => $host, port => $port);
-ok($rx, 'instantiate Device::RFXCOM::RX object');
-eval { $rx->handle() }; # hack to kick start init
+eval { Device::RFXCOM::RX->new(device => $host, port => $port) };
 like($@, qr!^TCP connect to '\Q$addr\E' failed:!o,
      'connection failed (default port)');
 
