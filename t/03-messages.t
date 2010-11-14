@@ -39,9 +39,18 @@ BEGIN {
   import Test::More tests => $tests;
 }
 
-use_ok('Device::RFXCOM::RX');
+{
+  package My::RX;
+  use base 'Device::RFXCOM::RX';
+  sub _open {
+  }
+  sub _init {
+  }
+  1;
+}
 
-my $rf = Device::RFXCOM::RX->new();
+my $rf = My::RX->new();
+ok($rf, 'instantiated mock device');
 foreach my $m (sort keys %msg) {
   my $rec = $msg{$m};
   my $res;

@@ -41,7 +41,7 @@ sub _new {
      %p,
     }, $pkg;
   $self->{plugins} = [$self->plugins()] unless ($self->{plugins});
-  $self->{handle} = $self->_open();
+  $self->_open();
   $self->_init();
   $self;
 }
@@ -91,17 +91,17 @@ sub _write_now {
 sub _real_write {
   my ($self, $rec) = @_;
   print STDERR "Sending: ", $rec->{hex}, ' ', ($rec->{desc}||''), "\n" if DEBUG;
-  syswrite $self->handle, $rec->{raw}, length $rec->{raw};
+  syswrite $self->{fh}, $rec->{raw}, length $rec->{raw};
 }
 
-=method C<handle()>
+=method C<fh()>
 
 This method returns the file handle for the device.
 
 =cut
 
-sub handle {
-  shift->{handle}
+sub fh {
+  shift->{fh}
 }
 
 sub _open {
@@ -118,7 +118,8 @@ sub _open_tcp_port {
   $dev .= ':'.$self->{port} unless ($dev =~ /:/);
   my $fh = IO::Socket::INET->new($dev) or
     croak "TCP connect to '$dev' failed: $!";
-  return $fh;
+  $self->{fh} = $fh;
+  return 1;
 }
 
 sub _open_serial_port {
@@ -141,7 +142,8 @@ sub _open_serial_port {
     or croak "sysopen of '$dev' failed: $!";
   $fh->autoflush(1);
   binmode($fh);
-  return $fh;
+  $self->{fh} = $fh;
+  return 1;
 }
 
 sub _time_now {

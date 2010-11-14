@@ -108,13 +108,11 @@ my $rx = Device::RFXCOM::RX->new(device => $addr,
 
 ok($rx, 'instantiate Device::RFXCOM::RX object');
 
-$rx->handle(); # hack to kick start init before there is anything to read
-
 is($rx->queue, 2, 'queued initialization');
 
 $cv = AnyEvent->condvar;
 my $res;
-my $w = AnyEvent->io(fh => $rx->handle, poll => 'r',
+my $w = AnyEvent->io(fh => $rx->fh, poll => 'r',
                      cb => sub { $cv->send($rx->read()) });
 $res = $cv->recv;
 is($res->type, 'version', 'got version check response');

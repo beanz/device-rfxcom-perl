@@ -105,12 +105,12 @@ sub read {
   return $res if (defined $res);
   $self->_discard_buffer_check() if ($self->{_buf} ne '');
   $self->_discard_dup_cache_check();
-  my $handle = $self->handle;
-  my $sel = IO::Select->new($handle);
+  my $fh = $self->fh;
+  my $sel = IO::Select->new($fh);
  REDO:
   my $start = $self->_time_now;
   $sel->can_read($timeout) or return;
-  my $bytes = sysread $handle, $self->{_buf}, 2048, length $self->{_buf};
+  my $bytes = sysread $fh, $self->{_buf}, 2048, length $self->{_buf};
   $self->{_last_read} = $self->_time_now;
   $timeout -= $self->{_last_read} - $start if (defined $timeout);
   unless ($bytes) {

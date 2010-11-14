@@ -18,7 +18,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 28;
+  import Test::More tests => 27;
 }
 
 my @connections =
@@ -96,7 +96,7 @@ my $w800 = Device::W800->new(device => $addr,
 ok($w800, 'instantiate Device::W800 object');
 
 my $res;
-my $w = AnyEvent->io(fh => $w800->handle, poll => 'r',
+my $w = AnyEvent->io(fh => $w800->fh, poll => 'r',
                      cb => sub { $cv->send($w800->read(0.1)) });
 $cv = AnyEvent->condvar;
 $res = $cv->recv;
@@ -149,7 +149,5 @@ like($@, qr!^Writes not supported for W800!, 'write unsupported');
 undef $w800;
 undef $w;
 
-$w800 = Device::W800->new(device => $addr);
-ok($w800, 'instantiate Device::W800 object');
-eval { $w800->handle() }; # hack to kick start init
+eval { Device::W800->new(device => $addr) };
 like($@, qr!^TCP connect to '\Q$addr\E' failed:!o, 'connection failed');

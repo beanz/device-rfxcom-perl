@@ -4,7 +4,7 @@ sub new {
   return if ($dev =~ /fail-serialport/);
   bless { calls => [] }, 'Device::SerialPort';
 }
-sub calls { splice @{$_[0]->{calls}} }
+sub calls { $_[0]->{calls} }
 sub AUTOLOAD {
   my $self = shift;
   our $AUTOLOAD;

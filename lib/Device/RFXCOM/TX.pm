@@ -230,11 +230,11 @@ B<IMPORTANT:> This API is still subject to change.
 sub wait_for_ack {
   my ($self, $timeout) = @_;
   $timeout = $self->{ack_timeout} unless (defined $timeout);
-  my $handle = $self->handle;
-  my $sel = IO::Select->new($handle);
+  my $fh = $self->fh;
+  my $sel = IO::Select->new($fh);
   $sel->can_read($timeout) or return;
   my $buf;
-  my $bytes = sysread $handle, $buf, 2048;
+  my $bytes = sysread $fh, $buf, 2048;
   unless ($bytes) {
     croak defined $bytes ? 'closed' : 'error: '.$!;
   }

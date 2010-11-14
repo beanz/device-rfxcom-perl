@@ -233,7 +233,7 @@ foreach my $con (@connections) {
 
   ok($tx, 'instantiate Device::RFXCOM::TX object');
 
-  $w = AnyEvent->io(fh => $tx->handle, poll => 'r',
+  $w = AnyEvent->io(fh => $tx->fh, poll => 'r',
                     cb => sub { $cv->send($tx->wait_for_ack()) });
 
   $cv = AnyEvent->condvar;
@@ -241,11 +241,7 @@ foreach my $con (@connections) {
     my ($tran, $desc, $sent, $init_exp) = @{$rec}{qw/transmit desc send init/};
     if ($tran) {
       print STDERR "Transmitting: $desc\n" if DEBUG;
-      if (ref $tran) {
-        $tx->transmit(%$tran);
-      } else {
-        $tx->handle();
-      }
+      $tx->transmit(%$tran) if ($tran);
     }
     my $res = $cv->recv;
     print STDERR "Received ack for $desc\n" if DEBUG;
