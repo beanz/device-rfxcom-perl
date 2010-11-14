@@ -24,7 +24,6 @@ specifications from stdin.  The keys and values given on the command
 line become the parameter hash for the L<Device::RFXCOM::TX#new>
 constructor and are documented in that module.
 
-
 =cut
 
 use warnings;
@@ -36,11 +35,9 @@ my $device = shift or die "Usage: $0 device [key=value] ...\n";
 
 my $tx = Device::RFXCOM::TX->new(device => $device, map{split/=/}@ARGV);
 
-@ARGV = ();
-
 $|=1; # don't buffer output
 
-while (<>) {
+while (<STDIN>) {
   chomp;
   $tx->transmit(split /[\t =]/);
   do {
