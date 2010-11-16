@@ -70,7 +70,7 @@ sub _write {
   $p{hex} = unpack 'H*', $p{raw} unless (exists $p{hex});
   print STDERR "Queued: ", $p{hex}, ' ', ($p{desc}||''), "\n" if DEBUG;
   push @{$self->{_q}}, \%p;
-  $self->_write_now unless (exists $self->{_waiting});
+  $self->_write_now unless ($self->{_waiting});
   1;
 }
 
