@@ -61,7 +61,7 @@ sub encode {
          },
 }
 
-=head2 C<encode_address( $addr )>
+=method C<encode_address( $addr )>
 
 Takes a 26-bit address in the form of a hex string prefixed by '0x' or
 an arbitrary string.  A hex string is converted in the obvious way.
