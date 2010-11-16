@@ -118,8 +118,7 @@ sub _open_tcp_port {
   $dev .= ':'.$self->{port} unless ($dev =~ /:/);
   my $fh = IO::Socket::INET->new($dev) or
     croak "TCP connect to '$dev' failed: $!";
-  $self->{fh} = $fh;
-  return 1;
+  return $self->{fh} = $fh;
 }
 
 sub _open_serial_port {
@@ -142,8 +141,7 @@ sub _open_serial_port {
     or croak "sysopen of '$dev' failed: $!";
   $fh->autoflush(1);
   binmode($fh);
-  $self->{fh} = $fh;
-  return 1;
+  return $self->{fh} = $fh;
 }
 
 sub _time_now {
