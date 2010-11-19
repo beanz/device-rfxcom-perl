@@ -12,14 +12,16 @@ package Device::RFXCOM;
 
 =head1 DESCRIPTION
 
-Modules for RF receivers and transmitters produced by RFXCOM,
-L<http://www.rfxcom.com/>.  This code is derived
-from code written for the xPL-Perl project at
-L<http://www.xpl-perl.org.uk/>.
+Modules to support RF receivers and transmitters produced by RFXCOM,
+L<http://www.rfxcom.com/>.  This code is derived from code written for
+the xPL-Perl project at L<http://www.xpl-perl.org.uk/>.
 
-This distribution also contains a thin-wrapper module that provides an
-interface for W800 RF receivers from L<http://www.wgldesigns.com/>.
-However, this receiver supports fewer remote devices.
+A bonus module is provided to support W800 RF receivers from
+L<http://www.wgldesigns.com/>.  These receivers recognize fewer RF
+protocols.
+
+These devices are typically used for home automation and sensor
+monitoring applications.
 
 =head1 THANKS
 
