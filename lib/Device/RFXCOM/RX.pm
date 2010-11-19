@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Device::RFXCOM::RX;
 
-# ABSTRACT: Device::RFXCOM::RX module for RFXCOM RF receiver
+# ABSTRACT: Module to support RFXCOM RF receiver
 
 =head1 SYNOPSIS
 
@@ -21,7 +21,7 @@ package Device::RFXCOM::RX;
 
 =head1 DESCRIPTION
 
-Module for reading data from an RFXCOM RF receiver.
+Module to decode messages from an RFXCOM RF receiver.
 
 B<IMPORTANT:> This API is still subject to change.
 
@@ -44,14 +44,14 @@ use Module::Pluggable
 =method C<new(%parameters)>
 
 This constructor returns a new RFXCOM RF receiver object.
-The only supported parameter is:
+The supported parameters are:
 
 =over
 
 =item device
 
 The name of the device to connect to.  The value can be a tty device
-name or a C<hostname:port> for TCP-based RFXCOM receivers.
+name or C<hostname:port> for a TCP-based RFXCOM receiver.
 
 The default is C</dev/rfxcom-rx> in anticipation of a scenario where a
 udev rule has been used to identify the USB tty device for the device.

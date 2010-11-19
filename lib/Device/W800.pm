@@ -2,7 +2,7 @@ use strict;
 use warnings;
 package Device::W800;
 
-# ABSTRACT: Device::W800 module for W800 RF receiver
+# ABSTRACT: Module to support W800 RF receiver
 
 =head1 SYNOPSIS
 
@@ -21,7 +21,8 @@ package Device::W800;
 
 =head1 DESCRIPTION
 
-Module for reading data from an W800 RF receiver from WGL & Associates.
+Module to decode messages from an W800 RF receiver from WGL &
+Associates.
 
 B<IMPORTANT:> This API is still subject to change.
 
@@ -45,8 +46,8 @@ The only supported parameter is:
 The name of the device to connect to.  The value can be a tty device
 name or a C<hostname:port> for TCP-based serial port redirection.
 
-The default is C</dev/w800> in anticipation of a scenario where a
-udev rule has been used to identify the USB tty device for the device.
+The default is C</dev/w800> in anticipation of a scenario where a udev
+rule has been used to identify the USB tty device of the W800.
 
 =back
 
