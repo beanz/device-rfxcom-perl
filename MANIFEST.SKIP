@@ -1,2 +1,3 @@
 ^temp/
 .*~
+^libdevice-rfxcom-perl_.*
