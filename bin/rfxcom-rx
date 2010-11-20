@@ -27,7 +27,6 @@ module.
 
 use warnings;
 use strict;
-package main;
 use Device::RFXCOM::RX;
 
 my $device = shift or die "Usage: $0 [device] [key=value] ...\n";
