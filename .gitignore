@@ -3,3 +3,4 @@
 /.tdldb.bak
 /temp
 /.build
+/libdevice-rfxcom-perl_*
