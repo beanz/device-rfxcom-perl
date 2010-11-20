@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # ABSTRACT: simple example script to control an RFXCOM RF transmitter
+# PODNAME: rfxcom-tx
 
 =head1 SYNOPSIS
 
@@ -28,7 +29,6 @@ constructor and are documented in that module.
 
 use warnings;
 use strict;
-package main;
 use Device::RFXCOM::TX;
 
 my $device = shift or die "Usage: $0 device [key=value] ...\n";

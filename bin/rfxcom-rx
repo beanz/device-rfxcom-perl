@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
-# ABSTRACT: rfxcom-rx simple example script to read from an RFXCOM receiver
+# ABSTRACT: simple example script to read from an RFXCOM receiver
+# PODNAME: rfxcom-rx
 
 =head1 SYNOPSIS
 
