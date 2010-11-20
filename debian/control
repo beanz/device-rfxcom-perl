@@ -10,9 +10,10 @@ Homepage: http://wiki.github.com/beanz/device-rfxcom-perl/
 Package: libdevice-rfxcom-perl
 Architecture: all
 Depends: ${perl:Depends}, ${misc:Depends}
-Description: Perl extension for RFXCOM RF receivers.
+Description: Perl extension for RFXCOM RF receivers/transmitters.
  This module provides an API for communicating with RFXCOM RF
- receivers.  It also provides a small wrapper for W800 receivers
- from WGL (http://www.wgldesigns.com/w800.html).
+ receivers and transmitters (http://www.rfxcom.com/).  It also
+ provides a small wrapper for W800 receivers from WGL
+ (http://www.wgldesigns.com/w800.html).
  .
  Code for RFXCOM RF transmitters will be included shortly.
