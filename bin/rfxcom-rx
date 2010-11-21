@@ -17,7 +17,7 @@
 =head1 DESCRIPTION
 
 This script is an example of the usage of the L<Device::RFXCOM::RX>
-api.  It simply initializes the receiver and writes a summary of the
+API.  It simply initializes the receiver and writes a summary of the
 received RF messages to stdout.  The keys and values given on the
 command line become the parameter hash for the
 L<Device::RFXCOM::RX#new> constructor and are documented in that
