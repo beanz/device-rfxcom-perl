@@ -44,3 +44,16 @@ while (<STDIN>) {
     $tx->wait_for_ack();
   } until (!$tx->queue);
 }
+
+=head1 THANKS
+
+Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
+excellent documentation and for giving me permission to use it to help
+me write this code.  I own a number of their products and highly
+recommend them.
+
+=head1 SEE ALSO
+
+L<Device::RFXCOM::TX>
+
+RFXCOM website: http://www.rfxcom.com/

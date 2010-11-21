@@ -39,3 +39,16 @@ while (1) {
   my $data = $rx->read() or next;
   print $data->summary,"\n";
 }
+
+=head1 THANKS
+
+Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
+excellent documentation and for giving me permission to use it to help
+me write this code.  I own a number of their products and highly
+recommend them.
+
+=head1 SEE ALSO
+
+L<Device::RFXCOM::RX>
+
+RFXCOM website: http://www.rfxcom.com/
