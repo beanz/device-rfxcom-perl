@@ -68,7 +68,7 @@ sub encode {
                                     });
     }
   } else {
-    carp $self.'->encode: Invalid x10.basic message';
+    carp $self.'->encode: Invalid x10 message';
   }
   return \@res;
 }
