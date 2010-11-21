@@ -4,7 +4,7 @@ libdevice-rfxcom-perl (1.103250-1) unstable; urgency=low
   * Fix tests on EV event loop.
   * Add w800-rx example script.
 
- -- Mark Hindess <soft-debian@temporalanomaly.com>  Sun, 21 Nov 2010 08:33:35 +0000
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Sun, 21 Nov 2010 10:36:52 +0000
 
 libdevice-rfxcom-perl (1.103240-1) unstable; urgency=low
 
