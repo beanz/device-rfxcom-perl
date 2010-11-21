@@ -17,7 +17,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 45;
+  import Test::More tests => 46;
 }
 
 my @connections =
@@ -170,10 +170,13 @@ is($res->length, 0, '... correct data length');
 is($res->hex_data, '', '... no data');
 is($res->summary, 'slave empty 80.', '... correct summary string');
 
-# Fails when EV event loop is used
-#$cv = AnyEvent->condvar;
-#eval { $res = $cv->recv; };
-#like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
+SKIP: {
+  skip 'fails with some event loops', 1
+    unless ($AnyEvent::MODEL eq 'AnyEvent::Impl::Perl');
+  $cv = AnyEvent->condvar;
+  eval { $res = $cv->recv; };
+  like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
+}
 
 undef $rx;
 undef $w;

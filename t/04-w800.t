@@ -18,7 +18,7 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
-  import Test::More tests => 26;
+  import Test::More tests => 27;
 }
 
 my @connections =
@@ -139,10 +139,13 @@ is($message->device, 'a3', '... correct message device');
 
 undef $server;
 
-# Fails when EV event loop is used
-#$cv = AnyEvent->condvar;
-#eval { $res = $cv->recv; };
-#like($@, qr!^closed at \Q$0\E line \d+$!, 'close');
+SKIP: {
+  skip 'fails with some event loops', 1
+    unless ($AnyEvent::MODEL eq 'AnyEvent::Impl::Perl');
+  $cv = AnyEvent->condvar;
+  eval { $res = $cv->recv; };
+  like($@, qr!^closed at \Q$0\E line \d+$!, 'close');
+}
 
 eval { $w800->_write('BEEF'); };
 like($@, qr!^Writes not supported for W800!, 'write unsupported');
