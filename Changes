@@ -2,6 +2,7 @@ Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
         - Fix NAME sections in script Pod.
+        - Fix tests on EV event loop.
 
 1.103240  2010-11-20 08:18:08 Europe/London
         - Support for Digimax sensors.
