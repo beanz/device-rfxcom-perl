@@ -2,7 +2,7 @@ libdevice-rfxcom-perl (1.103260-1) unstable; urgency=low
 
   * Improve message encoding error messages.
 
- -- Mark Hindess <soft-debian@temporalanomaly.com>  Mon, 22 Nov 2010 20:40:30 +0000
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Mon, 22 Nov 2010 20:51:12 +0000
 
 libdevice-rfxcom-perl (1.103250-1) unstable; urgency=low
 
