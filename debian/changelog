@@ -1,4 +1,4 @@
-libdevice-rfxcom-perl (1.103251-1) unstable; urgency=low
+libdevice-rfxcom-perl (1.103260-1) unstable; urgency=low
 
   * Improve message encoding error messages.
 
