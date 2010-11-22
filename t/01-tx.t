@@ -268,7 +268,7 @@ like($@, qr!^\Q$tx\E->transmit: magic encoding not supported at !,
      'invalid transmit type');
 
 like(test_warn(sub { $tx->transmit(type => 'x10', command => 'on'); }),
-     qr!->encode: Invalid x10\.basic message!, 'invalid x10 message');
+     qr!->encode: Invalid x10 message!, 'invalid x10 message');
 
 SKIP: {
   skip 'fails with some event loops', 1
