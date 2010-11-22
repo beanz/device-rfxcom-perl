@@ -1,3 +1,9 @@
+libdevice-rfxcom-perl (1.103251-1) unstable; urgency=low
+
+  * Improve message encoding error messages.
+
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Mon, 22 Nov 2010 20:40:30 +0000
+
 libdevice-rfxcom-perl (1.103250-1) unstable; urgency=low
 
   * Fix NAME sections in script Pod.

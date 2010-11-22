@@ -1,6 +1,7 @@
 Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
+        - Improve message encoding error messages.
 
 1.103250  2010-11-21 10:40:20 Europe/London
         - Fix NAME sections in script Pod.
