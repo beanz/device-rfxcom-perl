@@ -1,3 +1,10 @@
+libdevice-rfxcom-perl (1.103260-2) unstable; urgency=low
+
+  * Dependency fixes.
+  * Minor lintian fixes.
+
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Sun, 28 Nov 2010 19:27:54 +0000
+
 libdevice-rfxcom-perl (1.103260-1) unstable; urgency=low
 
   * Improve message encoding error messages.
