@@ -154,7 +154,7 @@ sub handle_connection {
     return;
   }
   my ($desc, $recv, $send) = @{$rec}{qw/desc recv send/};
-  if ($recv eq '') {
+  unless (defined $recv) {
     print STDERR "Sending: ", $send if DEBUG;
     $send = pack "H*", $send;
     print STDERR "Sending ", length $send, " bytes\n" if DEBUG;

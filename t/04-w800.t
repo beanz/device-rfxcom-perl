@@ -19,6 +19,7 @@ BEGIN {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
   import Test::More;
+  use t::Helpers qw/:all/;
 }
 
 my @connections =
