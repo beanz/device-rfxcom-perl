@@ -1,6 +1,7 @@
 Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
+        - Fix test error in W800 test script.
 
 1.103390  2010-12-05 21:39:41 Europe/London
         - Tests improvements and refactoring.
