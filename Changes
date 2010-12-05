@@ -1,6 +1,7 @@
 Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
+        - Tests improvements and refactoring.
 
 1.103260  2010-11-22 20:51:12 Europe/London
         - Improve message encoding error messages.
