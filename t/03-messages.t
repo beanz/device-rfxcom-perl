@@ -3,6 +3,7 @@
 # Copyright (C) 2007, 2009 by Mark Hindess
 
 use strict;
+use t::Helpers qw/:all/;
 my %msg;
 
 BEGIN {
@@ -72,18 +73,4 @@ foreach my $m (sort keys %msg) {
 
   is_deeply($res ? $res->summary : '', $rec->{summary},
             $m.' - correct summary');
-}
-
-sub test_warn {
-  my $sub = shift;
-  my $warn;
-  local $SIG{__WARN__} = sub { $warn .= $_[0]; };
-  eval { $sub->(); };
-  die $@ if ($@);
-  if ($warn) {
-    $warn =~ s/\s+at (\S+|\(eval \d+\)(\[[^]]+\])?) line \d+\.?\s*$//g;
-    $warn =~ s/\s+at (\S+|\(eval \d+\)(\[[^]]+\])?) line \d+\.?\s*$//g;
-    $warn =~ s/ \(\@INC contains:.*?\)$//;
-  }
-  return $warn;
 }
