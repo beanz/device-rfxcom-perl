@@ -133,15 +133,11 @@ sub _open_serial_port {
   my $fd = fileno($fh);
   my $termios = POSIX::Termios->new;
   $termios->getattr($fd) or die "POSIX::Termios->getattr(...) failed: $!\n";
-  my $lflag = $termios->getlflag()
-    or die "POSIX::Termios->getlflag(...) failed: $!\n";
+  my $lflag = $termios->getlflag();
   $lflag &= ~(POSIX::ECHO | POSIX::ECHOK | POSIX::ICANON);
-  $termios->setlflag($lflag)
-    or die "POSIX::Termios->setlflag(...) failed: $!\n";
-  $termios->setcflag(POSIX::CS8 | POSIX::CREAD | POSIX::CLOCAL | POSIX::HUPCL)
-    or die "POSIX::Termios->setcflag(...) failed: $!\n";
-  $termios->setiflag(POSIX::IGNBRK | POSIX::IGNPAR)
-    or die "POSIX::Termios->setiflag(...) failed: $!\n";
+  $termios->setlflag($lflag);
+  $termios->setcflag(POSIX::CS8 | POSIX::CREAD | POSIX::CLOCAL | POSIX::HUPCL);
+  $termios->setiflag(POSIX::IGNBRK | POSIX::IGNPAR);
   my $baud = $self->{baud};
   my $b;
   if ($baud == 57600) {
