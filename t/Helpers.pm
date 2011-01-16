@@ -154,6 +154,7 @@ sub handle_connection {
     return;
   }
   my ($desc, $recv, $send) = @{$rec}{qw/desc recv send/};
+  $send =~ s/\s+//g if (defined $send);
   unless (defined $recv) {
     print STDERR "Sending: ", $send if DEBUG;
     $send = pack "H*", $send;
@@ -162,6 +163,7 @@ sub handle_connection {
     handle_connection($handle, $actions);
     return;
   }
+  $recv =~ s/\s+//g;
   my $expect = $recv;
   print STDERR "Waiting for ", $recv, "\n" if DEBUG;
   my $len = .5*length $recv;
