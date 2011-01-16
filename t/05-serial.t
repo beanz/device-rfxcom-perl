@@ -7,7 +7,7 @@ use constant {
   DEBUG => $ENV{DEVICE_RFXCOM_RX_TEST_DEBUG}
 };
 use lib 't/lib';
-use Test::More tests => 7;
+use Test::More tests => 6;
 use File::Temp qw/tempfile/;
 
 BEGIN {
@@ -39,14 +39,16 @@ my $rx = MY::RX->new(device => $filename);
 
 ok($rx, 'instantiate MY::RX object');
 
-is_deeply($rx->{serialport}->calls,
+is_deeply([POSIX::Termios->calls],
           [
-           'Device::SerialPort::baudrate 4800',
-           'Device::SerialPort::databits 8',
-           'Device::SerialPort::parity none',
-           'Device::SerialPort::stopbits 1',
-           'Device::SerialPort::write_settings ',
-           'Device::SerialPort::close ',
+           'POSIX::Termios::getattr 4',
+           'POSIX::Termios::getlflag ',
+           'POSIX::Termios::setlflag 0',
+           'POSIX::Termios::setcflag 15',
+           'POSIX::Termios::setiflag 3',
+           'POSIX::Termios::setospeed 1',
+           'POSIX::Termios::setispeed 1',
+           'POSIX::Termios::setattr 4 1',
           ],
           '... object calls');
 is_deeply(\@sent, ['F020'], '... sent data');
@@ -60,17 +62,15 @@ is_deeply(\@sent, ['F020'], '... sent data');
 
 eval { MY::RX->new(device => 't/does-not-exist.dev') };
 like($@, qr!^sysopen of 't/does-not-exist\.dev' failed:!, 'sysopen error');
-is_deeply($rx->{serialport}->calls,
+is_deeply([POSIX::Termios->calls],
           [
-           'Device::SerialPort::baudrate 4800',
-           'Device::SerialPort::databits 8',
-           'Device::SerialPort::parity none',
-           'Device::SerialPort::stopbits 1',
-           'Device::SerialPort::write_settings ',
-           'Device::SerialPort::close ',
+           'POSIX::Termios::getattr 4',
+           'POSIX::Termios::getlflag ',
+           'POSIX::Termios::setlflag 0',
+           'POSIX::Termios::setcflag 15',
+           'POSIX::Termios::setiflag 3',
+           'POSIX::Termios::setospeed 1',
+           'POSIX::Termios::setispeed 1',
+           'POSIX::Termios::setattr 4 1',
           ],
           '... object calls');
-
-eval { MY::RX->new(device => 't/fail-serialport.dev') };
-like($@, qr!^Failed to open 't/fail-serialport\.dev' with Device::SerialPort:!,
-     'Device::SerialPort error');
