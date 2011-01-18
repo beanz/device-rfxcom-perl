@@ -150,7 +150,7 @@ sub _open_serial_port {
     or die "POSIX::Termios->setospeed(...) failed: $!\n";
   $termios->setispeed($b)
     or die "POSIX::Termios->setospeed(...) failed: $!\n";
-  $termios->setattr($fd, POSIX::TCSANOW) or die 'Failed setattr: ', $!, "\n"
+  $termios->setattr($fd, POSIX::TCSANOW)
     or die "POSIX::Termios->setattr(...) failed: $!\n";
   return $self->{fh} = $fh;
 }
