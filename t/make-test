@@ -6,7 +6,18 @@ use lib 'lib';
 use Device::RFXCOM::RX;
 use Data::Dumper;
 
-my $rx = Device::RFXCOM::RX->new;
+
+{
+  package My::RX;
+  use base 'Device::RFXCOM::RX';
+  sub _open {
+  }
+  sub _init {
+  }
+  1;
+}
+
+my $rx = My::RX->new();
 @ARGV = sort @ARGV if (@ARGV && -f $ARGV[0]);
 foreach my $test (@ARGV) {
   my $ofh;
