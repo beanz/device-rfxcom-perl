@@ -55,13 +55,13 @@ sub decode {
   my $dev = $device.'.'.$ch;
   printf "cm119 d=%s power=%dW\n", $dev, $now if DEBUG;
   push @{$result->{messages}},
-    Device::RFXCOM::Response::Sensor->new(device => 'owl-cm119.'.$dev,
+    Device::RFXCOM::Response::Sensor->new(device => 'cm119.'.$dev,
                                           measurement => 'power',
                                           value => $now);
   return 1;
 }
 
-sub ns {
+sub _ns {
   my ($s, $e, $b) = @_;
   my $sum = 0;
   foreach ($s .. $e) {
