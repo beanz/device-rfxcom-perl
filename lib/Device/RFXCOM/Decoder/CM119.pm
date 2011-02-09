@@ -36,7 +36,7 @@ sub decode {
   $bits == 108 or return;
   $bytes->[0]==0x2a or return;
 
-  my $s = ns(1, 10, $bytes);
+  my $s = _ns(1, 10, $bytes);
   $s += lo_nibble($bytes->[11]);
   $s -= (lo_nibble($bytes->[12])<<4) + hi_nibble($bytes->[11]);
   $s == 0 or return;
