@@ -1,3 +1,11 @@
+libdevice-rfxcom-perl (1.110430-1) unstable; urgency=low
+
+  * Initial CM119 support.  Thanks to Guigui Abloc and Bert.
+  * Fix serial port setup (issue #1).  Thanks to maxatome.
+  * Fix test error in W800 test script.
+
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Sat, 12 Feb 2011 11:26:58 +0000
+
 libdevice-rfxcom-perl (1.103260-2) unstable; urgency=low
 
   * Dependency fixes.

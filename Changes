@@ -1,6 +1,7 @@
 Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
+        - Initial CM119 support.  Thanks to Guigui Abloc and Bert.
         - Fix serial port setup (issue #1).  Thanks to maxatome.
         - Fix test error in W800 test script.
 
