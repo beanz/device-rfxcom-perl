@@ -4,8 +4,7 @@ use warnings;
 use lib 'blib/lib';
 use lib 'lib';
 use Device::RFXCOM::RX;
-use Data::Dumper;
-
+use t::Helpers qw/:all/;
 
 {
   package My::RX;
@@ -37,9 +36,8 @@ foreach my $test (@ARGV) {
   }
   print $ofh $test, "\n\n";
   my $buf = pack 'H*', $test.'deadbeef';
-  my $warn;
-  local $SIG{__WARN__} = sub { $warn .= $_[0]; };
-  my $res = $rx->read_one(\$buf);
+  my $res;
+  my $warn = test_warn(sub { $res = $rx->read_one(\$buf) });
   print $ofh ($res ? $res->summary : ''),"\n\n";
   print $ofh $warn||'', "\n\n";
   substr $buf, -4, 4, '';

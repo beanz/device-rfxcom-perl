@@ -34,17 +34,17 @@ is returned.
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
   $bits == 108 or return;
-  $bytes->[0]==0x2a or return;
+  ($bytes->[0]&0xf)==0xa or return;
 
   my $s = _ns(1, 10, $bytes);
   $s += lo_nibble($bytes->[11]);
   $s -= (lo_nibble($bytes->[12])<<4) + hi_nibble($bytes->[11]);
   $s == 0 or return;
 
-  if ($bytes->[0]&0xc0) {
-    warn "CM119 channel not 1 - 3?";
-  }
   my $ch = $bytes->[0]>>4;
+  if ($ch < 1 || $ch > 3) {
+    warn "CM119 channel not 1 - 3?\n";
+  }
   my $device = sprintf "%02x", $bytes->[2];
   my $counter = lo_nibble($bytes->[1]);
   my $now = (lo_nibble($bytes->[5])<<16) + ($bytes->[4]<<8) + $bytes->[3];
