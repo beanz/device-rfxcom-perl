@@ -7,7 +7,7 @@ use constant {
   DEBUG => $ENV{DEVICE_RFXCOM_RX_TEST_DEBUG}
 };
 use lib 't/lib';
-use Test::More tests => 6;
+use Test::More tests => 12;
 use File::Temp qw/tempfile/;
 
 BEGIN {
@@ -38,19 +38,22 @@ my @sent;
 my $rx = MY::RX->new(device => $filename);
 
 ok($rx, 'instantiate MY::RX object');
-
-is_deeply([POSIX::Termios->calls],
-          [
-           'POSIX::Termios::getattr 4',
-           'POSIX::Termios::getlflag ',
-           'POSIX::Termios::setlflag 0',
-           'POSIX::Termios::setcflag 15',
-           'POSIX::Termios::setiflag 3',
-           'POSIX::Termios::setospeed 1',
-           'POSIX::Termios::setispeed 1',
-           'POSIX::Termios::setattr 4 1',
-          ],
-          '... object calls');
+my $fh = $rx->filehandle;
+my $fd = $fh->fileno;
+$rx->_termios_config($fh);
+my @calls = POSIX::Termios->calls;
+foreach my $exp ('POSIX::Termios::getattr '.$fd,
+                 'POSIX::Termios::getlflag ',
+                 'POSIX::Termios::setlflag 0',
+                 'POSIX::Termios::setcflag 15',
+                 'POSIX::Termios::setiflag 3',
+                 'POSIX::Termios::setospeed 1',
+                 'POSIX::Termios::setispeed 1',
+                 'POSIX::Termios::setattr '.$fd.' 1',
+                ) {
+  my $got = shift @calls;
+  is($got, $exp, 'POSIX calls - '.$exp);
+}
 is_deeply(\@sent, ['F020'], '... sent data');
 
 # TOFIX: delay closing error until all data is consumed from buffer
@@ -62,15 +65,3 @@ is_deeply(\@sent, ['F020'], '... sent data');
 
 eval { MY::RX->new(device => 't/does-not-exist.dev') };
 like($@, qr!^sysopen of 't/does-not-exist\.dev' failed:!, 'sysopen error');
-is_deeply([POSIX::Termios->calls],
-          [
-           'POSIX::Termios::getattr 4',
-           'POSIX::Termios::getlflag ',
-           'POSIX::Termios::setlflag 0',
-           'POSIX::Termios::setcflag 15',
-           'POSIX::Termios::setiflag 3',
-           'POSIX::Termios::setospeed 1',
-           'POSIX::Termios::setispeed 1',
-           'POSIX::Termios::setattr 4 1',
-          ],
-          '... object calls');
