@@ -38,7 +38,7 @@ my @sent;
 my $rx = MY::RX->new(device => $filename);
 
 ok($rx, 'instantiate MY::RX object');
-my $fh = $rx->filehandle;
+$fh = $rx->filehandle;
 my $fd = $fh->fileno;
 $rx->_termios_config($fh);
 my @calls = POSIX::Termios->calls;
