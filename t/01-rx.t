@@ -75,7 +75,7 @@ is($rx->queue, 2, 'queued initialization');
 
 $cv = AnyEvent->condvar;
 my $res;
-my $w = AnyEvent->io(fh => $rx->fh, poll => 'r',
+my $w = AnyEvent->io(fh => $rx->filehandle, poll => 'r',
                      cb => sub { $cv->send($rx->read()) });
 $res = $cv->recv;
 is($res->type, 'version', 'got version check response');

@@ -171,7 +171,7 @@ foreach my $con (@connections) {
 
   ok($tx, 'instantiate Device::RFXCOM::TX object');
 
-  $w = AnyEvent->io(fh => $tx->fh, poll => 'r',
+  $w = AnyEvent->io(fh => $tx->filehandle, poll => 'r',
                     cb => sub { $cv->send($tx->wait_for_ack()) });
 
   $cv = AnyEvent->condvar;

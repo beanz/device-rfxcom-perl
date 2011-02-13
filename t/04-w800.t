@@ -66,7 +66,7 @@ my $w800 = Device::W800->new(device => $addr,
 ok($w800, 'instantiate Device::W800 object');
 
 my $res;
-my $w = AnyEvent->io(fh => $w800->fh, poll => 'r',
+my $w = AnyEvent->io(fh => $w800->filehandle, poll => 'r',
                      cb => sub { $cv->send($w800->read(0.1)) });
 $cv = AnyEvent->condvar;
 $res = $cv->recv;

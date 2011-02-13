@@ -105,7 +105,7 @@ sub read {
   return $res if (defined $res);
   $self->_discard_buffer_check() if ($self->{_buf} ne '');
   $self->_discard_dup_cache_check();
-  my $fh = $self->fh;
+  my $fh = $self->filehandle;
   my $sel = IO::Select->new($fh);
  REDO:
   my $start = $self->_time_now;

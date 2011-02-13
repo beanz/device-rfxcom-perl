@@ -231,7 +231,7 @@ B<IMPORTANT:> This API is still subject to change.
 sub wait_for_ack {
   my ($self, $timeout) = @_;
   $timeout = $self->{ack_timeout} unless (defined $timeout);
-  my $fh = $self->fh;
+  my $fh = $self->filehandle;
   my $sel = IO::Select->new($fh);
   $sel->can_read($timeout) or return;
   my $buf;
