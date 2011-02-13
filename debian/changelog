@@ -1,3 +1,10 @@
+libdevice-rfxcom-perl (1.110440-1) unstable; urgency=low
+
+  * Minor test portability fixes.
+  * CM119 channel fixes and more test coverage.
+
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Sun, 13 Feb 2011 20:45:31 +0000
+
 libdevice-rfxcom-perl (1.110430-1) unstable; urgency=low
 
   * Initial CM119 support.  Thanks to Guigui Abloc and Bert.
