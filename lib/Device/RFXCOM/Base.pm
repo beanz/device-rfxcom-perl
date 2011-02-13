@@ -151,7 +151,7 @@ sub baud {
 
 sub _posix_baud {
   my $self = shift;
-  my $baud = $self->_baud;
+  my $baud = $self->baud;
   my $b;
   if ($baud == 57600) {
     $b = 0010001; ## no critic
