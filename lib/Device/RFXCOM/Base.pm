@@ -139,13 +139,19 @@ sub _open_serial_port {
   return $self->{fh} = $fh;
 }
 
+=method C<baud()>
+
+Returns the baud rate.
+
+=cut
+
 sub baud {
   shift->{baud}
 }
 
 sub _posix_baud {
   my $self = shift;
-  my $baud = $self->baud;
+  my $baud = $self->_baud;
   my $b;
   if ($baud == 57600) {
     $b = 0010001; ## no critic
