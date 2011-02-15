@@ -50,6 +50,12 @@ sub decode {
                                             measurement => 'current',
                                             value => $ct[$index]);
   }
+  push @{$result->{messages}},
+    Device::RFXCOM::Response::Sensor->new(device => $device,
+                                          measurement => 'battery',
+                                          value => (($bytes->[1]&0x10)
+                                                    ? 10 : 90),
+                                          units => '%');
   return 1;
 }
 
