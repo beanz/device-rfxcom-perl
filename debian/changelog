@@ -1,3 +1,9 @@
+libdevice-rfxcom-perl (1.110470-1) unstable; urgency=low
+
+  * Add electrisave battery reporting - thanks to dmb on xpl-perl trac.
+
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Wed, 16 Feb 2011 22:10:04 +0000
+
 libdevice-rfxcom-perl (1.110440-1) unstable; urgency=low
 
   * Minor test portability fixes.
