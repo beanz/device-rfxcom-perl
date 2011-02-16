@@ -1,6 +1,8 @@
 Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
+
+1.110471  2011-02-16 22:23:50 Europe/London
         - Fix sensor device name.
 
 1.110470  2011-02-16 22:05:18 Europe/London
