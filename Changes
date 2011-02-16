@@ -1,6 +1,7 @@
 Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
+        - Fix typo in sensor device name.
 
 1.110470  2011-02-16 22:05:18 Europe/London
         - Add electrisave battery reporting - thanks to dmb on xpl-perl trac.
