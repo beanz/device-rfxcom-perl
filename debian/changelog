@@ -1,6 +1,6 @@
 libdevice-rfxcom-perl (1.110470-1) unstable; urgency=low
 
-  * Fix typo in sensor device name.
+  * Fix sensor device name.
 
  -- Mark Hindess <soft-debian@temporalanomaly.com>  Wed, 16 Feb 2011 22:25:18 +0000
 
