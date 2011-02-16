@@ -1,4 +1,4 @@
-libdevice-rfxcom-perl (1.110470-1) unstable; urgency=low
+libdevice-rfxcom-perl (1.110471-1) unstable; urgency=low
 
   * Fix sensor device name.
 
