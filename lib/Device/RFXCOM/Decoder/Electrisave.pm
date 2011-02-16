@@ -51,7 +51,7 @@ sub decode {
                                             value => $ct[$index]);
   }
   push @{$result->{messages}},
-    Device::RFXCOM::Response::Sensor->new(device => $device,
+    Device::RFXCOM::Response::Sensor->new(device => 'electrisave.'.$device,
                                           measurement => 'battery',
                                           value => (($bytes->[1]&0x10)
                                                     ? 10 : 90),
