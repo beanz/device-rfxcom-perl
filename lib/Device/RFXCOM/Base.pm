@@ -107,7 +107,7 @@ sub filehandle {
 
 sub _open {
   my $self = shift;
-  $self->{device} =~ m!/! ?
+  $self->{device} =~ m![/\\]! ?
     $self->_open_serial_port(@_) : $self->_open_tcp_port(@_)
 }
 
