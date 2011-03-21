@@ -1,3 +1,9 @@
+libdevice-rfxcom-perl (1.110800-1) unstable; urgency=low
+
+  * Fix some windows test errors.
+
+ -- Mark Hindess <soft-debian@temporalanomaly.com>  Mon, 21 Mar 2011 19:58:14 +0000
+
 libdevice-rfxcom-perl (1.110471-1) unstable; urgency=low
 
   * Fix sensor device name.
