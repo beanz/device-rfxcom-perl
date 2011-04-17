@@ -18,43 +18,29 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
+  eval { require AnyEvent::MockTCPServer; import AnyEvent::MockTCPServer };
+  if ($@) {
+    import Test::More skip_all => 'No AnyEvent::MockTCPServer module: '.$@;
+  }
   import Test::More;
-  use t::Helpers qw/:all/;
 }
 
 my @connections =
   (
    [
-    {
-     desc => 'partial message',
-     send => '609f08',
-    },
-    {
-     desc => 'sleep 1',
-     sleep => 0.3,
-    },
-    {
-     desc => 'rest of message',
-     send => 'f7',
-    },
-    {
-     desc => 'complete message',
-     send => '609f08f7',
-    },
-    {
-     desc => 'sleep 2',
-     sleep => 0.3,
-    },
+    [ packsend => '609f08', 'partial message' ],
+    [ sleep => 0.3, 'sleep 1' ],
+    [ packsend => 'f7', 'rest of message' ],
+    [ packsend => '609f08f7', 'complete message' ],
+    [ sleep => 0.3, 'sleep 2' ],
    ],
   );
 
-my $cv = AnyEvent->condvar;
 my $server;
-eval { $server = test_server($cv, @connections) };
+eval { $server = AnyEvent::MockTCPServer->new(connections => \@connections); };
 plan skip_all => "Failed to create dummy server: $@" if ($@);
-
-my $addr = $cv->recv;
-$addr = $addr->[0].':'.$addr->[1];
+my ($host, $port) = $server->connect_address;
+my $addr = join ':', $host, $port;
 
 import Test::More tests => 27;
 
@@ -66,6 +52,7 @@ my $w800 = Device::W800->new(device => $addr,
 ok($w800, 'instantiate Device::W800 object');
 
 my $res;
+my $cv;
 my $w = AnyEvent->io(fh => $w800->filehandle, poll => 'r',
                      cb => sub { $cv->send($w800->read(0.1)) });
 $cv = AnyEvent->condvar;

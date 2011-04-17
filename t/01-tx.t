@@ -16,8 +16,12 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
+  eval { require AnyEvent::MockTCPServer; import AnyEvent::MockTCPServer };
+  if ($@) {
+    import Test::More skip_all => 'No AnyEvent::MockTCPServer module: '.$@;
+  }
   import Test::More;
-  use t::Helpers qw/:all/;
+  use t::Helpers qw/test_warn/;
 }
 
 my @connections =
@@ -147,12 +151,22 @@ my @connections =
 
   );
 
-my $cv = AnyEvent->condvar;
-my $server;
-eval { $server = test_server($cv, @connections) };
-plan skip_all => "Failed to create dummy server: $@" if ($@);
+my @sc = ();
+foreach my $con (@connections) {
+  my @a = ();
+  foreach my $rec (@$con) {
+    my ($recv, $send, $desc) = @{$rec}{qw/recv send desc/};
+    push @a,
+      [ packrecv => $recv, $desc ],
+      [ packsend => $send, $desc ];
+  }
+  push @sc, \@a;
+}
 
-my ($host,$port) = @{$cv->recv};
+my $server;
+eval { $server = AnyEvent::MockTCPServer->new(connections => \@sc); };
+plan skip_all => "Failed to create dummy server: $@" if ($@);
+my ($host, $port) = $server->connect_address;
 my $addr = join ':', $host, $port;
 
 import Test::More tests => 56;
@@ -162,6 +176,7 @@ my $tx;
 my $w;
 my %args = ();
 
+my $cv;
 foreach my $con (@connections) {
 
   my $init = 0;

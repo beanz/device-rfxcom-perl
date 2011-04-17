@@ -17,50 +17,40 @@ BEGIN {
   if ($@) {
     import Test::More skip_all => 'Missing AnyEvent module(s): '.$@;
   }
+  eval { require AnyEvent::MockTCPServer; import AnyEvent::MockTCPServer };
+  if ($@) {
+    import Test::More skip_all => 'No AnyEvent::MockTCPServer module: '.$@;
+  }
   import Test::More;
-  use t::Helpers qw/:all/;
 }
 
 my @connections =
   (
    [
-    {
-     desc => 'version check',
-     recv => 'F020',
-     send => '4d26',
-    },
-    {
-     desc => 'set variable length mode',
-     recv => 'F041',
-     send => '41',
-    },
-    {
-     desc => 'enable all possible receiving modes',
-     recv => 'F02A',
-     send => '2c', # mode is still 0x41 really but differs here for coverage
-    },
-    {
-     desc => 'x10 message',
-     recv => '',
-     send => '20609f08f7',
-    },
-    {
-     desc => 'empty message',
-     recv => '',
-     send => '80',
-    },
+    [ packrecv => 'F020', 'version check' ],
+    [ packsend => '4d26', 'version check response' ],
+
+    [ packrecv => 'F041', 'set variable length mode' ],
+    [ packsend => '41', 'set variable length mode response' ],
+
+    [ packrecv => 'F02A', 'enable all possible receiving modes' ],
+    [ packsend => '2c',
+      # mode is still 0x41 really but differs here for coverage
+      'enable all possible receiving modes response' ],
+
+    [ packsend => '20609f08f7', 'x10 message' ],
+
+    [ packsend => '80', 'empty message' ],
    ],
   );
 
-my $cv = AnyEvent->condvar;
 my $server;
-eval { $server = test_server($cv, @connections) };
+eval { $server = AnyEvent::MockTCPServer->new(connections => \@connections); };
 plan skip_all => "Failed to create dummy server: $@" if ($@);
-
-my ($host,$port) = @{$cv->recv};
+my ($host, $port) = $server->connect_address;
 my $addr = join ':', $host, $port;
 
-import Test::More tests => 49;
+import Test::More tests => 47;
 
 use_ok('Device::RFXCOM::RX');
 
@@ -74,7 +64,7 @@ ok($rx, 'instantiate Device::RFXCOM::RX object');
 is($rx->queue, 2, 'queued initialization');
 is($rx->baud, 4800, 'baud initialization');
 
-$cv = AnyEvent->condvar;
+my $cv = AnyEvent->condvar;
 my $res;
 my $w = AnyEvent->io(fh => $rx->filehandle, poll => 'r',
                      cb => sub { $cv->send($rx->read()) });

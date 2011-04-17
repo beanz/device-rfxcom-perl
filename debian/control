@@ -1,7 +1,7 @@
 Source: libdevice-rfxcom-perl
 Section: perl
 Priority: optional
-Build-Depends: debhelper (>= 5)
+Build-Depends: debhelper (>= 5), libanyevent-mocktcpserver-perl
 Build-Depends-Indep: perl (>= 5.6.10-12)
 Maintainer: Mark Hindess <soft-debian@temporalanomaly.com>
 Standards-Version: 3.9.1
