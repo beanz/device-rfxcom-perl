@@ -1,6 +1,6 @@
-*~
 /Device-RFXCOM*
+/libdevice-rfxcom-perl_*
+/.build
+*~
 /.tdldb.bak
 /temp
-/.build
-/libdevice-rfxcom-perl_*
