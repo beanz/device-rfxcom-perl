@@ -54,9 +54,9 @@ sub decode {
 
 =method C<parse_gr101( $parent, $message, $bytes, $bits, \%result )>
 
-This method is a helper for the main L<decode> method that handles the
+This method is a helper for the main decode() method that handles the
 GR101 scales only.  Parameters and return values are the same as the
-L<decode> method.
+decode() method.
 
 =cut
 
