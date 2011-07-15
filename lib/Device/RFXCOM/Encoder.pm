@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Encoder;
+BEGIN {
+  $Device::RFXCOM::Encoder::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Encoder base class for encoding RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Base class for RFXCOM encoder modules.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_ENCODER_DEBUG};
@@ -25,11 +19,6 @@ our %EXPORT_TAGS = ( 'all' => [ qw() ] );
 our @EXPORT_OK = ( @{ $EXPORT_TAGS{'all'} } );
 our @EXPORT = qw();
 
-=method C<new()>
-
-This constructor returns a new encoder object.
-
-=cut
 
 sub new {
   my $pkg = shift;
@@ -37,6 +26,32 @@ sub new {
 }
 
 1;
+
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Encoder - Device::RFXCOM::Encoder base class for encoding RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Base class for RFXCOM encoder modules.
+
+=head1 METHODS
+
+=head2 C<new()>
+
+This constructor returns a new encoder object.
 
 =head1 THANKS
 
@@ -48,3 +63,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

@@ -1,6 +1,6 @@
 Revision history for Perl extension Device::RFXCOM.
 
-{{$NEXT}}
+1.111960  2011-07-15 20:26:57 Europe/London
 
 1.110800  2011-03-21 20:05:29 Europe/London
         - Fix some windows test errors.

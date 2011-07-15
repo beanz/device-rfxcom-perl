@@ -1,31 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::RX;
+BEGIN {
+  $Device::RFXCOM::RX::VERSION = '1.111960';
+}
 
 # ABSTRACT: Module to support RFXCOM RF receiver
 
-=head1 SYNOPSIS
-
-  # for a USB-based device
-  my $rx = Device::RFXCOM::RX->new(device => '/dev/ttyUSB0');
-
-  $|=1; # don't buffer output
-
-  # simple interface to read received data
-  while (my $data = $rx->read($timeout)) {
-    print $data->summary,"\n" unless ($data->duplicate);
-  }
-
-  # for a networked device
-  my $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
-
-=head1 DESCRIPTION
-
-Module to decode messages from an RFXCOM RF receiver.
-
-B<IMPORTANT:> This API is still subject to change.
-
-=cut
 
 use 5.006;
 use constant {
@@ -41,39 +22,6 @@ use Module::Pluggable
   search_path => 'Device::RFXCOM::Decoder',
   instantiate => 'new';
 
-=method C<new(%parameters)>
-
-This constructor returns a new RFXCOM RF receiver object.
-The supported parameters are:
-
-=over
-
-=item device
-
-The name of the device to connect to.  The value can be a tty device
-name or C<hostname:port> for a TCP-based RFXCOM receiver.
-
-The default is C</dev/rfxcom-rx> in anticipation of a scenario where a
-udev rule has been used to identify the USB tty device for the device.
-For example, a file might be created in C</etc/udev/rules.d/91-rfxcom>
-with a line like:
-
-  SUBSYSTEM=="tty", SYSFS{idProduct}=="6001", SYSFS{idVendor}=="0403", SYSFS{serial}=="AnnnnABC", NAME="rfxcom-rx"
-
-where the C<serial> number attribute is obtained from the output
-from:
-
-  udevinfo -a -p `udevinfo -q path -n /dev/ttyUSB0` | \
-    sed -e'/ATTRS{serial}/!d;q'
-
-=item init_callback
-
-This parameter can be set to a callback to be called when the device
-initialization has been completed.
-
-=back
-
-=cut
 
 sub new {
   my $pkg = shift;
@@ -89,15 +37,6 @@ sub _init {
   $self->{init} = 1;
 }
 
-=method C<read($timeout)>
-
-This method blocks until a new message has been received by the
-device.  When a message is received a data structure is returned
-that represents the data received.
-
-B<IMPORTANT:> This API is still subject to change.
-
-=cut
 
 sub read {
   my ($self, $timeout) = @_;
@@ -123,17 +62,6 @@ sub read {
 }
 
 
-=method C<read_one(\$buffer)>
-
-This method attempts to remove a single RF message from the buffer
-passed in via the scalar reference.  When a message is removed a data
-structure is returned that represents the data received.  If insufficient
-data is available then undef is returned.  If a duplicate message is
-received then 0 is returned.
-
-B<IMPORTANT:> This API is still subject to change.
-
-=cut
 
 sub read_one {
   my ($self, $rbuf) = @_;
@@ -251,6 +179,91 @@ sub _discard_dup_cache_check {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::RX - Module to support RFXCOM RF receiver
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # for a USB-based device
+  my $rx = Device::RFXCOM::RX->new(device => '/dev/ttyUSB0');
+
+  $|=1; # don't buffer output
+
+  # simple interface to read received data
+  while (my $data = $rx->read($timeout)) {
+    print $data->summary,"\n" unless ($data->duplicate);
+  }
+
+  # for a networked device
+  my $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
+
+=head1 DESCRIPTION
+
+Module to decode messages from an RFXCOM RF receiver.
+
+B<IMPORTANT:> This API is still subject to change.
+
+=head1 METHODS
+
+=head2 C<new(%parameters)>
+
+This constructor returns a new RFXCOM RF receiver object.
+The supported parameters are:
+
+=over
+
+=item device
+
+The name of the device to connect to.  The value can be a tty device
+name or C<hostname:port> for a TCP-based RFXCOM receiver.
+
+The default is C</dev/rfxcom-rx> in anticipation of a scenario where a
+udev rule has been used to identify the USB tty device for the device.
+For example, a file might be created in C</etc/udev/rules.d/91-rfxcom>
+with a line like:
+
+  SUBSYSTEM=="tty", SYSFS{idProduct}=="6001", SYSFS{idVendor}=="0403", SYSFS{serial}=="AnnnnABC", NAME="rfxcom-rx"
+
+where the C<serial> number attribute is obtained from the output
+from:
+
+  udevinfo -a -p `udevinfo -q path -n /dev/ttyUSB0` | \
+    sed -e'/ATTRS{serial}/!d;q'
+
+=item init_callback
+
+This parameter can be set to a callback to be called when the device
+initialization has been completed.
+
+=back
+
+=head2 C<read($timeout)>
+
+This method blocks until a new message has been received by the
+device.  When a message is received a data structure is returned
+that represents the data received.
+
+B<IMPORTANT:> This API is still subject to change.
+
+=head2 C<read_one(\$buffer)>
+
+This method attempts to remove a single RF message from the buffer
+passed in via the scalar reference.  When a message is removed a data
+structure is returned that represents the data received.  If insufficient
+data is available then undef is returned.  If a duplicate message is
+received then 0 is returned.
+
+B<IMPORTANT:> This API is still subject to change.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -261,3 +274,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

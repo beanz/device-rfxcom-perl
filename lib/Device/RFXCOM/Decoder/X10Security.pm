@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::X10Security;
+BEGIN {
+  $Device::RFXCOM::Decoder::X10Security::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::X10Security decode X10 Security RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Module to recognize X10 Security RF messages from an RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_X10_SECURITY_DEBUG};
@@ -21,14 +15,6 @@ use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Security;
 use Device::RFXCOM::Response::Sensor;
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from X10
-Security devices.  If messages are identified, a reference to a list of
-message data is returned.  If the message is not recognized,
-undef is returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -105,11 +91,6 @@ sub decode {
   return 1;
 }
 
-=method C<reverse_bits( \@bytes )>
-
-This method reverses the bits in the bytes.
-
-=cut
 
 sub reverse_bits {
   my $self = shift;
@@ -122,6 +103,39 @@ sub reverse_bits {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::X10Security - Device::RFXCOM::Decoder::X10Security decode X10 Security RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Module to recognize X10 Security RF messages from an RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from X10
+Security devices.  If messages are identified, a reference to a list of
+message data is returned.  If the message is not recognized,
+undef is returned.
+
+=head2 C<reverse_bits( \@bytes )>
+
+This method reverses the bits in the bytes.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -132,3 +146,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

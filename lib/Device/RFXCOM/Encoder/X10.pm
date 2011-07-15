@@ -1,20 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Encoder::X10;
+BEGIN {
+  $Device::RFXCOM::Encoder::X10::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Encoder::X10 encode X10 RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-This is a module for encoding RF messages for X10
-(L<http://www.x10.eu/>) devices so that they can be dispatched to
-an RFXCOM RF transmitter.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_ENCODER_X10_DEBUG};
@@ -41,12 +33,6 @@ my %bytes_to_unit =
   map { $_ => $i++ } ( 0x00, 0x10, 0x08, 0x18, 0x40, 0x50, 0x48, 0x58 );
 my %unit_to_bytes = reverse %bytes_to_unit;
 
-=method C<encode( $parent, \%params )>
-
-This method constructs the RF message data for a message to send to
-a X10 device.
-
-=cut
 
 sub encode {
   my ($self, $parent, $p) = @_;
@@ -98,6 +84,35 @@ sub _encode_x10 {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Encoder::X10 - Device::RFXCOM::Encoder::X10 encode X10 RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+This is a module for encoding RF messages for X10
+(L<http://www.x10.eu/>) devices so that they can be dispatched to
+an RFXCOM RF transmitter.
+
+=head1 METHODS
+
+=head2 C<encode( $parent, \%params )>
+
+This method constructs the RF message data for a message to send to
+a X10 device.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -108,3 +123,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

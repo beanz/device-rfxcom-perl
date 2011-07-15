@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::Digimax;
+BEGIN {
+  $Device::RFXCOM::Decoder::Digimax::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::Digimax decode Digimax RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Module to recognize Digimax RF messages from an RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_DIGIMAX_DEBUG};
@@ -21,14 +15,6 @@ use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Thermostat;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble nibble_sum/;
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from Digimax
-devices.  If messages are identified, a reference to a list of message
-data is returned.  If the message is not recognized, undef is
-returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -68,6 +54,49 @@ sub decode {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::Digimax - Device::RFXCOM::Decoder::Digimax decode Digimax RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Module to recognize Digimax RF messages from an RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from Digimax
+devices.  If messages are identified, a reference to a list of message
+data is returned.  If the message is not recognized, undef is
+returned.
+
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

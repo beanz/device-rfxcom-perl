@@ -1,20 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Encoder::HomeEasy;
+BEGIN {
+  $Device::RFXCOM::Encoder::HomeEasy::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Encoder::HomeEasy encode HomeEasy RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-This is a module for encoding RF messages for HomeEasy
-(L<http://www.homeeasy.eu/>) devices so that they can be dispatched to
-an RFXCOM RF transmitter.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_ENCODER_HOMEEASY_DEBUG};
@@ -22,12 +14,6 @@ use Carp qw/croak carp/;
 use base 'Device::RFXCOM::Encoder';
 use Device::RFXCOM::Response::HomeEasy;
 
-=method C<encode( $parent, \%params )>
-
-This method constructs the RF message data for a message to send to
-a HomeEasy device.
-
-=cut
 
 sub encode {
   my ($self, $parent, $p) = @_;
@@ -70,13 +56,6 @@ sub encode {
          },
 }
 
-=method C<encode_address( $addr )>
-
-Takes a 26-bit address in the form of a hex string prefixed by '0x' or
-an arbitrary string.  A hex string is converted in the obvious way.
-An arbitrary string is hashed to a 26-bit value.
-
-=cut
 
 sub encode_address {
   my $addr = shift;
@@ -93,6 +72,41 @@ sub encode_address {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Encoder::HomeEasy - Device::RFXCOM::Encoder::HomeEasy encode HomeEasy RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+This is a module for encoding RF messages for HomeEasy
+(L<http://www.homeeasy.eu/>) devices so that they can be dispatched to
+an RFXCOM RF transmitter.
+
+=head1 METHODS
+
+=head2 C<encode( $parent, \%params )>
+
+This method constructs the RF message data for a message to send to
+a HomeEasy device.
+
+=head2 C<encode_address( $addr )>
+
+Takes a 26-bit address in the form of a hex string prefixed by '0x' or
+an arbitrary string.  A hex string is converted in the obvious way.
+An arbitrary string is hashed to a 26-bit value.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -103,3 +117,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

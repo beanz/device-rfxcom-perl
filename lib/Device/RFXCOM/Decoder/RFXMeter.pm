@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::RFXMeter;
+BEGIN {
+  $Device::RFXCOM::Decoder::RFXMeter::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::RFXMeter decode RFXMeter RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Module to recognize RFXMeter RF messages from an RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_RFXMETER_DEBUG};
@@ -20,14 +14,6 @@ use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/nibble_sum/;
 our @ISA = qw(Device::RFXCOM::Decoder);
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from RFXMeter
-and RFXPower devices.  If messages are identified, a reference to a
-list of message data is returned.  If the message is not recognized,
-undef is returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -92,6 +78,35 @@ sub decode {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::RFXMeter - Device::RFXCOM::Decoder::RFXMeter decode RFXMeter RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Module to recognize RFXMeter RF messages from an RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from RFXMeter
+and RFXPower devices.  If messages are identified, a reference to a
+list of message data is returned.  If the message is not recognized,
+undef is returned.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -102,3 +117,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

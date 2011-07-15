@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::Visonic;
+BEGIN {
+  $Device::RFXCOM::Decoder::Visonic::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::Visonic decode Visonic RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Module to recognize Visonic RF messages from an RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_VISONIC_DEBUG};
@@ -24,14 +18,6 @@ use Device::RFXCOM::Response::Sensor;
 
 my %bits = ( 36 => 'powercode', 66 => 'codesecure' );
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from Visonic
-PowerCode and CodeSecure devices.  If messages are identified, a
-reference to a list of message data is returned.  If the message is
-not recognized, undef is returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -39,11 +25,6 @@ sub decode {
   return $self->$method($parent, $message, $bytes, $bits, $result);
 }
 
-=method C<codesecure( $parent, $message, $bytes, $bits, \%result )>
-
-This method decodes a message from a Visonic code secure keyfob.
-
-=cut
 
 sub codesecure {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -84,11 +65,6 @@ sub codesecure {
   return 1;
 }
 
-=method C<powercode( $parent, $message, $bytes, $bits, \%result )>
-
-This method decodes a message from a Visonic powercode sensor.
-
-=cut
 
 sub powercode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -133,6 +109,43 @@ sub powercode {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::Visonic - Device::RFXCOM::Decoder::Visonic decode Visonic RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Module to recognize Visonic RF messages from an RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from Visonic
+PowerCode and CodeSecure devices.  If messages are identified, a
+reference to a list of message data is returned.  If the message is
+not recognized, undef is returned.
+
+=head2 C<codesecure( $parent, $message, $bytes, $bits, \%result )>
+
+This method decodes a message from a Visonic code secure keyfob.
+
+=head2 C<powercode( $parent, $message, $bytes, $bits, \%result )>
+
+This method decodes a message from a Visonic powercode sensor.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -143,3 +156,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

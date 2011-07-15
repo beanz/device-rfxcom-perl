@@ -1,20 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::HomeEasy;
+BEGIN {
+  $Device::RFXCOM::Decoder::HomeEasy::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::HomeEasy decode HomeEasy RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-This is a module for decoding RF messages from HomeEasy
-(L<http://www.homeeasy.eu/>) devices that have been received by an
-RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_HOMEEASY_DEBUG};
@@ -22,14 +14,6 @@ use Carp qw/croak/;
 use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::HomeEasy;
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from HomeEasy
-devices.  If messages are identified, a reference to a list of message
-data is returned.  If the message is not recognized, undef is
-returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -67,12 +51,6 @@ sub decode {
   return 1;
 }
 
-=method C<from_rf( $bits, $bytes )>
-
-Takes an array reference of bytes from an RF message and converts it
-in to an hash reference with the details.
-
-=cut
 
 sub from_rf {
   my $length = shift;
@@ -93,6 +71,42 @@ sub from_rf {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::HomeEasy - Device::RFXCOM::Decoder::HomeEasy decode HomeEasy RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+This is a module for decoding RF messages from HomeEasy
+(L<http://www.homeeasy.eu/>) devices that have been received by an
+RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from HomeEasy
+devices.  If messages are identified, a reference to a list of message
+data is returned.  If the message is not recognized, undef is
+returned.
+
+=head2 C<from_rf( $bits, $bytes )>
+
+Takes an array reference of bytes from an RF message and converts it
+in to an hash reference with the details.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -103,3 +117,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

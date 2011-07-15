@@ -1,19 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::CM119;
+BEGIN {
+  $Device::RFXCOM::Decoder::CM119::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::CM119 decode OWL CM119 RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Module to recognize OWL CM119 energy monitor RF messages from an
-RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_CM119_DEBUG};
@@ -22,14 +15,6 @@ use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble nibble_sum/;
 use base 'Device::RFXCOM::Decoder';
 use Device::RFXCOM::Response::Sensor;
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from OWL
-CM119 devices.  If a suitable message is identified, a reference to a
-list of readings is returned.  If the message is not recognized, undef
-is returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -72,6 +57,36 @@ sub _ns {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::CM119 - Device::RFXCOM::Decoder::CM119 decode OWL CM119 RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Module to recognize OWL CM119 energy monitor RF messages from an
+RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from OWL
+CM119 devices.  If a suitable message is identified, a reference to a
+list of readings is returned.  If the message is not recognized, undef
+is returned.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -82,3 +97,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

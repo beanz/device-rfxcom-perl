@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::OregonScale;
+BEGIN {
+  $Device::RFXCOM::Decoder::OregonScale::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::OregonScale decode Oregon Scale RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Module to recognize Oregon Scale RF messages from an RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_OREGON_SCALE_DEBUG};
@@ -20,14 +14,6 @@ use Carp qw/croak/;
 use Device::RFXCOM::Decoder qw/hi_nibble lo_nibble/;
 our @ISA = qw(Device::RFXCOM::Decoder);
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from Oregon
-Scientific weighing scales.  If messages are identified, a reference
-to a list of message data is returned.  If the message is not
-recognized, undef is returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -52,13 +38,6 @@ sub decode {
   return 1;
 }
 
-=method C<parse_gr101( $parent, $message, $bytes, $bits, \%result )>
-
-This method is a helper for the main L<decode> method that handles the
-GR101 scales only.  Parameters and return values are the same as the
-L<decode> method.
-
-=cut
 
 sub parse_gr101 {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -76,6 +55,41 @@ sub parse_gr101 {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::OregonScale - Device::RFXCOM::Decoder::OregonScale decode Oregon Scale RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Module to recognize Oregon Scale RF messages from an RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from Oregon
+Scientific weighing scales.  If messages are identified, a reference
+to a list of message data is returned.  If the message is not
+recognized, undef is returned.
+
+=head2 C<parse_gr101( $parent, $message, $bytes, $bits, \%result )>
+
+This method is a helper for the main L<decode> method that handles the
+GR101 scales only.  Parameters and return values are the same as the
+L<decode> method.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -86,3 +100,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

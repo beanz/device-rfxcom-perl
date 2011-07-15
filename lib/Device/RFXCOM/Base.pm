@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Base;
+BEGIN {
+  $Device::RFXCOM::Base::VERSION = '1.111960';
+}
 
 # ABSTRACT: module for RFXCOM device base class
 
-=head1 SYNOPSIS
-
-  ... abstract base class
-
-=head1 DESCRIPTION
-
-Module for RFXCOM device base class.
-
-=cut
 
 use 5.006;
 use constant {
@@ -52,12 +46,6 @@ sub DESTROY {
   delete $self->{init};
 }
 
-=method C<queue()>
-
-Returns the number of messages in the queue to be sent to the
-device.
-
-=cut
 
 sub queue {
   scalar @{$_[0]->{_q}};
@@ -95,11 +83,6 @@ sub _real_write {
   syswrite $self->{fh}, $rec->{raw}, length $rec->{raw};
 }
 
-=method C<filehandle()>
-
-This method returns the file handle for the device.
-
-=cut
 
 sub filehandle {
   shift->{fh}
@@ -139,11 +122,6 @@ sub _open_serial_port {
   return $self->{fh} = $fh;
 }
 
-=method C<baud()>
-
-Returns the baud rate.
-
-=cut
 
 sub baud {
   shift->{baud}
@@ -188,6 +166,41 @@ sub _time_now {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Base - module for RFXCOM device base class
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  ... abstract base class
+
+=head1 DESCRIPTION
+
+Module for RFXCOM device base class.
+
+=head1 METHODS
+
+=head2 C<queue()>
+
+Returns the number of messages in the queue to be sent to the
+device.
+
+=head2 C<filehandle()>
+
+This method returns the file handle for the device.
+
+=head2 C<baud()>
+
+Returns the baud rate.
+
 =head1 THANKS
 
 Special thanks to RFXCOM, L<http://www.rfxcom.com/>, for their
@@ -198,3 +211,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

@@ -1,32 +1,12 @@
 use strict;
 use warnings;
 package Device::W800;
+BEGIN {
+  $Device::W800::VERSION = '1.111960';
+}
 
 # ABSTRACT: Module to support W800 RF receiver
 
-=head1 SYNOPSIS
-
-  # for a USB-based device
-  my $rx = Device::W800->new(device => '/dev/ttyUSB0');
-
-  $|=1; # don't buffer output
-
-  # simple interface to read received data
-  while (my $data = $rx->read($timeout)) {
-    print $data->summary,"\n";
-  }
-
-  # for a networked device
-  my $rx = Device::W800->new(device => '10.0.0.1:10001');
-
-=head1 DESCRIPTION
-
-Module to decode messages from an W800 RF receiver from WGL &
-Associates.
-
-B<IMPORTANT:> This API is still subject to change.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_W800_DEBUG};
@@ -34,24 +14,6 @@ use Carp qw/croak/;
 use base 'Device::RFXCOM::RX';
 use Device::RFXCOM::Response;
 
-=method C<new(%parameters)>
-
-This constructor returns a new W800 RF receiver object.
-The only supported parameter is:
-
-=over
-
-=item device
-
-The name of the device to connect to.  The value can be a tty device
-name or a C<hostname:port> for TCP-based serial port redirection.
-
-The default is C</dev/w800> in anticipation of a scenario where a udev
-rule has been used to identify the USB tty device of the W800.
-
-=back
-
-=cut
 
 sub new {
   my ($pkg, %p) = @_;
@@ -81,17 +43,6 @@ sub _init {
   $self->{init} = 1;
 }
 
-=method C<read_one(\$buffer)>
-
-This method attempts to remove a single RF message from the buffer
-passed in via the scalar reference.  When a message is removed a data
-structure is returned that represents the data received.  If insufficient
-data is available then undef is returned.  If a duplicate message is
-received then 0 is returned.
-
-B<IMPORTANT:> This API is still subject to change.
-
-=cut
 
 sub read_one {
   my ($self, $rbuf) = @_;
@@ -136,8 +87,85 @@ sub read_one {
 
 1;
 
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::W800 - Module to support W800 RF receiver
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # for a USB-based device
+  my $rx = Device::W800->new(device => '/dev/ttyUSB0');
+
+  $|=1; # don't buffer output
+
+  # simple interface to read received data
+  while (my $data = $rx->read($timeout)) {
+    print $data->summary,"\n";
+  }
+
+  # for a networked device
+  my $rx = Device::W800->new(device => '10.0.0.1:10001');
+
+=head1 DESCRIPTION
+
+Module to decode messages from an W800 RF receiver from WGL &
+Associates.
+
+B<IMPORTANT:> This API is still subject to change.
+
+=head1 METHODS
+
+=head2 C<new(%parameters)>
+
+This constructor returns a new W800 RF receiver object.
+The only supported parameter is:
+
+=over
+
+=item device
+
+The name of the device to connect to.  The value can be a tty device
+name or a C<hostname:port> for TCP-based serial port redirection.
+
+The default is C</dev/w800> in anticipation of a scenario where a udev
+rule has been used to identify the USB tty device of the W800.
+
+=back
+
+=head2 C<read_one(\$buffer)>
+
+This method attempts to remove a single RF message from the buffer
+passed in via the scalar reference.  When a message is removed a data
+structure is returned that represents the data received.  If insufficient
+data is available then undef is returned.  If a duplicate message is
+received then 0 is returned.
+
+B<IMPORTANT:> This API is still subject to change.
+
 =head1 SEE ALSO
 
 L<Device::RFXCOM::RX>
 
 W800 website: http://www.wgldesigns.com/w800.html
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

@@ -1,8 +1,57 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Response::DateTime;
+BEGIN {
+  $Device::RFXCOM::Response::DateTime::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Response class for DateTime message from RFXCOM receiver
+
+
+use 5.006;
+use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_DATETIME_DEBUG};
+use Carp qw/croak/;
+
+
+sub new {
+  my ($pkg, %p) = @_;
+  bless { %p }, $pkg;
+}
+
+
+sub type { 'datetime' }
+
+
+sub device { shift->{device} }
+
+
+sub date { shift->{date} }
+
+
+sub time { shift->{time} }
+
+
+sub day { shift->{day} }
+
+
+sub summary {
+  my $self = shift;
+  $self->type.'/'.$self->device.'='.$self->date.' '.$self->time.' '.$self->day;
+}
+
+1;
+
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Response::DateTime - Device::RFXCOM::Response class for DateTime message from RFXCOM receiver
+
+=head1 VERSION
+
+version 1.111960
 
 =head1 SYNOPSIS
 
@@ -12,80 +61,40 @@ package Device::RFXCOM::Response::DateTime;
 
 Message class for DateTime messages from an RFXCOM receiver.
 
-=cut
+=head1 METHODS
 
-use 5.006;
-use constant DEBUG => $ENV{DEVICE_RFXCOM_RESPONSE_DATETIME_DEBUG};
-use Carp qw/croak/;
-
-=method C<new(%params)>
+=head2 C<new(%params)>
 
 This constructor returns a new response object.
 
-=cut
-
-sub new {
-  my ($pkg, %p) = @_;
-  bless { %p }, $pkg;
-}
-
-=method C<type()>
+=head2 C<type()>
 
 This method returns 'datetime'.
 
-=cut
-
-sub type { 'datetime' }
-
-=method C<device()>
+=head2 C<device()>
 
 This method returns a string representing the name of the device that
 sent the date and time data.
 
-=cut
-
-sub device { shift->{device} }
-
-=method C<date()>
+=head2 C<date()>
 
 This method returns a string of the form 'YYYYMMDD' representing the
 date from the date and time RF message.
 
-=cut
-
-sub date { shift->{date} }
-
-=method C<time()>
+=head2 C<time()>
 
 This method returns a string of the form 'HHMMSS' representing the
 time from the date and time RF message.
 
-=cut
-
-sub time { shift->{time} }
-
-=method C<day()>
+=head2 C<day()>
 
 This method returns the day (in English) from the date and time RF
 message.  It is probably best to avoid using this and calculate the
 correct value for the locale from the other data.
 
-=cut
-
-sub day { shift->{day} }
-
-=method C<summary()>
+=head2 C<summary()>
 
 This method returns a string summary of the date and time information.
-
-=cut
-
-sub summary {
-  my $self = shift;
-  $self->type.'/'.$self->device.'='.$self->date.' '.$self->time.' '.$self->day;
-}
-
-1;
 
 =head1 THANKS
 
@@ -97,3 +106,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+

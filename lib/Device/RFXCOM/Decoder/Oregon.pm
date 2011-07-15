@@ -1,18 +1,12 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::Oregon;
+BEGIN {
+  $Device::RFXCOM::Decoder::Oregon::VERSION = '1.111960';
+}
 
 # ABSTRACT: Device::RFXCOM::Decoder::Oregon decode Oregon RF messages
 
-=head1 SYNOPSIS
-
-  # see Device::RFXCOM::RX
-
-=head1 DESCRIPTION
-
-Module to recognize Oregon RF messages from an RFXCOM RF receiver.
-
-=cut
 
 use 5.006;
 use constant DEBUG => $ENV{DEVICE_RFXCOM_DECODER_OREGON_DEBUG};
@@ -129,14 +123,6 @@ my %types =
 
 my $DOT = q{.};
 
-=method C<decode( $parent, $message, $bytes, $bits, \%result )>
-
-This method attempts to recognize and decode RF messages from Oregon
-Scientific sensors.  If messages are identified, a reference to a list
-of message data is returned.  If the message is not recognized, undef
-is returned.
-
-=cut
 
 sub decode {
   my ($self, $parent, $message, $bytes, $bits, $result) = @_;
@@ -167,14 +153,6 @@ sub decode {
   $self->$method($device, $bytes, \@nibbles, $result);
 }
 
-=head1 DEVICE METHODS
-
-=method C<uv138( $device, $bytes, $nibbles, \%result )>
-
-This method is called if the device type bytes indicate that the bytes
-might contain a message from a UV138 sensor.
-
-=cut
 
 sub uv138 {
   my ($self, $device, $bytes, $nibbles, $result) = @_;
@@ -184,12 +162,6 @@ sub uv138 {
   return 1;
 }
 
-=method C<uvn800( $device, $bytes, $nibbles, \%result )>
-
-This method is called if the device type bytes indicate that the bytes
-might contain a message from a UVN800 sensor.
-
-=cut
 
 sub uvn800 {
   my ($self, $device, $bytes, $nibbles, $result) = @_;
@@ -199,12 +171,6 @@ sub uvn800 {
   return 1;
 }
 
-=method C<wgr918_anemometer( $device, $bytes, $nibbles, \%result )>
-
-This method is called if the device type bytes indicate that the bytes
-might contain a wind speed/direction message from a WGR918 sensor.
-
-=cut
 
 sub wgr918_anemometer {
   my ($self, $device, $bytes, $nib, $result) = @_;
@@ -229,12 +195,6 @@ sub wgr918_anemometer {
   return 1;
 }
 
-=method C<wtgr800_anemometer( $device, $bytes, $nibbles, \%result )>
-
-This method is called if the device type bytes indicate that the bytes
-might contain a wind speed/direction message from a WTGR800 sensor.
-
-=cut
 
 sub wtgr800_anemometer {
   my ($self, $device, $bytes, $nib, $result) = @_;
@@ -258,12 +218,6 @@ sub wtgr800_anemometer {
   return 1
 }
 
-=method C<alt_temphydro( $device, $bytes, $nibbles, \%result )>
-
-This method is called if the device type bytes indicate that the bytes
-might contain a temperature/humidity message from a WTGR800 sensor.
-
-=cut
 
 sub alt_temphydro {
   my ($self, $device, $bytes, $nibbles, $result) = @_;
@@ -274,12 +228,6 @@ sub alt_temphydro {
   return 1;
 }
 
-=method C<alt_temphydrobaro( $device, $bytes, $nibbles, \%result )>
-
-This method is called if the device type bytes indicate that the bytes
-might contain a temperature/humidity/baro message from a BTHR918N sensor.
-
-=cut
 
 sub alt_temphydrobaro {
   my ($self, $device, $bytes, $nibbles, $result) = @_;
@@ -291,12 +239,6 @@ sub alt_temphydrobaro {
   return 1;
 }
 
-=method C<rtgr328n_datetime( $device, $bytes, $nibbles, \%result )>
-
-This method is called if the device type bytes indicate that the bytes
-might contain a date/time message from a RTGR328n sensor.
-
-=cut
 
 sub rtgr328n_datetime {
   my ($self, $device, $bytes, $nib, $result) = @_;
@@ -319,12 +261,6 @@ sub rtgr328n_datetime {
   return 1;
 }
 
-=method C<common_temp( $device, $bytes, $nibbles, \%result )>
-
-This method is a generic device method for devices that report
-temperature in a particular manner.
-
-=cut
 
 sub common_temp {
   my ($self, $device, $bytes, $nibbles, $result) = @_;
@@ -334,12 +270,6 @@ sub common_temp {
   return 1;
 }
 
-=method C<common_temphydro( $device, $bytes, $nibbles, \%result )>
-
-This method is a generic device method for devices that report
-temperature and humidity in a particular manner.
-
-=cut
 
 sub common_temphydro {
   my ($self, $device, $bytes, $nibbles, $result) = @_;
@@ -350,12 +280,6 @@ sub common_temphydro {
   return 1;
 }
 
-=method C<common_temphydrobaro( $device, $bytes, $nibbles, \%result )>
-
-This method is a generic device method for devices that report
-temperature, humidity and barometric pressure in a particular manner.
-
-=cut
 
 sub common_temphydrobaro {
   my ($self, $device, $bytes, $nibbles, $result) = @_;
@@ -367,11 +291,6 @@ sub common_temphydrobaro {
   return 1;
 }
 
-=method C<common_rain( $device, $bytes, $nibbles, \%result )>
-
-This method handles the rain measurements from an RGR918 rain gauge.
-
-=cut
 
 sub common_rain {
   my ($self, $device, $bytes, $nib, $result) = @_;
@@ -400,11 +319,6 @@ sub common_rain {
   return 1;
 }
 
-=method C<pcr800_rain( $device, $bytes, $nibbles, \%result )>
-
-This method handles the rain measurements from a PCR800 rain gauge.
-
-=cut
 
 sub pcr800_rain {
   my ($self, $device, $bytes, $nib, $result) = @_;
@@ -431,16 +345,6 @@ sub pcr800_rain {
   return 1;
 }
 
-=head1 CHECKSUM METHODS
-
-=method C<checksum1( $bytes, $nibbles )>
-
-This method is a byte checksum of all nibbles of the first 6 bytes,
-the low nibble of the 7th byte, minus 10 which should equal the byte
-consisting of a high nibble taken from the low nibble of the 8th byte
-plus the high nibble from the 7th byte.
-
-=cut
 
 sub checksum1 {
   my $c = $_[1]->[12] + ($_[1]->[15]<<4);
@@ -448,79 +352,36 @@ sub checksum1 {
   $s == $c;
 }
 
-=method C<checksum2( $bytes )>
-
-This method is a byte checksum of all nibbles of the first 8 bytes
-minus 10, which should equal the 9th byte.
-
-=cut
 
 sub checksum2 {
   $_[0]->[8] == ((nibble_sum(16,$_[1]) - 0xa) & 0xff);
 }
 
-=method C<checksum3( $bytes )>
-
-This method is a byte checksum of all nibbles of the first 11 bytes
-minus 10, which should equal the 12th byte.
-
-=cut
 
 sub checksum3 {
   $_[0]->[11] == ((nibble_sum(22,$_[1]) - 0xa) & 0xff);
 }
 
-=method C<checksum4( $bytes )>
-
-This method is a byte checksum of all nibbles of the first 9 bytes
-minus 10, which should equal the 10th byte.
-
-=cut
 
 sub checksum4 {
   $_[0]->[9] == ((nibble_sum(18,$_[1]) - 0xa) & 0xff);
 }
 
-=method C<checksum5( $bytes )>
-
-This method is a byte checksum of all nibbles of the first 10 bytes
-minus 10, which should equal the 11th byte.
-
-=cut
 
 sub checksum5 {
   $_[0]->[10] == ((nibble_sum(20,$_[1]) - 0xa) & 0xff);
 }
 
-=method C<checksum6( $bytes )>
-
-This method is a byte checksum of all nibbles of the first 10 bytes
-minus 10, which should equal the 11th byte.
-
-=cut
 
 sub checksum6 {
   $_[1]->[16]+($_[1]->[19]<<4) == ((nibble_sum(16,$_[1]) - 0xa) & 0xff);
 }
 
-=method C<checksum7( $bytes )>
-
-This method is a byte checksum of all nibbles of the first 7 bytes,
-minus 10 which should equal the byte
-consisting of the 8th byte
-
-=cut
 
 sub checksum7 {
   $_[0]->[7] == ((nibble_sum(14,$_[1]) - 0xa) & 0xff);
 }
 
-=method C<checksum8( $bytes )>
-
-This method is a byte checksum of all nibbles of the first 7 bytes,
-minus 10 which should equal the byte consisting of the 8th byte
-
-=cut
 
 sub checksum8 {
   my $c = $_[1]->[18] + ($_[1]->[21]<<4);
@@ -528,12 +389,6 @@ sub checksum8 {
   $s == $c;
 }
 
-=method C<checksum_tester( $bytes, $nibbles )>
-
-This method is a dummy checksum method that tries to guess the checksum
-that is required.
-
-=cut
 
 sub checksum_tester {
   my @bytes = ( @{$_[0]}, 0, 0, 0, 0, 0, 0, 0 );
@@ -575,26 +430,11 @@ my @uv_str =
    'very high', 'very high', 'very high', # 8 - 10
   );
 
-=head1 UTILITY METHODS
-
-=method C<uv_string( $uv_index )>
-
-This method takes the UV Index and returns a suitable string.
-
-=cut
 
 sub uv_string {
   $uv_str[$_[0]] || 'dangerous';
 }
 
-=head1 SENSOR READING METHODS
-
-=method C<uv( $device, $bytes, $nibbles, \%result)>
-
-This method processes a UV Index reading.  It appends an xPL message
-to the result array.
-
-=cut
 
 sub uv {
   my ($dev, $bytes, $nib, $result) = @_;
@@ -610,12 +450,6 @@ sub uv {
   1;
 }
 
-=method C<uv2( $device, $bytes, $nibbles, \%result)>
-
-This method processes a UV Index reading for UVN800 sensor type.  It
-appends an xPL message to the result array.
-
-=cut
 
 sub uv2 {
   my ($dev, $bytes, $nib, $result) = @_;
@@ -631,12 +465,6 @@ sub uv2 {
   1;
 }
 
-=method C<temperature( $device, $bytes, $nibbles, \%result)>
-
-This method processes a temperature reading.  It appends an xPL message
-to the result array.
-
-=cut
 
 sub temperature {
   my ($dev, $bytes, $nib, $result) = @_;
@@ -651,12 +479,6 @@ sub temperature {
   1;
 }
 
-=method C<humidity( $device, $bytes, $nibbles, \%result)>
-
-This method processes a humidity reading.  It appends an xPL message
-to the result array.
-
-=cut
 
 sub humidity {
   my ($dev, $bytes, $nib, $result) = @_;
@@ -672,13 +494,6 @@ sub humidity {
   1;
 }
 
-=method C<pressure( $device, $bytes, $nibbles, \%result, $forecast_index,
-                   $offset )>
-
-This method processes a pressure reading.  It appends an xPL message
-to the result array.
-
-=cut
 
 sub pressure {
   my ($dev, $bytes, $nib, $result, $forecast_index, $offset) = @_;
@@ -700,12 +515,6 @@ sub pressure {
   1;
 }
 
-=method C<simple_battery( $device, $bytes, $nibbles, \%result)>
-
-This method processes a simple low battery reading.  It appends an xPL
-message to the result array if the battery is low.
-
-=cut
 
 sub simple_battery {
   my ($dev, $bytes, $nib, $result) = @_;
@@ -719,12 +528,6 @@ sub simple_battery {
   $battery_low;
 }
 
-=method C<percentage_battery( $device, $bytes, $nibbles, \%result)>
-
-This method processes a battery percentage charge reading.  It appends
-an xPL message to the result array if the battery is low.
-
-=cut
 
 sub percentage_battery {
   my ($dev, $bytes, $nib, $result) = @_;
@@ -738,18 +541,200 @@ sub percentage_battery {
   $bat < 20;
 }
 
-=method C<type_length_key( $type, $length )>
-
-This function creates a simple key from a device type and message
-length (in bits).  It is used to as the index for the parts table.
-
-=cut
 
 sub type_length_key {
   ($_[0] << 8) + $_[1]
 }
 
 1;
+
+
+__END__
+=pod
+
+=head1 NAME
+
+Device::RFXCOM::Decoder::Oregon - Device::RFXCOM::Decoder::Oregon decode Oregon RF messages
+
+=head1 VERSION
+
+version 1.111960
+
+=head1 SYNOPSIS
+
+  # see Device::RFXCOM::RX
+
+=head1 DESCRIPTION
+
+Module to recognize Oregon RF messages from an RFXCOM RF receiver.
+
+=head1 METHODS
+
+=head2 C<decode( $parent, $message, $bytes, $bits, \%result )>
+
+This method attempts to recognize and decode RF messages from Oregon
+Scientific sensors.  If messages are identified, a reference to a list
+of message data is returned.  If the message is not recognized, undef
+is returned.
+
+=head2 C<uv138( $device, $bytes, $nibbles, \%result )>
+
+This method is called if the device type bytes indicate that the bytes
+might contain a message from a UV138 sensor.
+
+=head2 C<uvn800( $device, $bytes, $nibbles, \%result )>
+
+This method is called if the device type bytes indicate that the bytes
+might contain a message from a UVN800 sensor.
+
+=head2 C<wgr918_anemometer( $device, $bytes, $nibbles, \%result )>
+
+This method is called if the device type bytes indicate that the bytes
+might contain a wind speed/direction message from a WGR918 sensor.
+
+=head2 C<wtgr800_anemometer( $device, $bytes, $nibbles, \%result )>
+
+This method is called if the device type bytes indicate that the bytes
+might contain a wind speed/direction message from a WTGR800 sensor.
+
+=head2 C<alt_temphydro( $device, $bytes, $nibbles, \%result )>
+
+This method is called if the device type bytes indicate that the bytes
+might contain a temperature/humidity message from a WTGR800 sensor.
+
+=head2 C<alt_temphydrobaro( $device, $bytes, $nibbles, \%result )>
+
+This method is called if the device type bytes indicate that the bytes
+might contain a temperature/humidity/baro message from a BTHR918N sensor.
+
+=head2 C<rtgr328n_datetime( $device, $bytes, $nibbles, \%result )>
+
+This method is called if the device type bytes indicate that the bytes
+might contain a date/time message from a RTGR328n sensor.
+
+=head2 C<common_temp( $device, $bytes, $nibbles, \%result )>
+
+This method is a generic device method for devices that report
+temperature in a particular manner.
+
+=head2 C<common_temphydro( $device, $bytes, $nibbles, \%result )>
+
+This method is a generic device method for devices that report
+temperature and humidity in a particular manner.
+
+=head2 C<common_temphydrobaro( $device, $bytes, $nibbles, \%result )>
+
+This method is a generic device method for devices that report
+temperature, humidity and barometric pressure in a particular manner.
+
+=head2 C<common_rain( $device, $bytes, $nibbles, \%result )>
+
+This method handles the rain measurements from an RGR918 rain gauge.
+
+=head2 C<pcr800_rain( $device, $bytes, $nibbles, \%result )>
+
+This method handles the rain measurements from a PCR800 rain gauge.
+
+=head2 C<checksum1( $bytes, $nibbles )>
+
+This method is a byte checksum of all nibbles of the first 6 bytes,
+the low nibble of the 7th byte, minus 10 which should equal the byte
+consisting of a high nibble taken from the low nibble of the 8th byte
+plus the high nibble from the 7th byte.
+
+=head2 C<checksum2( $bytes )>
+
+This method is a byte checksum of all nibbles of the first 8 bytes
+minus 10, which should equal the 9th byte.
+
+=head2 C<checksum3( $bytes )>
+
+This method is a byte checksum of all nibbles of the first 11 bytes
+minus 10, which should equal the 12th byte.
+
+=head2 C<checksum4( $bytes )>
+
+This method is a byte checksum of all nibbles of the first 9 bytes
+minus 10, which should equal the 10th byte.
+
+=head2 C<checksum5( $bytes )>
+
+This method is a byte checksum of all nibbles of the first 10 bytes
+minus 10, which should equal the 11th byte.
+
+=head2 C<checksum6( $bytes )>
+
+This method is a byte checksum of all nibbles of the first 10 bytes
+minus 10, which should equal the 11th byte.
+
+=head2 C<checksum7( $bytes )>
+
+This method is a byte checksum of all nibbles of the first 7 bytes,
+minus 10 which should equal the byte
+consisting of the 8th byte
+
+=head2 C<checksum8( $bytes )>
+
+This method is a byte checksum of all nibbles of the first 7 bytes,
+minus 10 which should equal the byte consisting of the 8th byte
+
+=head2 C<checksum_tester( $bytes, $nibbles )>
+
+This method is a dummy checksum method that tries to guess the checksum
+that is required.
+
+=head2 C<uv_string( $uv_index )>
+
+This method takes the UV Index and returns a suitable string.
+
+=head2 C<uv( $device, $bytes, $nibbles, \%result)>
+
+This method processes a UV Index reading.  It appends an xPL message
+to the result array.
+
+=head2 C<uv2( $device, $bytes, $nibbles, \%result)>
+
+This method processes a UV Index reading for UVN800 sensor type.  It
+appends an xPL message to the result array.
+
+=head2 C<temperature( $device, $bytes, $nibbles, \%result)>
+
+This method processes a temperature reading.  It appends an xPL message
+to the result array.
+
+=head2 C<humidity( $device, $bytes, $nibbles, \%result)>
+
+This method processes a humidity reading.  It appends an xPL message
+to the result array.
+
+=head2 C<pressure( $device, $bytes, $nibbles, \%result, $forecast_index,
+                   $offset )>
+
+This method processes a pressure reading.  It appends an xPL message
+to the result array.
+
+=head2 C<simple_battery( $device, $bytes, $nibbles, \%result)>
+
+This method processes a simple low battery reading.  It appends an xPL
+message to the result array if the battery is low.
+
+=head2 C<percentage_battery( $device, $bytes, $nibbles, \%result)>
+
+This method processes a battery percentage charge reading.  It appends
+an xPL message to the result array if the battery is low.
+
+=head2 C<type_length_key( $type, $length )>
+
+This function creates a simple key from a device type and message
+length (in bits).  It is used to as the index for the parts table.
+
+=head1 DEVICE METHODS
+
+=head1 CHECKSUM METHODS
+
+=head1 UTILITY METHODS
+
+=head1 SENSOR READING METHODS
 
 =head1 THANKS
 
@@ -761,3 +746,17 @@ recommend them.
 =head1 SEE ALSO
 
 RFXCOM website: http://www.rfxcom.com/
+
+=head1 AUTHOR
+
+Mark Hindess <soft-cpan@temporalanomaly.com>
+
+=head1 COPYRIGHT AND LICENSE
+
+This software is copyright (c) 2011 by Mark Hindess.
+
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
+
+=cut
+
