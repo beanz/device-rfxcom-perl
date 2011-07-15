@@ -11,7 +11,7 @@ package Device::RFXCOM::Encoder::HomeEasy;
 =head1 DESCRIPTION
 
 This is a module for encoding RF messages for HomeEasy
-(L<http://www.homeeasy.eu/>) devices so that that can be dispatched to
+(L<http://www.homeeasy.eu/>) devices so that they can be dispatched to
 an RFXCOM RF transmitter.
 
 =cut

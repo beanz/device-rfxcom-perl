@@ -11,7 +11,7 @@ package Device::RFXCOM::Encoder::X10;
 =head1 DESCRIPTION
 
 This is a module for encoding RF messages for X10
-(L<http://www.x10.eu/>) devices so that that can be dispatched to
+(L<http://www.x10.eu/>) devices so that they can be dispatched to
 an RFXCOM RF transmitter.
 
 =cut
