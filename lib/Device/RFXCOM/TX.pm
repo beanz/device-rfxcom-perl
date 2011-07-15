@@ -8,7 +8,9 @@ package Device::RFXCOM::TX;
 
   # for a USB-based device, transmitting X10 RF messages
   my $tx = Device::RFXCOM::TX->new(device => '/dev/ttyUSB0', x10 => 1);
-  $tx->transmit(type => 'homeeasy', command => 'on', ...);
+  $tx->transmit(type => 'homeeasy', command => 'on',
+                # ...
+               );
   $tx->wait_for_ack() while ($tx->queue);
 
 =head1 DESCRIPTION

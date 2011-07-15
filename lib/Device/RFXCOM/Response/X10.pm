@@ -50,7 +50,7 @@ sub device { shift->{device} }
 =method C<house()>
 
 This method returns the X10 house code from the RF message.  That is,
-C<a>, C<b>, ... C<p>.  It will be undefined if L<device> is defined.
+C<a>, C<b>, ... C<p>.  It will be undefined if device() is defined.
 
 =cut
 

@@ -6,7 +6,7 @@ package Device::RFXCOM::Base;
 
 =head1 SYNOPSIS
 
-  ... abstract base class
+  # ... abstract base class
 
 =head1 DESCRIPTION
 

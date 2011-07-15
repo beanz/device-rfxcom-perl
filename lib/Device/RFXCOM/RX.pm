@@ -12,12 +12,13 @@ package Device::RFXCOM::RX;
   $|=1; # don't buffer output
 
   # simple interface to read received data
+  my $timeout = 10; # 10 seconds
   while (my $data = $rx->read($timeout)) {
     print $data->summary,"\n" unless ($data->duplicate);
   }
 
   # for a networked device
-  my $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
+  $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
 
 =head1 DESCRIPTION
 

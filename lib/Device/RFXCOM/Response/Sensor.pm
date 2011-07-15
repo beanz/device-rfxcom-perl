@@ -66,8 +66,7 @@ sub value { shift->{value} }
 
 =method C<units()>
 
-This method returns the units of the L<value> in the sensor RF
-message.
+This method returns the units of the value() in the sensor RF message.
 
 =cut
 

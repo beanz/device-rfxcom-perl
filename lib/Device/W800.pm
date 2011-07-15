@@ -12,12 +12,13 @@ package Device::W800;
   $|=1; # don't buffer output
 
   # simple interface to read received data
+  my $timeout = 10; # 10 seconds
   while (my $data = $rx->read($timeout)) {
     print $data->summary,"\n";
   }
 
   # for a networked device
-  my $rx = Device::W800->new(device => '10.0.0.1:10001');
+  $rx = Device::W800->new(device => '10.0.0.1:10001');
 
 =head1 DESCRIPTION
 
