@@ -84,8 +84,8 @@ sub new {
 sub _init {
   my ($self, $cb) = @_;
   $self->_write(hex => 'F020', desc => 'version check');
-  $self->_write(hex => 'F041', desc => 'variable length with visonic');
-  $self->_write(hex => 'F02A', desc => 'enable all possible receiving modes',
+  $self->_write(hex => 'F02A', desc => 'enable all possible receiving modes');
+  $self->_write(hex => 'F041', desc => 'variable length with visonic',
                 callback => $cb || $self->{init_callback});
   $self->{init} = 1;
 }
