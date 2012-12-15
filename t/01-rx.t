@@ -129,7 +129,7 @@ SKIP: {
     unless ($AnyEvent::MODEL eq 'AnyEvent::Impl::Perl');
   $cv = AnyEvent->condvar;
   eval { $res = $cv->recv; };
-  like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
+  like($@, qr!^closed at \Q$0\E line \d+!, 'check close');
 }
 
 undef $rx;

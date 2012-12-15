@@ -227,7 +227,7 @@ SKIP: {
   skip 'fails with some event loops', 1
     unless ($AnyEvent::MODEL eq 'AnyEvent::Impl::Perl');
   eval { my $res = $cv->recv; };
-  like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
+  like($@, qr!^closed at \Q$0\E line \d+!, 'check close');
 }
 
 undef $tx;
