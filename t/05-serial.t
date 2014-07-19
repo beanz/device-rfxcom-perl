@@ -7,7 +7,7 @@ use constant {
   DEBUG => $ENV{DEVICE_RFXCOM_RX_TEST_DEBUG}
 };
 use lib 't/lib';
-use Test::More tests => 12;
+use Test::More;
 use File::Temp qw/tempfile/;
 
 BEGIN {
@@ -39,29 +39,19 @@ my $rx = MY::RX->new(device => $filename);
 
 ok($rx, 'instantiate MY::RX object');
 $fh = $rx->filehandle;
-my $fd = $fh->fileno;
-$rx->_termios_config($fh);
-my @calls = POSIX::Termios->calls;
-foreach my $exp ('POSIX::Termios::getattr '.$fd,
-                 'POSIX::Termios::getlflag ',
-                 'POSIX::Termios::setlflag 0',
-                 'POSIX::Termios::setcflag 15',
-                 'POSIX::Termios::setiflag 3',
-                 'POSIX::Termios::setospeed 1',
-                 'POSIX::Termios::setispeed 1',
-                 'POSIX::Termios::setattr '.$fd.' 1',
-                ) {
-  my $got = shift @calls;
-  is($got, $exp, 'POSIX calls - '.$exp);
-}
-is_deeply(\@sent, ['F020'], '... sent data');
-
-# TOFIX: delay closing error until all data is consumed from buffer
-
-#@sent = ();
-
-#use Data::Dumper;
-#print STDERR Data::Dumper->Dump([$rx->read(0.1)],[qw/read/]);
+my @calls = Device::SerialPort::calls();
+is_deeply \@calls,
+ [
+  [ 'Device::SerialPort::baudrate' => 4800 ],
+  [ 'Device::SerialPort::databits' => 8 ],
+  [ 'Device::SerialPort::parity' => 'none' ],
+  [ 'Device::SerialPort::stopbits' => 1 ],
+  [ 'Device::SerialPort::datatype' => 'raw' ],
+  [ 'Device::SerialPort::write_settings' ],
+  [ 'Device::SerialPort::BINMODE' ],
+ ], '... Device::SerialPort calls';
 
 eval { MY::RX->new(device => 't/does-not-exist.dev') };
 like($@, qr!^sysopen of 't/does-not-exist\.dev' failed:!, 'sysopen error');
+
+done_testing;
