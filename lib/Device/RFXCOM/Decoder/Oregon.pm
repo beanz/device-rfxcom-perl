@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::Oregon;
-BEGIN {
-  $Device::RFXCOM::Decoder::Oregon::VERSION = '1.111960';
-}
-
+$Device::RFXCOM::Decoder::Oregon::VERSION = '1.142000';
 # ABSTRACT: Device::RFXCOM::Decoder::Oregon decode Oregon RF messages
 
 
@@ -115,6 +112,11 @@ my %types =
     part => 'PCR800',
     checksum => \&checksum8,
     method => 'pcr800_rain',
+   },
+
+   type_length_key(0xca48, 68) =>
+   {
+    part => 'THWR800', checksum => \&checksum1, method => 'common_temp',
    },
 
    # for testing
@@ -548,9 +550,11 @@ sub type_length_key {
 
 1;
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -558,7 +562,7 @@ Device::RFXCOM::Decoder::Oregon - Device::RFXCOM::Decoder::Oregon decode Oregon 
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
@@ -753,10 +757,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

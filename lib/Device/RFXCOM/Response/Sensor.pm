@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Response::Sensor;
-BEGIN {
-  $Device::RFXCOM::Response::Sensor::VERSION = '1.111960';
-}
-
+$Device::RFXCOM::Response::Sensor::VERSION = '1.142000';
 # ABSTRACT: Device::RFXCOM::Response class for Sensor message from RFXCOM receiver
 
 
@@ -42,9 +39,11 @@ sub summary {
 
 1;
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -52,7 +51,7 @@ Device::RFXCOM::Response::Sensor - Device::RFXCOM::Response class for Sensor mes
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
@@ -89,8 +88,7 @@ message.
 
 =head2 C<units()>
 
-This method returns the units of the L<value> in the sensor RF
-message.
+This method returns the units of the value() in the sensor RF message.
 
 =head2 C<summary()>
 
@@ -113,10 +111,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

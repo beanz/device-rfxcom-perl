@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::RX;
-BEGIN {
-  $Device::RFXCOM::RX::VERSION = '1.111960';
-}
-
+$Device::RFXCOM::RX::VERSION = '1.142000';
 # ABSTRACT: Module to support RFXCOM RF receiver
 
 
@@ -31,8 +28,8 @@ sub new {
 sub _init {
   my ($self, $cb) = @_;
   $self->_write(hex => 'F020', desc => 'version check');
-  $self->_write(hex => 'F041', desc => 'variable length with visonic');
-  $self->_write(hex => 'F02A', desc => 'enable all possible receiving modes',
+  $self->_write(hex => 'F02A', desc => 'enable all possible receiving modes');
+  $self->_write(hex => 'F041', desc => 'variable length with visonic',
                 callback => $cb || $self->{init_callback});
   $self->{init} = 1;
 }
@@ -179,9 +176,11 @@ sub _discard_dup_cache_check {
 
 1;
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -189,7 +188,7 @@ Device::RFXCOM::RX - Module to support RFXCOM RF receiver
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
@@ -199,12 +198,13 @@ version 1.111960
   $|=1; # don't buffer output
 
   # simple interface to read received data
+  my $timeout = 10; # 10 seconds
   while (my $data = $rx->read($timeout)) {
     print $data->summary,"\n" unless ($data->duplicate);
   }
 
   # for a networked device
-  my $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
+  $rx = Device::RFXCOM::RX->new(device => '10.0.0.1:10001');
 
 =head1 DESCRIPTION
 
@@ -281,10 +281,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

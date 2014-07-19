@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::X10;
-BEGIN {
-  $Device::RFXCOM::Decoder::X10::VERSION = '1.111960';
-}
-
+$Device::RFXCOM::Decoder::X10::VERSION = '1.142000';
 # ABSTRACT: Device::RFXCOM::Decoder::X10 decode X10 RF messages
 
 
@@ -54,7 +51,6 @@ my %byte_to_house =
    '13' => 'l',  '0' => 'm',  '1' => 'n',  '2' => 'o',  '3' => 'p',
   );
 
-my $i = 1;
 my %byte_to_unit =
   (
    0x00 => 1, 0x10 => 2, 0x08 => 3, 0x18 => 4, 0x40 => 5, 0x50 => 6,
@@ -102,9 +98,11 @@ sub is_x10 {
 
 1;
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -112,7 +110,7 @@ Device::RFXCOM::Decoder::X10 - Device::RFXCOM::Decoder::X10 decode X10 RF messag
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
@@ -162,10 +160,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

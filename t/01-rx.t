@@ -30,13 +30,13 @@ my @connections =
     [ packrecv => 'F020', 'version check' ],
     [ packsend => '4d26', 'version check response' ],
 
-    [ packrecv => 'F041', 'set variable length mode' ],
-    [ packsend => '41', 'set variable length mode response' ],
-
     [ packrecv => 'F02A', 'enable all possible receiving modes' ],
+    [ packsend => '41', 'enable all possible receiving modes response' ],
+
+    [ packrecv => 'F041', 'set variable length mode' ],
     [ packsend => '2c',
       # mode is still 0x41 really but differs here for coverage
-      'enable all possible receiving modes response' ],
+      'set variable length mode response' ],
 
     [ packsend => '20609f08f7', 'x10 message' ],
 
@@ -129,7 +129,7 @@ SKIP: {
     unless ($AnyEvent::MODEL eq 'AnyEvent::Impl::Perl');
   $cv = AnyEvent->condvar;
   eval { $res = $cv->recv; };
-  like($@, qr!^closed at \Q$0\E line \d+$!, 'check close');
+  like($@, qr!^closed at \Q$0\E line \d+!, 'check close');
 }
 
 undef $rx;

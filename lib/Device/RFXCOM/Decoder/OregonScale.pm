@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::OregonScale;
-BEGIN {
-  $Device::RFXCOM::Decoder::OregonScale::VERSION = '1.111960';
-}
-
+$Device::RFXCOM::Decoder::OregonScale::VERSION = '1.142000';
 # ABSTRACT: Device::RFXCOM::Decoder::OregonScale decode Oregon Scale RF messages
 
 
@@ -55,9 +52,11 @@ sub parse_gr101 {
 
 1;
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -65,7 +64,7 @@ Device::RFXCOM::Decoder::OregonScale - Device::RFXCOM::Decoder::OregonScale deco
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
@@ -86,9 +85,9 @@ recognized, undef is returned.
 
 =head2 C<parse_gr101( $parent, $message, $bytes, $bits, \%result )>
 
-This method is a helper for the main L<decode> method that handles the
+This method is a helper for the main decode() method that handles the
 GR101 scales only.  Parameters and return values are the same as the
-L<decode> method.
+decode() method.
 
 =head1 THANKS
 
@@ -107,10 +106,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

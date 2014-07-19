@@ -22,9 +22,11 @@ while (<STDIN>) {
   } until (!$tx->queue);
 }
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -32,7 +34,7 @@ rfxcom-tx - simple example script to control an RFXCOM RF transmitter
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
@@ -53,7 +55,7 @@ version 1.111960
 This script is an example of the usage of the L<Device::RFXCOM::TX>
 API.  It simply initializes the transmitter and reads messages
 specifications from stdin.  The keys and values given on the command
-line become the parameter hash for the L<Device::RFXCOM::TX#new>
+line become the parameter hash for the L<Device::RFXCOM::TX>
 constructor and are documented in that module.
 
 =head1 THANKS
@@ -75,10 +77,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

@@ -1,12 +1,14 @@
 use strict;
 use warnings;
 package Device::RFXCOM;
-
+$Device::RFXCOM::VERSION = '1.142000';
 # ABSTRACT: Perl modules for RFXCOM RF receivers and transmitters
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -14,7 +16,7 @@ Device::RFXCOM - Perl modules for RFXCOM RF receivers and transmitters
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
@@ -44,7 +46,7 @@ recommend them.
 
 =head1 SEE ALSO
 
-L<Device::RFXCOM::RX>, L<rfxcom-rx>, L<Device::RFXCOM::TX>, L<rfxcom-tx>.
+L<Device::RFXCOM::RX>, rfxcom-rx(1p), L<Device::RFXCOM::TX>, rfxcom-tx(1p).
 
 RFXCOM website: http://www.rfxcom.com/
 
@@ -54,10 +56,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-

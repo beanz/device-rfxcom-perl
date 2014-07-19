@@ -2,7 +2,7 @@ NAME
     Device::RFXCOM - Perl modules for RFXCOM RF receivers and transmitters
 
 VERSION
-    version 1.111960
+    version 1.142000
 
 SYNOPSIS
       # see Device::RFXCOM::RX (and corresponding example script
@@ -27,7 +27,7 @@ THANKS
     this code. I own a number of their products and highly recommend them.
 
 SEE ALSO
-    Device::RFXCOM::RX, rfxcom-rx, Device::RFXCOM::TX, rfxcom-tx.
+    Device::RFXCOM::RX, rfxcom-rx(1p), Device::RFXCOM::TX, rfxcom-tx(1p).
 
     RFXCOM website: http://www.rfxcom.com/
 
@@ -35,7 +35,7 @@ AUTHOR
     Mark Hindess <soft-cpan@temporalanomaly.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2011 by Mark Hindess.
+    This software is copyright (c) 2014 by Mark Hindess.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

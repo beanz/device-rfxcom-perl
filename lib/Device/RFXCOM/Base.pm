@@ -1,10 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Base;
-BEGIN {
-  $Device::RFXCOM::Base::VERSION = '1.111960';
-}
-
+$Device::RFXCOM::Base::VERSION = '1.142000';
 # ABSTRACT: module for RFXCOM device base class
 
 
@@ -14,11 +11,12 @@ use constant {
   TESTING => $ENV{DEVICE_RFXCOM_TESTING},
 };
 use Carp qw/croak/;
-use Fcntl;
-use POSIX qw/:termios_h/;
 use IO::Handle;
 use IO::Select;
 use Time::HiRes;
+use Symbol qw/gensym/;
+use Device::SerialPort qw( :PARAM :STAT 0.07 );
+use Fcntl;
 
 sub _new {
   my ($pkg, %p) = @_;
@@ -109,16 +107,20 @@ sub _open_serial_port {
   my $self = shift;
   my $dev = $self->{device};
   print STDERR "Opening $dev as serial port\n" if DEBUG;
-  my $flags = O_RDWR;
-  eval { $flags |= O_NOCTTY }; # ignore undefined error
-  eval { $flags |= O_NDELAY }; # ignore undefined error
-  sysopen my $fh, $dev, $flags
-    or croak "sysopen of '$dev' failed: $!";
+  my $fh = gensym();
+  my $sport = tie (*$fh, 'Device::SerialPort', $dev) or
+    croak "Could not tie serial port, $dev, to file handle: $!";
+  $sport->baudrate($self->baud);
+  $sport->databits(8);
+  $sport->parity("none");
+  $sport->stopbits(1);
+  $sport->datatype("raw");
+  $sport->write_settings();
+
+  sysopen $fh, $dev, O_RDWR|O_NOCTTY|O_NDELAY or
+    croak "sysopen of '$dev' failed: $!";
   $fh->autoflush(1);
   binmode($fh);
-  if (-c $fh) {
-    $self->_termios_config($fh);
-  }
   return $self->{fh} = $fh;
 }
 
@@ -127,48 +129,17 @@ sub baud {
   shift->{baud}
 }
 
-sub _posix_baud {
-  my $self = shift;
-  my $baud = $self->baud;
-  my $b;
-  if ($baud == 57600) {
-    $b = 0010001; ## no critic
-  } else {
-    eval qq/\$b = \&POSIX::B$baud/; ## no critic
-    die "Unsupported baud rate: $baud\n" if ($@);
-  }
-  $b;
-}
-
-sub _termios_config {
-  my ($self, $fh) = @_;
-  my $fd = fileno($fh);
-  my $termios = POSIX::Termios->new;
-  $termios->getattr($fd) or die "POSIX::Termios->getattr(...) failed: $!\n";
-  my $lflag = $termios->getlflag();
-  $lflag &= ~(POSIX::ECHO | POSIX::ECHOK | POSIX::ICANON);
-  $termios->setlflag($lflag);
-  $termios->setcflag(POSIX::CS8 | POSIX::CREAD |
-                     POSIX::CLOCAL | POSIX::HUPCL);
-  $termios->setiflag(POSIX::IGNBRK | POSIX::IGNPAR);
-  my $baud = $self->_posix_baud;
-  $termios->setospeed($baud)
-    or die "POSIX::Termios->setospeed(...) failed: $!\n";
-  $termios->setispeed($baud)
-    or die "POSIX::Termios->setospeed(...) failed: $!\n";
-  $termios->setattr($fd, POSIX::TCSANOW)
-    or die "POSIX::Termios->setattr(...) failed: $!\n";
-}
-
 sub _time_now {
   Time::HiRes::time
 }
 
 1;
 
-
 __END__
+
 =pod
+
+=encoding UTF-8
 
 =head1 NAME
 
@@ -176,11 +147,11 @@ Device::RFXCOM::Base - module for RFXCOM device base class
 
 =head1 VERSION
 
-version 1.111960
+version 1.142000
 
 =head1 SYNOPSIS
 
-  ... abstract base class
+  # ... abstract base class
 
 =head1 DESCRIPTION
 
@@ -218,10 +189,9 @@ Mark Hindess <soft-cpan@temporalanomaly.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Mark Hindess.
+This software is copyright (c) 2014 by Mark Hindess.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
