@@ -32,6 +32,6 @@ recommend them.
 
 =head1 SEE ALSO
 
-L<Device::RFXCOM::RX>, L<rfxcom-rx>, L<Device::RFXCOM::TX>, L<rfxcom-tx>.
+L<Device::RFXCOM::RX>, rfxcom-rx(1p), L<Device::RFXCOM::TX>, rfxcom-tx(1p).
 
 RFXCOM website: http://www.rfxcom.com/
