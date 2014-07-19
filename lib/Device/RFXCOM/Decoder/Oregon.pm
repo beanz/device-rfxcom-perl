@@ -125,7 +125,7 @@ my %types =
 
    type_length_key(0xca48, 68) =>
    {
-    part => 'THWR800', checksum => &checksum1, method => 'common_temp',
+    part => 'THWR800', checksum => \&checksum1, method => 'common_temp',
    },
 
    # for testing
