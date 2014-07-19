@@ -1,3 +1,9 @@
+libdevice-rfxcom-perl (1.142000-1) unstable; urgency=low
+
+  * New upstream release.
+
+ -- Mark Hindess (Debian Packages) <soft-debian@temporalanomaly.com>  Sat, 19 Jul 2014 13:21:31 +0100
+
 libdevice-rfxcom-perl (1.110800-1) unstable; urgency=low
 
   * Fix some windows test errors.

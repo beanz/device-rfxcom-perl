@@ -11,7 +11,6 @@ README
 bin/rfxcom-rx
 bin/rfxcom-tx
 bin/w800-rx
-debian/#_assh_bcee_b_ahome_abeanz_agit_agithub_adevice-rfxcom-perl_adebian_achangelog#
 debian/changelog
 debian/compat
 debian/control
