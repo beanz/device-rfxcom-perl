@@ -123,6 +123,11 @@ my %types =
     method => 'pcr800_rain',
    },
 
+   type_length_key(0xca48, 68) =>
+   {
+    part => 'THWR800', checksum => &checksum1, method => 'common_temp',
+   },
+
    # for testing
    type_length_key(0xfefe, 80) => { part => 'TEST' },
   );
