@@ -101,9 +101,8 @@ version 1.142010
 
 =head1 DESCRIPTION
 
-This is a module for encoding RF messages for X10
-(L<http://www.x10.eu/>) devices so that they can be dispatched to
-an RFXCOM RF transmitter.
+This is a module for encoding RF messages for X10 devices so that they
+can be dispatched to an RFXCOM RF transmitter.
 
 =head1 METHODS
 

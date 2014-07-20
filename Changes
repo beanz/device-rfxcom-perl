@@ -1,8 +1,9 @@
 Revision history for Perl extension Device::RFXCOM.
 
-1.142010  2014-07-20 13:49:49+01:00 Europe/London
+1.142010  2014-07-20 13:58:11+01:00 Europe/London
         - Add THWR800 support. Thanks to Clement87 via github.
         - Use Device::SerialPort for serial device code.
+        - Remove broken link from POD.
 
 1.110800  2011-03-21 20:05:29 Europe/London
         - Fix some windows test errors.
