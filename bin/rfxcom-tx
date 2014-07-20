@@ -34,7 +34,7 @@ rfxcom-tx - simple example script to control an RFXCOM RF transmitter
 
 =head1 VERSION
 
-version 1.142000
+version 1.142010
 
 =head1 SYNOPSIS
 

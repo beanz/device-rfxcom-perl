@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Response::X10;
-$Device::RFXCOM::Response::X10::VERSION = '1.142000';
+$Device::RFXCOM::Response::X10::VERSION = '1.142010';
 # ABSTRACT: Device::RFXCOM::Response class for X10 message from RFXCOM receiver
 
 
@@ -54,7 +54,7 @@ Device::RFXCOM::Response::X10 - Device::RFXCOM::Response class for X10 message f
 
 =head1 VERSION
 
-version 1.142000
+version 1.142010
 
 =head1 SYNOPSIS
 

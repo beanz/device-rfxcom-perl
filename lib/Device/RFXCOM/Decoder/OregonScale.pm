@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::OregonScale;
-$Device::RFXCOM::Decoder::OregonScale::VERSION = '1.142000';
+$Device::RFXCOM::Decoder::OregonScale::VERSION = '1.142010';
 # ABSTRACT: Device::RFXCOM::Decoder::OregonScale decode Oregon Scale RF messages
 
 
@@ -64,7 +64,7 @@ Device::RFXCOM::Decoder::OregonScale - Device::RFXCOM::Decoder::OregonScale deco
 
 =head1 VERSION
 
-version 1.142000
+version 1.142010
 
 =head1 SYNOPSIS
 

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Response::DateTime;
-$Device::RFXCOM::Response::DateTime::VERSION = '1.142000';
+$Device::RFXCOM::Response::DateTime::VERSION = '1.142010';
 # ABSTRACT: Device::RFXCOM::Response class for DateTime message from RFXCOM receiver
 
 
@@ -50,7 +50,7 @@ Device::RFXCOM::Response::DateTime - Device::RFXCOM::Response class for DateTime
 
 =head1 VERSION
 
-version 1.142000
+version 1.142010
 
 =head1 SYNOPSIS
 

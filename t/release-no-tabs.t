@@ -98,6 +98,7 @@ my @files = (
     't/rf/oregon-thgr228n-01-temphydro.txt',
     't/rf/oregon-thgr810-01.txt',
     't/rf/oregon-thr128-01-temp.txt',
+    't/rf/oregon-thwr800-01.txt',
     't/rf/oregon-uv138-01.txt',
     't/rf/oregon-uv138-02-invalid-checksum.txt',
     't/rf/oregon-uv138-03-dangerous.txt',

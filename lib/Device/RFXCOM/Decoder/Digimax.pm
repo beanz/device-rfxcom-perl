@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::Digimax;
-$Device::RFXCOM::Decoder::Digimax::VERSION = '1.142000';
+$Device::RFXCOM::Decoder::Digimax::VERSION = '1.142010';
 # ABSTRACT: Device::RFXCOM::Decoder::Digimax decode Digimax RF messages
 
 
@@ -63,7 +63,7 @@ Device::RFXCOM::Decoder::Digimax - Device::RFXCOM::Decoder::Digimax decode Digim
 
 =head1 VERSION
 
-version 1.142000
+version 1.142010
 
 =head1 SYNOPSIS
 

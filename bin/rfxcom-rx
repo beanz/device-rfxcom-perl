@@ -31,7 +31,7 @@ rfxcom-rx - simple example script to read from an RFXCOM receiver
 
 =head1 VERSION
 
-version 1.142000
+version 1.142010
 
 =head1 SYNOPSIS
 

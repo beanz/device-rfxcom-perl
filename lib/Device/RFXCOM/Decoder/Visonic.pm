@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::Visonic;
-$Device::RFXCOM::Decoder::Visonic::VERSION = '1.142000';
+$Device::RFXCOM::Decoder::Visonic::VERSION = '1.142010';
 # ABSTRACT: Device::RFXCOM::Decoder::Visonic decode Visonic RF messages
 
 
@@ -118,7 +118,7 @@ Device::RFXCOM::Decoder::Visonic - Device::RFXCOM::Decoder::Visonic decode Vison
 
 =head1 VERSION
 
-version 1.142000
+version 1.142010
 
 =head1 SYNOPSIS
 
