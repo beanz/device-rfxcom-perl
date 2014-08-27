@@ -83,7 +83,7 @@ sub decode {
   } else {
 
     my $alert = !($data&0x1);
-    $command = $alert ? 'alert' : 'normal',
+    $command = $alert ? 'alert' : 'normal';
     $tamper = $data&0x2;
     $min_delay = $data&0x20;
     $low_battery = $data&0x80;
