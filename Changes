@@ -1,6 +1,8 @@
 Revision history for Perl extension Device::RFXCOM.
 
 {{$NEXT}}
+
+1.163170  2016-11-12 15:21:59+00:00 Europe/London
         - Remove unnecessary binmode call. Thanks to @Digicrat.
 
 1.142010  2014-07-20 14:24:46+01:00 Europe/London
