@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::X10Security;
-$Device::RFXCOM::Decoder::X10Security::VERSION = '1.142010';
+$Device::RFXCOM::Decoder::X10Security::VERSION = '1.163170';
 # ABSTRACT: Device::RFXCOM::Decoder::X10Security decode X10 Security RF messages
 
 
@@ -66,7 +66,7 @@ sub decode {
   } else {
 
     my $alert = !($data&0x1);
-    $command = $alert ? 'alert' : 'normal',
+    $command = $alert ? 'alert' : 'normal';
     $tamper = $data&0x2;
     $min_delay = $data&0x20;
     $low_battery = $data&0x80;
@@ -112,7 +112,7 @@ Device::RFXCOM::Decoder::X10Security - Device::RFXCOM::Decoder::X10Security deco
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 

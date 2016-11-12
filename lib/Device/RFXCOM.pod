@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM;
-$Device::RFXCOM::VERSION = '1.142010';
+
 # ABSTRACT: Perl modules for RFXCOM RF receivers and transmitters
 
 __END__
@@ -16,7 +16,7 @@ Device::RFXCOM - Perl modules for RFXCOM RF receivers and transmitters
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 

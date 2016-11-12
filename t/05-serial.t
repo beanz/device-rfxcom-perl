@@ -48,7 +48,6 @@ is_deeply \@calls,
   [ 'Device::SerialPort::stopbits' => 1 ],
   [ 'Device::SerialPort::datatype' => 'raw' ],
   [ 'Device::SerialPort::write_settings' ],
-  [ 'Device::SerialPort::BINMODE' ],
  ], '... Device::SerialPort calls';
 
 eval { MY::RX->new(device => 't/does-not-exist.dev') };

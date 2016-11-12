@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::CM119;
-$Device::RFXCOM::Decoder::CM119::VERSION = '1.142010';
+$Device::RFXCOM::Decoder::CM119::VERSION = '1.163170';
 # ABSTRACT: Device::RFXCOM::Decoder::CM119 decode OWL CM119 RF messages
 
 
@@ -66,7 +66,7 @@ Device::RFXCOM::Decoder::CM119 - Device::RFXCOM::Decoder::CM119 decode OWL CM119
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 

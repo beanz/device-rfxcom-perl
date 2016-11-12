@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::RFXMeter;
-$Device::RFXCOM::Decoder::RFXMeter::VERSION = '1.142010';
+$Device::RFXCOM::Decoder::RFXMeter::VERSION = '1.163170';
 # ABSTRACT: Device::RFXCOM::Decoder::RFXMeter decode RFXMeter RF messages
 
 
@@ -87,7 +87,7 @@ Device::RFXCOM::Decoder::RFXMeter - Device::RFXCOM::Decoder::RFXMeter decode RFX
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 

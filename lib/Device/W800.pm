@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::W800;
-$Device::W800::VERSION = '1.142010';
+$Device::W800::VERSION = '1.163170';
 # ABSTRACT: Module to support W800 RF receiver
 
 
@@ -96,7 +96,7 @@ Device::W800 - Module to support W800 RF receiver
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 

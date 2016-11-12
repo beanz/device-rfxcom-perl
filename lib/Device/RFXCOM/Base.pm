@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Base;
-$Device::RFXCOM::Base::VERSION = '1.142010';
+$Device::RFXCOM::Base::VERSION = '1.163170';
 # ABSTRACT: module for RFXCOM device base class
 
 
@@ -120,7 +120,6 @@ sub _open_serial_port {
   sysopen $fh, $dev, O_RDWR|O_NOCTTY|O_NDELAY or
     croak "sysopen of '$dev' failed: $!";
   $fh->autoflush(1);
-  binmode($fh);
   return $self->{fh} = $fh;
 }
 
@@ -147,7 +146,7 @@ Device::RFXCOM::Base - module for RFXCOM device base class
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 

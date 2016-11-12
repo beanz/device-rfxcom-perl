@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Decoder::Electrisave;
-$Device::RFXCOM::Decoder::Electrisave::VERSION = '1.142010';
+$Device::RFXCOM::Decoder::Electrisave::VERSION = '1.163170';
 # ABSTRACT: Device::RFXCOM::Decoder::Electrisave decode Electrisave RF messages
 
 
@@ -55,7 +55,7 @@ Device::RFXCOM::Decoder::Electrisave - Device::RFXCOM::Decoder::Electrisave deco
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 

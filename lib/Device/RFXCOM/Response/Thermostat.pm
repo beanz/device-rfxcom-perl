@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 package Device::RFXCOM::Response::Thermostat;
-$Device::RFXCOM::Response::Thermostat::VERSION = '1.142010';
+$Device::RFXCOM::Response::Thermostat::VERSION = '1.163170';
 # ABSTRACT: Device::RFXCOM::Response class for Thermostat RF messages
 
 
@@ -59,7 +59,7 @@ Device::RFXCOM::Response::Thermostat - Device::RFXCOM::Response class for Thermo
 
 =head1 VERSION
 
-version 1.142010
+version 1.163170
 
 =head1 SYNOPSIS
 
