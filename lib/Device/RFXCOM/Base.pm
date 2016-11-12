@@ -140,7 +140,6 @@ sub _open_serial_port {
   sysopen $fh, $dev, O_RDWR|O_NOCTTY|O_NDELAY or
     croak "sysopen of '$dev' failed: $!";
   $fh->autoflush(1);
-  binmode($fh);
   return $self->{fh} = $fh;
 }
 
